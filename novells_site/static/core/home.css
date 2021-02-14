@@ -3,11 +3,10 @@
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    overflow-x: scroll;
-
+    width: 100%;
 }
 
 
-.card {
+.scrolling-wrapper-flexbox .card {
     flex: 0 0 auto;
 }

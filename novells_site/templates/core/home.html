@@ -3,6 +3,7 @@
 
 {% block styles %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static "core/home.css" %}">
     <style>
         .checked {
             color: orange;
@@ -14,48 +15,86 @@
     <div class="container-xxl">
         <div class="row my-2">
             <div class="col-12">
-                <img src="{% static 'img/prints/back1.jpg' %}" class="img-fluid">
+                <img src="{% static 'img/prints/back1.jpg' %}" class="img-fluid w-100">
             </div>
 
         </div>
         <div class="row">
             <div class="col-xxl-6 col-sm-12">
-                <h1 class="text-center my-1"><i class="bi bi-award text-danger"></i> Популярное</h1>
-                <div class="row">
-                    <div class="col-7">
-                        <h2 class="mb-1">{{ pop }}</h2>
-                        {% for genre in pop.genres.all %}
-                            <span class="badge rounded-pill bg-primary">{{ genre }}</span>
 
-                        {% endfor %}
-                        <h5 class="text-muted">{{ pop.author }}</h5>
-                        <h6>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span>{{ pop.rating }}</span>
-                        </h6>
-                        <p>
-                            {{ pop.description }}
-                        </p>
-                    </div>
-                    <div class="col-5">
-                        <img src="{{ pop.poster.url }}" width="100%" class="rightimg">
-                    </div>
-                </div>
+                <h1 class="text-center mt-1 mb-2"><i class="bi bi-award text-danger" style="vertical-align: bottom"></i>
+                    Популярное</h1>
+                <hr>
+                <img src="{{ pop.poster.url }}" class="float-left w-25 img-thumbnail mr-2 mb-1 mt-2">
+
+                <h2 class="mb-1">{{ pop }}</h2>
+                {% for genre in pop.genres.all %}
+                    <span class="badge rounded-pill bg-primary">{{ genre }}</span>
+
+                {% endfor %}
+                <h6 class="text-muted">Автор: {{ pop.author }}</h6>
+                <h6>
+                    <span class="bi bi-star-fill checked"></span>
+                    <span class="bi bi-star-fill checked"></span>
+                    <span class="bi bi-star-fill checked"></span>
+                    <span class="bi bi-star-half checked"></span>
+                    <span>{{ pop.rating }}</span>
+                </h6>
+                <p>
+                    {{ pop.description|truncatechars:400 }}
+                </p>
 
             </div>
+
             <div class="col-xxl-6 col-sm-12">
-                <h1 class="text-center">Расписание</h1>
+                <h1 class="text-center align-text-bottom mt-1 mb-2"><i class="bi bi-table text-primary"
+                                                                       style="vertical-align: bottom"></i> Расписание
+                </h1>
+                <hr>
+
+                <div class="list-group">
+                    {% for chapter in shedule_chapter %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col-1 px-1">
+                                    <img src="{{ chapter.novell.poster.url }}" class="img-fluid rounded float-start">
+
+                                </div>
+                                <div class="col-11">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ chapter.novell.original_title }}</h6>
+                                        <small>{{ chapter.publish }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ chapter.number }} глава. {{ chapter.title }}</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
             </div>
         </div>
+
 
         <hr class="featurette-divider">
 
         <div class="row">
-
+            <div class="scrolling-wrapper-flexbox">
+                {% for nov in all_novells %}
+                    <div class="col-3">
+                        <div class="card p-2 mx-1">
+                            <img src="{{ nov.poster.url }}" class="card-img-top rounded p-2" alt="{{ nov.original_title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ nov.original_title }}</h5>
+                                <h6 class="card-subtitle">{{ nov.rating }}, {{ nov.views }}</h6>
+                                <p class="card-text">{{ nov.description|truncatechars:200 }}</p>
+                                <a href="#" class="btn btn-primary">Читать</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
 
 
