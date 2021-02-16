@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import DetailView
+
 from .models import Novell, Chapter
 from django.http import HttpResponse
 
@@ -12,3 +14,10 @@ def index(request):
                                               'shedule_chapter': shedule_chapter,
                                               'all_novells': all_novells,
                                               })
+
+
+
+class NovellDetailView(DetailView):
+    model = Novell
+    context_object_name = 'novell'
+    template_name = 'core/novell_profile.html'

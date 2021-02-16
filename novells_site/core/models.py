@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -41,6 +42,9 @@ class Novell(models.Model):
     views = models.PositiveSmallIntegerField('Просмотры', default=0)
     rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг')
 
+    def get_absolute_url(self):
+        return reverse('core:novell_detail', args=[self.slug])
+
     class Meta:
         verbose_name = 'Новелла'
         verbose_name_plural = 'Новеллы'
@@ -50,20 +54,17 @@ class Novell(models.Model):
 
 
 class Chapter(models.Model):
-
     number = models.PositiveSmallIntegerField('Номер главы')
     title = models.CharField('Заголовок главы', max_length=256)
     status = models.BooleanField('Выпущена', help_text='Если вышла, галочка стоит. Нет - запланирована', default=False)
     publish = models.DateTimeField('Дата публикации', default=timezone.now)
     novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.PROTECT, related_name='chapters')
     chapter_text = models.TextField('Текст главы', blank=True, null=True)
-    
 
     class Meta:
         verbose_name = 'Глава'
         verbose_name_plural = 'Главы'
         ordering = ('-publish',)
-
 
     def __str__(self):
         return 'Глава {} Новеллы {} '.format(self.number, self.novell)

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ novell.rus_title }}
+{% endblock %}
+{% block styles %}
+    <style>
+        .nav-tabs {
+            margin-left: 1%;
+            margin-top: 1%;
+        }
+
+        .nav-tabs .nav-link {
+            font-weight: 600;
+            border: none;
+        }
+
+        .nav-tabs .nav-link.active {
+            border: none;
+            border-bottom: 2px solid #0062cc;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container-xxl">
+
+        <div class="row mt-2">
+            <div class="col-4">
+                <img src="{{ novell.poster.url }}" alt="{{ novell.original_title }}" class="img-fluid">
+            </div>
+            <div class="col-8">
+                <h4>{{ novell.original_title }}</h4>
+                <h5>{{ novell.rus_title }}</h5>
+                <h6>{{ novell.author }}</h6>
+                <h6>Глав {{ novell.chapters.count }}</h6>
+                <h6>{{ novell.status }}</h6>
+                {{ novell.rating }}
+            </div>
+        </div>
+
+        <div class="row">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active h5" id="description-tab" data-toggle="tab" href="#description" role="tab"
+                       aria-controls="home" aria-selected="true">Информация</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h5" id="list-tab" data-toggle="tab" href="#list" role="tab"
+                       aria-controls="profile" aria-selected="false">Оглавление</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link h5" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
+                       aria-controls="profile" aria-selected="false">Комментарии</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="description" role="tabpanel"
+                         aria-labelledby="description-tab">
+                        {{ novell.description|linebreaksbr }}
+                    </div>
+
+                    <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
+                        {% for n in novell.chapters.all %}
+                            <h5>Глава {{ n.number }}. {{ n.title }}</h5>
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                        <h1>Ti pidor</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

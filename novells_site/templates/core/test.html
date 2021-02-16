@@ -11,6 +11,9 @@
 
     </style>
 {% endblock %}
+{% block title %}
+    Домашняя страница
+{% endblock %}
 {% block content %}
     <div class="container-xxl">
         <div class="row my-2">
@@ -89,7 +92,19 @@
 
                         <img src="{{ nov.poster.url }}" class="card-img-top rounded p-2" alt="{{ nov.original_title }}">
                         <div class="card-body">
-                            <h5 class="card-title">{{ nov.original_title }}</h5>
+                            <h5 class="card-title"><a href="{{ nov.get_absolute_url }}">{{ nov.original_title }}</a>
+                            </h5>
+                            <h6 class="card-subtitle mt-1">
+                                <div class="pb-2">
+                                    <span class="bi bi-star-fill checked align-bottom"></span>
+                                    <span class="bi bi-star-fill checked"></span>
+                                    <span class="bi bi-star-fill checked"></span>
+                                    <span class="bi bi-star-half checked"></span>
+
+                                    <span class="align-bottom">{{ nov.rating }}</span>
+                                </div>
+                            </h6>
+
                             {% if nov.status == 'OG' %}
                                 <span class="text-muted font-weight-bold"><i
                                         class="bi bi-circle-fill text-primary"></i> Онгоинг</span>
@@ -98,11 +113,9 @@
                             {% elif nov.status == 'CT' %}
                                 Завершено
                             {% endif %}
-                            <h6 class="card-subtitle mt-1">{{ nov.rating }}, {{ nov.views }}</h6>
-                            <p class="card-text">{{ nov.description|truncatechars:250 }}</p>
                         </div>
-                        <div class="card-footer d-flex justify-content-end">
-                            <a href="#" class="btn btn-primary">Читать</a>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ nov.get_absolute_url }}" class="btn btn-primary">Читать</a>
 
                         </div>
                     </div>
