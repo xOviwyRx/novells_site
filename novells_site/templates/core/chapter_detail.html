@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ chapter.novell.rus_title }} | {{ chapter.number }} глава. {{ chapter.title }}
+{% endblock %}
+{% block styles %}
+    <style>
+        .chapter_header {
+
+        }
+
+        .chapter_text {
+            font-family: Arimo;
+            font-size: larger;
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container-xxl mt-2">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title chapter_header">
+                            Глава {{ chapter.number }}
+                        </h4>
+                        <h5 class="card-subtitle">
+                            {{ chapter.title }}
+                        </h5>
+                    </div>
+                    <div class="card-body chapter_text">
+                        {{ chapter.chapter_text|linebreaks }}
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+
+                        <button type="button" class="btn btn-outline-dark">Предыдущая глава</button>
+                        <button type="button" class="btn btn-outline-dark">Оглавление</button>
+                        <button type="button" class="btn btn-outline-dark">Следующая глава</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

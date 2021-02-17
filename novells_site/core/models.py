@@ -61,10 +61,14 @@ class Chapter(models.Model):
     novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.PROTECT, related_name='chapters')
     chapter_text = models.TextField('Текст главы', blank=True, null=True)
 
+    def get_absolute_url(self):
+        return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
+
+
     class Meta:
         verbose_name = 'Глава'
         verbose_name_plural = 'Главы'
-        ordering = ('-publish',)
+        ordering = ('number', '-publish',)
 
     def __str__(self):
         return 'Глава {} Новеллы {} '.format(self.number, self.novell)

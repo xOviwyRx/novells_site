@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import DetailView
 
 from .models import Novell, Chapter
@@ -21,3 +21,14 @@ class NovellDetailView(DetailView):
     model = Novell
     context_object_name = 'novell'
     template_name = 'core/novell_profile.html'
+
+
+class ChapterDetailView(DetailView):
+    model = Chapter
+    context_object_name = 'chapter'
+    template_name = 'core/chapter_detail.html'
+
+    def get_object(self):
+        print(self.kwargs['slug'])
+        nov = get_object_or_404(Novell, slug=self.kwargs['slug'])
+        return get_object_or_404(Chapter, novell=nov, number=self.kwargs['number'])
