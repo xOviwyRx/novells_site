@@ -11,6 +11,10 @@
             margin-top: 1%;
         }
 
+        .checked {
+            color: orange;
+        }
+
         .nav-tabs .nav-link {
             font-weight: 600;
             border: none;
@@ -20,22 +24,68 @@
             border: none;
             border-bottom: 2px solid #0062cc;
         }
+
+        .description {
+            font-family: "Bell MT";
+            font-size: larger;
+        }
     </style>
 {% endblock %}
 {% block content %}
     <div class="container-xxl">
 
         <div class="row mt-2">
-            <div class="col-4">
-                <img src="{{ novell.poster.url }}" alt="{{ novell.original_title }}" class="img-fluid">
+            <div class="col-xxl-3 col-sm-3">
+                <img src="{{ novell.poster.url }}" alt="{{ novell.original_title }}"
+                     class="img-fluid w-100 rounded img-thumbnail">
             </div>
-            <div class="col-8">
-                <h4>{{ novell.original_title }}</h4>
-                <h5>{{ novell.rus_title }}</h5>
-                <h6>{{ novell.author }}</h6>
-                <h6>Глав {{ novell.chapters.count }}</h6>
-                <h6>{{ novell.status }}</h6>
-                {{ novell.rating }}
+            <div class="col-xxl-9 col-sm-9">
+
+                <div class="card border-0 h-100">
+                    <div class="card-body pt-0">
+                        <h1>{{ novell.original_title }}</h1>
+                        <h2>{{ novell.rus_title }}</h2>
+                        <p class="text-muted mb-0 font-weight-bold">Автор</p>
+                        <h6>{{ novell.author }}</h6>
+                        <p class="text-muted mb-0 font-weight-bold">Глав</p>
+                        <h6>{{ novell.chapters.count }}</h6>
+                        <p class="text-muted mb-0 font-weight-bold">Статус</p>
+                        {% if novell.status == 'OG' %}
+                            <h6 class="font-weight-bold"><i
+                                    class="bi bi-circle-fill text-primary" style="
+    vertical-align: bottom;"></i> Онгоинг</h6>
+                        {% elif novell.status == 'AN' %}
+                            <h6 class="font-weight-bold"><i
+                                    class="bi bi-circle-fill text-danger" style="
+    vertical-align: bottom;"></i>
+                                Анонос</h6>
+                        {% elif novell.status == 'CT' %}
+                            Завершено
+                        {% endif %}
+
+                        <p class="text-muted mb-0 font-weight-bold">Оценка</p>
+                        <h6>
+                            <span class="bi bi-star-fill checked"></span>
+                            <span class="bi bi-star-fill checked"></span>
+                            <span class="bi bi-star-fill checked"></span>
+                            <span class="bi bi-star-half checked"></span>
+                            <span>{{ novell.rating }}</span>
+                        </h6>
+                    </div>
+                    <div class="card-footer border-0">
+                        <div class="row w-100">
+                            <div class="col">
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-info">Начать чтение</button>
+                                    <button type="button" class="btn btn-dark">Продолжить чтение</button>
+                                    <button type="button" class="btn btn-success">Добавить в закладки</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -60,7 +110,27 @@
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="description" role="tabpanel"
                          aria-labelledby="description-tab">
-                        {{ novell.description|linebreaksbr }}
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="mb-2">Описание</h3>
+                                <p class="description">
+                                    {{ novell.description|linebreaksbr }}
+                                </p>
+                                <h3 class="mb-4">Жанры</h3>
+                                {% for genre in novell.genres.all %}
+                                    <button type="button" class="btn btn-outline-primary">
+                                        {{ genre }}
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="card">
+                            <h3>Последнее обновление:</h3>
+
+                        </div>
                     </div>
 
                     <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
