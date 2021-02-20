@@ -29,6 +29,5 @@ class ChapterDetailView(DetailView):
     template_name = 'core/chapter_detail.html'
 
     def get_object(self):
-        print(self.kwargs['slug'])
         nov = get_object_or_404(Novell, slug=self.kwargs['slug'])
         return get_object_or_404(Chapter, novell=nov, number=self.kwargs['number'])
