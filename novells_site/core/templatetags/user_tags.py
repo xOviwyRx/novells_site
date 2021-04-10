@@ -1,0 +1,41 @@
+from django import template
+
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Count, Q
+from django.utils import timezone
+from datetime import date, datetime
+
+from ..models import Genre
+
+
+
+
+register = template.Library()
+
+
+
+# Фильтр для проверки юзера в объекте(Типа, если лайк уже ставил или диз)
+# except на ТайпЕррор, надо бы добавить, а то НоН обжект хэв но филтер ёба
+@register.filter
+def user_in(objects, user):
+    if user.is_authenticated:
+        try:
+            return objects.filter(user=user).exists()
+        except:
+            return False
+    return False
+
+
+@register.simple_tag
+def age(born_date):
+    if date.today().month > born_date.month:
+        return (date.today().year - born_date.year)
+    elif born_date.month == date.today().month and date.today().day > born_date.day:
+        return date.today().year - born_date.year
+    else:
+        return date.today().year - born_date.year - 1
+
+
+@register.inclusion_tag('core/include/genres.html')
+def genres():
+    return {'all_genres' : Genre.objects.all()}

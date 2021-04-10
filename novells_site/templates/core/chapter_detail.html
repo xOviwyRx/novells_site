@@ -44,4 +44,11 @@
             </div>
         </div>
     </div>
+    <div class="container-xxl mt-2">
+        <div class="row">
+            {% include 'core/comments.html' with comments=chapter.chapter_comments %}
+                {% include 'core/include/add_comment_form.html' with chapter=chapter %}
+
+        </div>
+    </div>
 {% endblock %}

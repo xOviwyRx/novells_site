@@ -1,0 +1,25 @@
+
+
+.nav-tabs {
+    margin-left: 1%;
+    margin-top: 1%;
+}
+
+.checked {
+    color: orange;
+}
+
+.nav-tabs .nav-link {
+    font-weight: 600;
+    border: none;
+}
+
+.nav-tabs .nav-link.active {
+    border: none;
+    border-bottom: 2px solid #0062cc;
+}
+
+.description {
+    font-family: "Bell MT";
+    font-size: larger;
+}

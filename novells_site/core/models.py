@@ -1,8 +1,75 @@
+from autoslug import AutoSlugField
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 # Create your models here.
+from django.db.models import Sum
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+
+
+class MyQuerySet(models.query.QuerySet):
+
+    def delete(self):
+        for obj in self:
+            obj.delete()
+
+
+# Менеджер модели лайк-дизлайк
+class LikeDislikeManager(models.Manager):
+    use_for_related_fields = True
+
+    def likes(self):
+        # Забираем queryset с записями больше 0
+        return self.get_queryset().filter(vote__gt=0)
+
+    def dislikes(self):
+        # Забираем queryset с записями меньше 0
+        return self.get_queryset().filter(vote__lt=0)
+
+    def sum_rating(self):
+        # Забираем суммарный рейтинг
+        return self.get_queryset().aggregate(Sum('vote')).get('vote__sum') or 0
+
+    def posts(self):
+        return self.get_queryset().filter(content_type__model='post').order_by('-posts__pub_date')
+
+    def comments(self):
+        return self.get_queryset().filter(content_type__model='comment').order_by('-comments__pub_date')
+
+    def get_queryset(self):
+        return MyQuerySet(self.model, using=self._db)
+
+
+# Модель для лайк-дизлайк системы
+class LikeDislike(models.Model):
+    LIKE = 1
+    DISLIKE = -1
+
+    VOTES = (
+        (DISLIKE, 'Не нравится'),
+        (LIKE, 'Нравится')
+    )
+
+    vote = models.SmallIntegerField(verbose_name="Голос", choices=VOTES)
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    objects = LikeDislikeManager()
+
+    def get_query_set(self):
+        return MyQuerySet(self.model)
+
+    class Meta:
+        verbose_name = 'Лайк/дизлайк голос'
+        verbose_name_plural = "Лайк/дизлайк голоса"
 
 
 class Genre(models.Model):
@@ -64,7 +131,6 @@ class Chapter(models.Model):
     def get_absolute_url(self):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
 
-
     class Meta:
         verbose_name = 'Глава'
         verbose_name_plural = 'Главы'
@@ -72,3 +138,67 @@ class Chapter(models.Model):
 
     def __str__(self):
         return 'Глава {} Новеллы {} '.format(self.number, self.novell)
+
+    def get_comments(self):
+        return self.chapter_comments.filter(parent__isnull=True)
+
+
+class Comment(models.Model):
+    chapter = models.ForeignKey(Chapter, verbose_name='К главе', on_delete=models.CASCADE,
+                                related_name='chapter_comments')
+    author = models.ForeignKey(User, verbose_name='Автор', related_name='comments_by_user', on_delete=models.CASCADE)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', verbose_name='Родитель', on_delete=models.SET_NULL, blank=True, null=True,
+                               related_name="childs")
+    votes = GenericRelation(LikeDislike, related_query_name='comments')
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ('-created',)
+
+    def __str__(self):
+        return 'Комментарий от {} к {}'.format(self.author, self.chapter.title)
+
+    def get_absolute_url(self):
+        a = reverse('core:chapter_detail', args=[self.chapter.novell.slug, self.chapter.number]) + '#comment' + str(
+            self.id)
+        return a
+
+
+class Profile(models.Model):
+    name = models.OneToOneField(User, verbose_name='Пользователь', on_delete=models.CASCADE,
+                                related_name='user_profile')
+
+    realname = models.CharField('Имя',max_length=100, blank=True)
+    slug = AutoSlugField(always_update=True, populate_from='name')
+    avatar = models.ImageField('Аватар', upload_to='users_avatars/', default='users_avatars/default/default.png')
+    born_date = models.DateField('Дата рождения', blank=True, null=True)
+    about = models.TextField(max_length=1000, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    vk = models.CharField(max_length=100, blank=True)
+    telegram = models.CharField(max_length=100, blank=True)
+    discord = models.CharField(max_length=100, blank=True)
+    bookmarks = models.ManyToManyField(Novell, blank=True)
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(name=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.user_profile.save()
+
+    def get_absolute_url(self):
+        return reverse('core:profile_detail', args=[self.id, self.slug])
+
+    def __str__(self):
+        return 'Профиль {}'.format(self.name.username)
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
+

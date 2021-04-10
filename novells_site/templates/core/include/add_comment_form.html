@@ -1,0 +1,35 @@
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static "core/include/add_comment_form.css" %}">
+{% endblock %}
+
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7 mt-3">
+            {% if user.is_authenticated %}
+                <div class="card bg-c-lite-unknown mb-2 pb-2" style="border-radius: 30px">
+                    <form action="{% url 'core:add_comment' chapter.id %}" method="post" class="mt-4 mx-4" id="CommentForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent" id="contactparent" value="">
+                        <div class="form-group editContent">
+                            <label for="contactcomment" class="editContent h6">
+                                Ваш комментарий:
+                            </label>
+                            <textarea class="form-control border" rows="5" name="body"
+                                      id="contactcomment" required=""></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end w-100">
+                            <button type="submit"
+                                    class="mt-2 btn btn-success">
+                                Отправить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            {% else %}
+                <h5 class="text-center my-4">Войдите, чтобы оставить комментарий</h5>
+            {% endif %}
+        </div>
+    </div>
+</div>

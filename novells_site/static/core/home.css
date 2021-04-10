@@ -10,3 +10,12 @@
 .scrolling-wrapper-flexbox .card {
     flex: 0 0 auto;
 }
+
+.checked {
+    color: orange;
+}
+
+a:hover {
+    color: inherit;
+}
+
