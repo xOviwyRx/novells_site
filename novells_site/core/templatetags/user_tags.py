@@ -50,6 +50,10 @@ def star_user(novell, user):
 
 @register.inclusion_tag('core/include/stars.html')
 def stars(rating):
+    try:
+        rating = int(rating)
+    except:
+        return 'NaN'
     a = round(rating)
     if abs(a - rating) > Decimal('0.25') and abs(a - rating) < Decimal('0.75'):
         half = True
