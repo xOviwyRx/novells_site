@@ -7,7 +7,7 @@ from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Ratin
 @admin.register(Novell)
 class NovellAdmin(admin.ModelAdmin):
     list_display = ('original_title','author', 'status', 'views', 'overall_rating')
-    filter_horizontal = ('genre',)
+    filter_horizontal = ('genres',)
     prepopulated_fields = {'slug': ('original_title',)}
 
 
