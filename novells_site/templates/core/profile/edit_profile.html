@@ -85,7 +85,8 @@
                                     <label>Имя</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" name="realname" value="{{ profile.realname }}">
+                                    <input type="text" class="form-control" name="realname"
+                                           value="{{ profile.realname }}">
                                 </div>
                             </div>
                             <div class="row my-1">
@@ -99,6 +100,29 @@
                                                min="1966-01-01"
                                                max="2020-07-17">
                                     </p>
+                                </div>
+                            </div>
+                            <div class="row my-1">
+                                <div class="col-md-6">
+                                    <label>Пол</label>
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="sex"
+                                               id="inlineRadio1" value="M">
+                                        <label class="form-check-label" for="inlineRadio1">М</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="sex"
+                                               id="inlineRadio2" value="F">
+                                        <label class="form-check-label" for="inlineRadio2">Ж</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="sex"
+                                               id="inlineRadio3" value="UN">
+                                        <label class="form-check-label" for="inlineRadio3">Не раскрывать</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row my-1">

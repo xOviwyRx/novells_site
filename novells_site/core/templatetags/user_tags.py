@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import template
 
 from django.contrib.contenttypes.models import ContentType
@@ -5,13 +7,9 @@ from django.db.models import Count, Q
 from django.utils import timezone
 from datetime import date, datetime
 
-from ..models import Genre
-
-
-
+from ..models import Genre, Rating, RatingStar
 
 register = template.Library()
-
 
 
 # Фильтр для проверки юзера в объекте(Типа, если лайк уже ставил или диз)
@@ -38,4 +36,24 @@ def age(born_date):
 
 @register.inclusion_tag('core/include/genres.html')
 def genres():
-    return {'all_genres' : Genre.objects.all()}
+    return {'all_genres': Genre.objects.all()}
+
+
+@register.filter
+def star_user(novell, user):
+    try:
+        a = Rating.objects.get(author=user, novell=novell)
+        return a.rate.value
+    except:
+        return False
+
+
+@register.inclusion_tag('core/include/stars.html')
+def stars(rating):
+    a = round(rating)
+    if abs(a - rating) > Decimal('0.25') and abs(a - rating) < Decimal('0.75'):
+        half = True
+    else:
+        half = False
+    rating_plus = rating + 1
+    return {'stars': RatingStar.objects.all().order_by('value'), 'rating': rating, 'half': half, 'rating_plus': rating_plus, 'rounded':a}

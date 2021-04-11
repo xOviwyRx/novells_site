@@ -9,8 +9,13 @@ urlpatterns = [
 
     path('add_comment/to_chapter/<int:pk>', views.AddComment.as_view(), name='add_comment'),
     path('', views.index, name='home'),
-    path('filter/', views.FilterNovellsView.as_view(), name='filter'),
-    path('novell_list/', views.NovellListView.as_view(), name='novell_list'),
+    path('novells_list/', views.NovellListView.as_view(), name='novell_list'),
+    path('novells_list/filter/', views.FilterNovellsView.as_view(), name='filter'),
+
+    path('add-rating/', views.AddNovellRating.as_view(), name='add_rating'),
+
+    #path('novells_list/json-filter/', views.JsonFilterNovellsView.as_view(), name='json_filter'),
+
     path('novell/<slug:slug>', views.NovellDetailView.as_view(), name='novell_detail'),
     path('profile/<int:pk>/<slug:slug>/', views.ProfileDetail.as_view(), name='profile_detail'),
     path('profile/edit/<int:pk>/<slug:slug>/', views.EditMyProfile.as_view(), name='edit_profile'),

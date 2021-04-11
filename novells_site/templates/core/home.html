@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load user_tags %}
 
 {% block styles %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -8,6 +9,7 @@
         .checked {
             color: orange;
         }
+
         a:hover {
             color: inherit;
         }
@@ -40,11 +42,9 @@
                 {% endfor %}
                 <h6 class="text-muted">Автор: {{ pop.author }}</h6>
                 <h6>
-                    <span class="bi bi-star-fill checked"></span>
-                    <span class="bi bi-star-fill checked"></span>
-                    <span class="bi bi-star-fill checked"></span>
-                    <span class="bi bi-star-half checked"></span>
-                    <span>{{ pop.rating }}</span>
+                    {% stars pop.overall_rating %}
+
+                    <span>{{ pop.overall_rating }}</span>
                 </h6>
                 <p>
                     {{ pop.description|truncatechars:400 }}
@@ -101,14 +101,10 @@
                             </h5>
                             <h6 class="card-subtitle mt-1">
                                 <div class="pb-2">
-                                    <span class="bi bi-star-fill checked align-bottom"></span>
-                                    <span class="bi bi-star-fill checked"></span>
-                                    <span class="bi bi-star-fill checked"></span>
+                                    {% stars nov.overall_rating %}
 
-                                    <span class="bi bi-star-half checked"></span>
-                                    <span class="bi bi-star checked"></span>
 
-                                    <span class="align-bottom">{{ nov.rating }}</span>
+                                    <span class="align-bottom">{{ nov.overall_rating }}</span>
                                 </div>
                             </h6>
 

@@ -7,9 +7,9 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre
-from .forms import CommentForm, EditProfileForm
-from django.http import HttpResponse
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating
+from .forms import CommentForm, EditProfileForm, RatingForm
+from django.http import HttpResponse, JsonResponse
 
 
 # Create your views here.
@@ -36,6 +36,15 @@ class NovellDetailView(GenreYear, DetailView):
     model = Novell
     context_object_name = 'novell'
     template_name = 'core/novell_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        nov = context['novell']
+        nov.views = nov.views + 1
+        nov.save()
+        context['star_form'] = RatingForm()
+
+        return context
 
 
 class ChapterDetailView(DetailView):
@@ -177,3 +186,61 @@ class FilterNovellsView(GenreYear, ListView):
         else:
             return Novell.objects.filter(Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)).distinct()
         # print(self.request.GET.getlist('year'))
+
+
+class AddNovellRating(View):
+
+    def post(self, request):
+        form = RatingForm(request.POST)
+        if form.is_valid():
+            Rating.objects.update_or_create(
+                author=self.request.user,
+                novell_id=int(request.POST.get("novell")),
+                defaults={'rate_id': int(request.POST.get('rate'))}
+            )
+            nov = Novell.objects.get(id=int(request.POST.get("novell")))
+            sum = 0
+            nov_rates = Rating.objects.filter(novell=nov)
+            for i in nov_rates:
+                sum += i.rate.value
+            nov.overall_rating = sum/len(nov_rates)
+            nov.save(update_fields=['overall_rating'])
+            return HttpResponse(status=201)
+        else:
+            return HttpResponse(status=400)
+
+
+"""
+class JsonFilterNovellsView(ListView):
+    template_name = 'core/novells_list.html'
+    context_object_name = 'novells'
+
+    def get_queryset(self):
+        genre_filter = self.request.GET.getlist('genre')
+        year_filter = self.request.GET.getlist('year')
+        if genre_filter and year_filter and len(genre_filter) == 1:
+            return Novell.objects.filter(publish__year__in=year_filter, genres__in=genre_filter).values('slug','original_title', 'poster')
+        elif len(genre_filter) > 1 and year_filter:
+            genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
+            a = []
+            for i in Novell.objects.filter(publish__year__in=year_filter):
+                if set(genres_in_filter) <= set(i.genres.all()):
+                    a.append(i)
+            return a
+        elif len(genre_filter) > 1 and not year_filter:
+            genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
+            a = []
+            for i in Novell.objects.all():
+                if set(genres_in_filter) <= set(i.genres.all()):
+                    a.append(i)
+            return a
+        elif not year_filter and not genre_filter:
+            return Novell.objects.all()
+        else:
+            return Novell.objects.filter(Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)).distinct()
+
+    def get(self, request, *args, **kwargs):
+        queryset = list(self.get_queryset())
+        return JsonResponse({"novells": queryset}, safe=False)
+
+"""

@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load user_tags %}
 {% block title %}
     {{ novell.rus_title }}
 {% endblock %}
 {% block styles %}
-        <link rel="stylesheet" type="text/css" href="{% static "core/novell_profile.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "core/novell_profile.css" %}">
 {% endblock %}
+
 {% block content %}
     <div class="container-xxl" style="background:#ffffff;">
 
@@ -39,14 +40,29 @@
                             Завершено
                         {% endif %}
 
-                        <p class="text-muted mb-0 font-weight-bold">Оценка</p>
+                        <p class="text-dark mb-0 font-weight-bold">Рейтинг</p>
                         <h6>
-                            <span class="bi bi-star-fill checked"></span>
-                            <span class="bi bi-star-fill checked"></span>
-                            <span class="bi bi-star-fill checked"></span>
-                            <span class="bi bi-star-half checked"></span>
-                            <span>{{ novell.rating }}</span>
+                            {% stars novell.overall_rating %}
+                            <span class="editContent font-weight-bolder">{{ novell.overall_rating }}</span>
                         </h6>
+
+                        <form action="{% url 'core:add_rating' %}" method="post" name="rating">
+                            <p class="m-0 text-muted font-weight-bold">Ваша оценка: </p>
+
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ novell.id }}" name="novell">
+                            <span class="rating">
+                                {% for k, v in star_form.fields.rate.choices %}
+                                    <input id="rating{{ v }}" type="radio" name="rate"
+                                    {% if novell|star_user:user == k %}checked{% endif %}
+                                           value="{{ k }}">
+                                    <label for="rating{{ v }}">{{ k }}</label>
+                                {% endfor %}
+                            </span>
+
+
+                        </form>
+
                     </div>
                     <div class="card-footer border-0" style="background-color: white">
                         <div class="row w-100">
@@ -55,10 +71,12 @@
                                     <button type="button" class="btn btn-info">Начать чтение</button>
                                     <button type="button" class="btn btn-dark">Продолжить чтение</button>
                                     {% if novell in user.user_profile.bookmarks.all %}
-                                        <a href="{% url 'core:del_from_bookmarks' novell.id 'novell' %}" type="button" class="btn btn-outline-success">В закладках <i
+                                        <a href="{% url 'core:del_from_bookmarks' novell.id 'novell' %}" type="button"
+                                           class="btn btn-outline-success">В закладках <i
                                                 class="bi bi-bookmark-check-fill"></i></a>
                                     {% else %}
-                                        <a href="{% url 'core:add_to_bookmarks' novell.id %}" type="button" class="btn btn-success">Добавить в закладки <i
+                                        <a href="{% url 'core:add_to_bookmarks' novell.id %}" type="button"
+                                           class="btn btn-success">Добавить в закладки <i
                                                 class="bi bi-bookmark-check"></i>
                                         </a>
 
@@ -89,7 +107,7 @@
                 <li class="nav-item">
                     <a class="nav-link h5" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
                        aria-controls="profile" aria-selected="false"><i class="bi bi-chat"
-                                                                        style="vertical-align: bottom"></i> Комментарии</a>
+                                                                        style="vertical-align: bottom"></i> Отзывы</a>
                 </li>
             </ul>
         </div>
@@ -151,10 +169,13 @@
                     </div>
 
                     <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
-                        <h1>Ti pidor</h1>
+                        <h1>Отзывы</h1>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script type="text/javascript" src="{% static "core/js/star_rating.js" %}"></script>
+
 {% endblock %}

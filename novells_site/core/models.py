@@ -107,7 +107,7 @@ class Novell(models.Model):
     description = models.TextField('Описание')
     genres = models.ManyToManyField(Genre, related_name='novells', verbose_name='Жанры')
     views = models.PositiveSmallIntegerField('Просмотры', default=0)
-    rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг')
+    overall_rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг')
 
     def get_absolute_url(self):
         return reverse('core:novell_detail', args=[self.slug])
@@ -168,10 +168,19 @@ class Comment(models.Model):
 
 
 class Profile(models.Model):
+    MALE = 'M'
+    FEMALE = 'F'
+    UNKNOWN = 'UN'
+    GENDER = [
+        (MALE, 'Мужской'),
+        (FEMALE, 'Женский'),
+        (UNKNOWN, 'Неизвестно')
+    ]
     name = models.OneToOneField(User, verbose_name='Пользователь', on_delete=models.CASCADE,
                                 related_name='user_profile')
 
     realname = models.CharField('Имя',max_length=100, blank=True)
+    sex = models.CharField('Пол', max_length=2, choices=GENDER, default=UNKNOWN)
     slug = AutoSlugField(always_update=True, populate_from='name')
     avatar = models.ImageField('Аватар', upload_to='users_avatars/', default='users_avatars/default/default.png')
     born_date = models.DateField('Дата рождения', blank=True, null=True)
@@ -201,4 +210,32 @@ class Profile(models.Model):
         verbose_name = 'Профиль'
         verbose_name_plural = 'Профили'
 
+
+class RatingStar(models.Model):
+
+    value = models.SmallIntegerField('Значение', default=0)
+
+    def __str__(self):
+        return str(self.value)
+
+    class Meta:
+        verbose_name = "Оценка"
+        verbose_name_plural = "Значения оценок"
+        ordering = ['-value']
+
+
+class Rating(models.Model):
+
+    author = models.ForeignKey(User, verbose_name='Проголосовавший', related_name='rated_novells', on_delete=models.CASCADE)
+    rate = models.ForeignKey(RatingStar, verbose_name='Оценка', on_delete=models.CASCADE)
+    novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.CASCADE)
+    date = models.DateTimeField("Дата оценки", auto_now_add=True)
+    updated = models.DateTimeField("Дата обновления оценки", auto_now=True)
+
+    def __str__(self):
+        return '{} от {} новелле {}'.format(self.rate, self.author, self.novell)
+
+    class Meta:
+        verbose_name = 'Оценка'
+        verbose_name_plural = 'Оценки'
 

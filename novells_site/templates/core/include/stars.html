@@ -1,0 +1,23 @@
+<style>
+    .checked {
+        color: orange;
+    }
+
+    .unchecked {
+
+        color: #eaeeff;
+    }
+</style>
+
+
+{% for i in stars %}
+    {% if i.value <= rating %}
+        <span class="bi bi-star-fill checked"></span>
+    {% elif half and rating_plus > i.value %}
+
+        <span class="bi bi-star-half checked"></span>
+    {% else %}
+        <span class="bi bi-star-fill unchecked"></span>
+
+    {% endif %}
+{% endfor %}

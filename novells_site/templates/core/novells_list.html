@@ -1,4 +1,6 @@
 {% extends 'core/home.html' %}
+{% load static %}
+{% load user_tags %}
 {% block title %}Все новеллы{% endblock title %}
 {% block content %}
     <div class="container-xxl bg-white h-100">
@@ -33,7 +35,8 @@
 
                                     {% for year in view.get_year %}
                                         <label class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="year" value="{{ year.0 }}">
+                                            <input class="form-check-input" type="checkbox" name="year"
+                                                   value="{{ year.0 }}">
                                             <span class="form-check-label">
 				                                {{ year.0 }}
 				                            </span>
@@ -52,7 +55,7 @@
                 </div>
             </div>
             <div class="col-10">
-                <div class="container">
+                <div class="container marat">
                     <div class="row row-cols-1 row-cols-xxl-5 row-cols-lg-4 row-cols-md-3 mt-1">
 
                         {% for nov in novells %}
@@ -67,14 +70,10 @@
 
                                     <h6 class="card-title mt-1">
                                         <div class="pb-2">
-                                            <span class="bi bi-star-fill checked align-bottom"></span>
-                                            <span class="bi bi-star-fill checked"></span>
-                                            <span class="bi bi-star-fill checked"></span>
+                                            {% stars nov.overall_rating %}
 
-                                            <span class="bi bi-star-half checked"></span>
-                                            <span class="bi bi-star checked"></span>
 
-                                            <span class="align-bottom">{{ nov.rating }}</span>
+                                            <span class="align-bottom">{{ nov.overall_rating }}</span>
                                         </div>
                                     </h6>
                                     <h6 class="card-subtitle"><a
@@ -89,4 +88,7 @@
             </div>
         </div>
     </div>
+
+
+
 {% endblock %}

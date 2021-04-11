@@ -88,6 +88,23 @@
                                 </p>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Пол</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+                                    {% if profile.sex == 'UN' %}
+                                        Неизвестен
+                                    {% elif profile.sex == 'M' %}
+                                        Мужской
+                                    {% elif profile.sex == 'F' %}
+                                        Женский
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Город</label>
