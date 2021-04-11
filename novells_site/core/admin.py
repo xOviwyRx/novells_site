@@ -6,8 +6,9 @@ from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Ratin
 
 @admin.register(Novell)
 class NovellAdmin(admin.ModelAdmin):
-    list_display = ('original_title', 'author', 'status', 'views', 'overall_rating')
+    list_display = ('original_title','eng_title','author', 'status', 'views', 'overall_rating')
     prepopulated_fields = {'slug': ('original_title',)}
+    readonly_fields = ('slug',)
 
 
 @admin.register(Chapter)
