@@ -160,22 +160,26 @@ if DEBUG:
     # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    MEDIA_ROOT = '/root/site/media'
+    STATIC_URL = '/static/'
+    MEDIA_URL = '/media/'
 
-
-
-if DEBUG:
+    
+    #if
     # EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     # ACCOUNT_EMAIL_REQUIRED = True
     # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
     # ACCOUNT_EMAIL_VERIFICATION = True
-else:
+"""else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
     ACCOUNT_EMAIL_VERIFICATION = True
     # ACCOUNT_USERNAME_MIN_LENGTH = 1
- 
+ """
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
