@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'allauth',
     'allauth.account',
+    #'allauth.socialaccount',
 
 ]
 
@@ -100,8 +101,8 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'novells_database',
-            'USER': 'fixmypc_database_user',
-            'PASSWORD': 'password',
+            'USER': 'novells_database_user',
+            'PASSWORD': 'nnpassword',
             'HOST': 'localhost',
             'PORT': '5432',
         }
