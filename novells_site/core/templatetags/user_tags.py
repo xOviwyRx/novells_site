@@ -55,7 +55,7 @@ def stars(rating):
         a = round(rating)
         print(a)
     except:
-        return 0
+        return {'stars': RatingStar.objects.all().order_by('value'), 'rating': 0, 'half': False, 'rating_plus': 0, 'rounded':0}
     a = round(rating)
     if abs(a - rating) > Decimal('0.25') and abs(a - rating) < Decimal('0.75'):
         half = True
