@@ -51,7 +51,9 @@ def star_user(novell, user):
 @register.inclusion_tag('core/include/stars.html')
 def stars(rating):
     try:
+
         a = round(rating)
+        print(a)
     except:
         return 'NaN'
     a = round(rating)
