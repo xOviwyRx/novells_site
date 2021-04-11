@@ -46,7 +46,7 @@
                             <span class="editContent font-weight-bolder">{{ novell.overall_rating }}</span>
                         </h6>
 
-                        {% if user.is_authentificated %}
+                        {% if user.is_authenticated %}
                             <form action="{% url 'core:add_rating' %}" method="post" name="rating">
                                 <p class="m-0 text-muted font-weight-bold">Ваша оценка: </p>
 
@@ -63,8 +63,8 @@
 
 
                             </form>
-                            {% else %}
-                                                            <p class="m-0 text-muted font-weight-bold">Войдите, чтобы оценить??</p>
+                        {% else %}
+                            <p class="m-0 text-muted font-weight-bold">Войдите, чтобы оценить??</p>
 
                         {% endif %}
                     </div>
@@ -125,7 +125,7 @@
                             <div class="card-body">
                                 <h3 class="mb-2">Описание</h3>
                                 <p class="description">
-                                    {{ novell.description|linebreaksbr }}
+                                    {{ novell.description|safe|linebreaksbr }}
                                 </p>
                                 <h3 class="mb-4">Жанры</h3>
                                 {% for genre in novell.genres.all %}

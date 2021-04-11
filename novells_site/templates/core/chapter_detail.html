@@ -31,7 +31,7 @@
                         </h5>
                     </div>
                     <div class="card-body chapter_text">
-                        {{ chapter.chapter_text|linebreaks }}
+                        {{ chapter.chapter_text|safe|linebreaks }}
                     </div>
                     <div class="card-footer d-flex justify-content-between">
 
