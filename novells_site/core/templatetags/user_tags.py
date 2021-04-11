@@ -55,7 +55,7 @@ def stars(rating):
         a = round(rating)
         print(a)
     except:
-        return 'NaN'
+        return 0
     a = round(rating)
     if abs(a - rating) > Decimal('0.25') and abs(a - rating) < Decimal('0.75'):
         half = True
