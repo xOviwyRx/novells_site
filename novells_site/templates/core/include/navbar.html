@@ -3,9 +3,12 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex sticky-top">
     <div class="container-xxl">
         <a class="navbar-brand" href="#">Логотип</a>
-
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold" aria-current="page" href='{% url 'core:home' %}'>Главная</a>
                 </li>
@@ -26,6 +29,23 @@
                     <a class="nav-link font-weight-bold" href="#">Pricing</a>
                 </li>
             </ul>
+
+
+            {% if user.is_authenticated %}
+                <a class="p-2 text-muted" href="{{ user.user_profile.get_absolute_url }}">{{ user.username }}</a>
+            {% else %}
+                <a role="button" class="btn btn-success mr-2" href="{% url 'account_signup' %}">Регистрация</a>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#logoutModal">
+                    Выход
+                </button>
+            {% else %}
+                <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#loginModal">
+                    Вход
+                </button>
+            {% endif %}
         </div>
         <!--
         <form class="d-flex">
@@ -37,20 +57,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         -->
-        {% if user.is_authenticated %}
-            <a class="p-2 text-muted" href="{{ user.user_profile.get_absolute_url }}">{{ user.username }}</a>
-        {% else %}
-            <a role="button" class="btn btn-success mr-2" href="{% url 'account_signup' %}">Регистрация</a>
-        {% endif %}
 
-        {% if user.is_authenticated %}
-            <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#logoutModal">
-                Выход
-            </button>
-        {% else %}
-            <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#loginModal">
-                Вход
-            </button>
-        {% endif %}
     </div>
 </nav>
