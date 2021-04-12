@@ -109,14 +109,15 @@
         </div>
 
 
-        <h1 class="text-center mt-3"><i class="bi bi-card-list text-primary"
+
+            <h1 class="text-center mt-3"><i class="bi bi-card-list text-primary"
                                         style="vertical-align: bottom"></i> Каталог новелл</h1>
         <hr class="featurette-divider">
 
 
-        <div class="row scrolling-wrapper-flexbox pb-4">
+        <div class="row row-cols-2 row-cols-xxl-6 row-cols-lg-5 row-cols-md-4 row-cols-sm-3 g-lg-3 scrolling-wrapper-flexbox pb-4">
             {% for nov in all_novells %}
-                <div class="col-xxl-2 col-lg-3 col-md-4 col-sm-4 col-xs-6 pr-1 pl-0">
+                <div class="col px-1">
                     <div class="card p-0 mx-0 h-100">
 
                             <img src="{{ nov.poster.url }}" class="card-img-top img-fluid rounded p-2"
