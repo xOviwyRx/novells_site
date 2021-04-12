@@ -96,7 +96,7 @@ class Novell(models.Model):
     ]
 
     original_title = models.CharField(max_length=256, verbose_name='Оригинальное название')
-    rus_title = models.CharField(max_length=256, verbose_name='Перевод названия', blank=True, null=True)
+    rus_title = models.CharField(max_length=256, verbose_name='Название на русском', blank=True, null=True)
     eng_title = models.CharField(max_length=256, verbose_name='Название на англ.', blank=True, null=True)
 
     slug = models.SlugField(max_length=250)

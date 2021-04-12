@@ -8,7 +8,8 @@ from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Ratin
 class NovellAdmin(admin.ModelAdmin):
     list_display = ('original_title','author', 'status', 'views', 'overall_rating')
     filter_horizontal = ('genres',)
-    prepopulated_fields = {'slug': ('original_title',)}
+    prepopulated_fields = {'slug': ('eng_title',)}
+    readonly_fields = ('overall_rating',)
 
 
 
