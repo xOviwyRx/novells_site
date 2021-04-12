@@ -11,7 +11,7 @@
     Домашняя страница
 {% endblock %}
 {% block content %}
-    <div class="container-xxl" style="background:#ffffff; max-width: 1100px;">
+    <div class="container-xxl" style="background:#ffffff; max-width: 1170px;">
 
         <div class="row mb-2">
 
@@ -61,7 +61,7 @@
                 <hr>
                 <img src="{{ pop.poster.url }}" class="float-left w-25 img-thumbnail mr-2 mb-1 mt-2">
 
-                <h2 class="mb-1">{{ pop }}</h2>
+                <h2 class="mb-1">{{ pop.rus_title }}</h2>
                 {% for genre in pop.genres.all %}
                     <span class="badge rounded-pill bg-primary">{{ genre }}</span>
 
