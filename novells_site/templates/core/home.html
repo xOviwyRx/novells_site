@@ -29,7 +29,7 @@
                 <div class="carousel-inner">
                     {% for img in image_shots %}
 
-                        <div class="carousel-item ratio ratio-21x9 {% if forloop.first %}active{% endif %}">
+                        <div class="carousel-item ratio ratio-16x9 {% if forloop.first %}active{% endif %}">
                             <img src="{{ img.shot.url }}" class="d-block w-100" alt="{{ img.text_primary }}">
                             <div class="carousel-caption d-none d-md-block">
                                 <h4>{{ img.text_primary }}</h4>
