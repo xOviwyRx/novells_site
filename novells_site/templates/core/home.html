@@ -121,11 +121,10 @@
             {% for nov in all_novells %}
                 <div class="col-xxl-2 col-md-3 col-sm-6 px-1">
                     <div class="card p-0 mx-1 h-100">
-                        <a href="{{ nov.get_absolute_url }}">
-                            <img src="{{ nov.poster.url }}" class="card-img-top rounded p-2"
-                                 alt="{{ nov.original_title }}" height="250px">
+                            <img src="{{ nov.poster.url }}" class="card-img-top img-fluid rounded p-2"
+                                 alt="{{ nov.original_title }}">
 
-                        </a>
+
                         <div class="card-body">
                             <h6 class="card-title"><a href="{{ nov.get_absolute_url }}">{{ nov.rus_title }}</a>
                             </h6>
@@ -140,7 +139,7 @@
                                                 class="bi bi-circle-fill text-danger"></i> Анонос</span>
                                     {% elif nov.status == 'CT' %}
                                         <span class="text-muted font-weight-bold"><i
-                                                class="bi bi-circle-fill text-success"></i>Завершено</span>
+                                                class="bi bi-circle-fill text-success"></i> Завершено</span>
                                     {% endif %}
                                 </div>
                             </h6>
