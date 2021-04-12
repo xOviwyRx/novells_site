@@ -76,7 +76,7 @@
                     <span>{{ pop.overall_rating }}</span>
                 </h6>
                 <p>
-                    {{ pop.description|truncatechars:400 }}
+                    {{ pop.description|safe|truncatechars:400 }}
                 </p>
 
             </div>
