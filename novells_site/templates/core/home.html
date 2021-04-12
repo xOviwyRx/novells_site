@@ -5,26 +5,55 @@
 {% block styles %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{% static "core/home.css" %}">
-    <style>
-        .checked {
-            color: orange;
-        }
 
-        a:hover {
-            color: inherit;
-        }
-    </style>
 {% endblock %}
 {% block title %}
     Домашняя страница
 {% endblock %}
 {% block content %}
+    <div class="container-xxl">
 
+    </div>
     <div class="container-xxl" style="background:#ffffff">
-        <div class="row my-2">
-            <div class="col-12 p-0">
-                <img src="{% static 'img/prints/back1.jpg' %}" class="img-fluid w-100">
+
+        <div class="row mb-2">
+
+            <div id="carouselExampleCaptions" class="carousel slide carousel-fade carousel-dark px-0"
+                 data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    {% for img in image_shots %}
+                        <button type="button" data-bs-target="#carouselExampleCaptions"
+                                data-bs-slide-to="{{ forloop.counter0 }}"
+                                {% if forloop.counter == 1 %}class="active" aria-current="true"{% endif %}
+                                aria-label="Slide {{ forloop.counter }}"></button>
+                    {% endfor %}
+                </div>
+
+                <div class="carousel-inner">
+                    {% for img in image_shots %}
+
+                        <div class="carousel-item ratio ratio-21x9 {% if forloop.first %}active{% endif %}">
+                            <img src="{{ img.shot.url }}" class="d-block w-100" alt="{{ img.text_primary }}">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h4>{{ img.text_primary }}</h4>
+                                <p>{{ img.text_secondary }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Предыдущий</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Следующий</span>
+                </button>
             </div>
+
 
         </div>
         <div class="row">
@@ -68,7 +97,7 @@
                                 </div>
                                 <div class="col-11">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">{{ chapter.novell.original_title }}</h6>
+                                        <h6 class="mb-1">{{ chapter.novell.rus_title }}</h6>
                                         <small>{{ chapter.publish }}</small>
                                     </div>
                                     <p class="mb-1">{{ chapter.number }} глава. {{ chapter.title }}</p>
@@ -90,36 +119,39 @@
 
         <div class="row scrolling-wrapper-flexbox pb-4">
             {% for nov in all_novells %}
-                <div class="col-xxl-3 col-md-4 col-sm-6">
-                    <div class="card p-2 mx-1 h-100">
+                <div class="col-xxl-2 col-md-3 col-sm-6 px-1">
+                    <div class="card p-0 mx-1 h-100">
                         <a href="{{ nov.get_absolute_url }}">
                             <img src="{{ nov.poster.url }}" class="card-img-top rounded p-2"
                                  alt="{{ nov.original_title }}">
                         </a>
                         <div class="card-body">
-                            <h5 class="card-title"><a href="{{ nov.get_absolute_url }}">{{ nov.original_title }}</a>
-                            </h5>
+                            <h6 class="card-title"><a href="{{ nov.get_absolute_url }}">{{ nov.rus_title }}</a>
+                            </h6>
                             <h6 class="card-subtitle mt-1">
                                 <div class="pb-2">
-                                    {% stars nov.overall_rating %}
 
-
-                                    <span class="align-bottom">{{ nov.overall_rating }}</span>
+                                    {% if nov.status == 'OG' %}
+                                        <span class="text-muted font-weight-bold"><i
+                                                class="bi bi-circle-fill text-primary"></i> Онгоинг</span>
+                                    {% elif nov.status == 'AN' %}
+                                        <span class="text-muted font-weight-bold"><i
+                                                class="bi bi-circle-fill text-danger"></i> Анонос</span>
+                                    {% elif nov.status == 'CT' %}
+                                        <span class="text-muted font-weight-bold"><i
+                                                class="bi bi-circle-fill text-success"></i>Завершено</span>
+                                    {% endif %}
                                 </div>
                             </h6>
 
-                            {% if nov.status == 'OG' %}
-                                <span class="text-muted font-weight-bold"><i
-                                        class="bi bi-circle-fill text-primary"></i> Онгоинг</span>
-                            {% elif nov.status == 'AN' %}
-                                <span class="text-muted font-weight-bold"><i class="bi bi-circle-fill text-danger"></i> Анонос</span>
-                            {% elif nov.status == 'CT' %}
-                                Завершено
-                            {% endif %}
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <a href="{{ nov.get_absolute_url }}" target="_blank" class="btn btn-primary">Читать</a>
 
+                        </div>
+                        <div class="card-footer border-0 bg-white">
+
+                            {% stars nov.overall_rating %}
+
+
+                            <span class="align-bottom">{{ nov.overall_rating }}</span>
                         </div>
                     </div>
                 </div>

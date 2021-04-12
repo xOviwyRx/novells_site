@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar
+from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider
 
 
 # Register your models here.
@@ -49,3 +49,7 @@ class RatingStarAdmin(admin.ModelAdmin):
 class RatingAdmin(admin.ModelAdmin):
     list_display = ('author','rate','novell')
 
+
+@admin.register(Slider)
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ('position',)

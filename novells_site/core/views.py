@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse
 
@@ -26,9 +26,11 @@ def index(request):
     pop_novell = Novell.objects.order_by('-views').first()
     shedule_chapter = Chapter.objects.filter(status=False).order_by('publish')[:4]
     all_novells = Novell.objects.all()
+    shots = Slider.objects.all().order_by('position')
     return render(request, 'core/home.html', {'pop': pop_novell,
                                               'shedule_chapter': shedule_chapter,
                                               'all_novells': all_novells,
+                                              'image_shots':shots,
                                               })
 
 

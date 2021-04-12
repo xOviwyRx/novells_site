@@ -241,3 +241,17 @@ class Rating(models.Model):
         verbose_name = 'Оценка'
         verbose_name_plural = 'Оценки'
 
+
+class Slider(models.Model):
+    shot = models.ImageField('Картинка', upload_to='slider_shots/', default='slider_shots/default.png')
+    position = models.PositiveSmallIntegerField('Позиция')
+    text_primary = models.CharField("Крупный текст", max_length=100, blank=True)
+    text_secondary = models.CharField("Текст помельче", max_length=100, blank=True)
+
+    def __str__(self):
+        return 'Картинка на главной на {} месте'.format(self.position)
+
+    class Meta:
+        verbose_name = 'Картинка на главной'
+        verbose_name_plural = 'Картинки на главной'
+

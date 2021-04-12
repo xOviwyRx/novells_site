@@ -53,7 +53,6 @@ def stars(rating):
     try:
 
         a = round(rating)
-        print(a)
     except:
         return {'stars': RatingStar.objects.all().order_by('value'), 'rating': 0, 'half': False, 'rating_plus': 0, 'rounded':0}
     a = round(rating)
