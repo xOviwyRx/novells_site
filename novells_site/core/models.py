@@ -109,7 +109,7 @@ class Novell(models.Model):
     description = models.TextField('Описание')
     genres = models.ManyToManyField(Genre, related_name='novells', verbose_name='Жанры')
     views = models.PositiveSmallIntegerField('Просмотры', default=0)
-    overall_rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг')
+    overall_rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг', default='0.00')
 
     def get_absolute_url(self):
         return reverse('core:novell_detail', args=[self.slug])
