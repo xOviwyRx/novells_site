@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider
 
 
@@ -53,4 +55,9 @@ class RatingAdmin(admin.ModelAdmin):
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
-    list_display = ('position',)
+    list_display = ('shot_img','position', 'active',)
+
+    def shot_img(self, obj):
+        return mark_safe('<img src={} width="210" height="90"/>'.format(obj.shot.url))
+
+    shot_img.short_description = 'Изображение'
