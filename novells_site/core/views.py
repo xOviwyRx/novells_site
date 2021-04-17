@@ -23,11 +23,12 @@ class GenreYear:
 
 
 def index(request):
-    pop_novell = Novell.objects.order_by('-views').first()
+    pop_novell = Novell.objects.filter(important=True)
+    #pop_novell = Novell.objects.order_by('-views').first()
     shedule_chapter = Chapter.objects.filter(status=False).order_by('publish')[:4]
     all_novells = Novell.objects.all()
     shots = Slider.objects.filter(active=True).order_by('position')
-    return render(request, 'core/home.html', {'pop': pop_novell,
+    return render(request, 'core/home.html', {'pops': pop_novell,
                                               'shedule_chapter': shedule_chapter,
                                               'all_novells': all_novells,
                                               'image_shots':shots,

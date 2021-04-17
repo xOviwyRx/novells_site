@@ -104,6 +104,7 @@ class Novell(models.Model):
     translator = models.CharField(max_length=128, verbose_name='Переводчик')
     publish = models.DateTimeField('Начало публикации', default=timezone.now)
     status = models.CharField('Статус', max_length=2, choices=STATUS, default=ANONS)
+    important = models.BooleanField('Выбор редакции', default=False)
     created = models.DateTimeField('Опубликовано', auto_now_add=True)
     poster = models.ImageField('Постер', upload_to='novells_poster/')
     description = models.TextField('Описание')
