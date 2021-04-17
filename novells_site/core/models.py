@@ -120,7 +120,7 @@ class Novell(models.Model):
         verbose_name_plural = 'Новеллы'
 
     def __str__(self):
-        return self.original_title
+        return self.rus_title
 
 
 class Chapter(models.Model):
