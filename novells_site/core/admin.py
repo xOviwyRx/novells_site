@@ -19,6 +19,7 @@ class NovellAdmin(admin.ModelAdmin):
 @admin.register(Chapter)
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ('number', 'title', 'status', 'novell')
+    exclude = ('publish',)
 
 
 @admin.register(Genre)

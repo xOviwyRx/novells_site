@@ -55,10 +55,10 @@
         </div>
 
 
-        <div class="row">
+        <div class="row mb-4">
 
 
-            <div class="col-xxl-6 col-sm-12">
+            <div class="col-12">
                 <h1 class="text-center mt-1 mb-2"><i class="bi bi-award text-danger"
                                                      style="vertical-align: bottom"></i>
                     Выбор редакции</h1>
@@ -105,12 +105,12 @@
                         <span class="visually-hidden">Следующий</span>
                     </button>
 
-                    <div class="carousel-indicators m-0 position-relative">
+                    <div class="carousel-indicators m-0" style="bottom: 14%;">
                         {% for pop in pops %}
                             <button data-bs-target="#carouselExampleIndicators"
                                     data-bs-slide-to="{{ forloop.counter0 }}"
                                     class="{% if forloop.first %}active{% endif %}" aria-current="true"
-                                    style="height: auto; width: 10%;">
+                                    style="height: auto; width: 9%;">
                                 <img src="{{ pop.poster.url }}" class="d-block w-100 img-thumbnail">
 
                             </button>
@@ -120,34 +120,6 @@
 
             </div>
 
-            <div class="col-xxl-6 col-sm-12">
-                <h1 class="text-center align-text-bottom mt-1 mb-2"><i class="bi bi-table text-primary"
-                                                                       style="vertical-align: bottom"></i> Расписание
-                </h1>
-                <hr>
-
-                <div class="list-group">
-                    {% for chapter in shedule_chapter %}
-                        <div class="list-group-item list-group-item-action">
-                            <div class="row">
-                                <div class="col-1 px-1">
-                                    <img src="{{ chapter.novell.poster.url }}" class="img-fluid rounded float-start">
-
-                                </div>
-                                <div class="col-11">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">{{ chapter.novell.rus_title }}</h6>
-                                        <small>{{ chapter.publish }}</small>
-                                    </div>
-                                    <p class="mb-1">{{ chapter.number }} глава. {{ chapter.title }}</p>
-                                </div>
-
-                            </div>
-                        </div>
-                    {% endfor %}
-
-                </div>
-            </div>
         </div>
 
         <div class="pops-novells row" style="background-color: #8bbafe;">
@@ -206,33 +178,29 @@
         <div class="row">
             <div class="col-12">
                 <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">List group item heading</h5>
-                            <small>3 days ago</small>
+                    {% for chapter in last_update %}
+                        <div class="list-group-item list-group-item-action py-1">
+                            <div class="row">
+                                <div class="col-1 px-1 justify-content-center d-flex">
+                                    <img src="{{ chapter.novell.poster.url }}" class="rounded w-75">
+
+                                </div>
+                                <div class="col-11">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <a class="mb-1 h5" href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
+                                        <small class="font-weight-bold">{{ chapter.created|timesince }} назад</small>
+                                    </div>
+                                    <p class="mb-1">
+                                        <span class="font-weight-bold text-success">{% if chapter.status %}Добавлена{% else %}Анонсирована{% endif %}</span>
+                                        <span>{{ chapter.number }} глава.</span>
+                                        <span class="font-weight-bolder">{{ chapter.title }}</span>
+                                    </p>
+                                </div>
+
+                            </div>
                         </div>
-                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                            varius blandit.</p>
-                        <small>Donec id elit non mi porta.</small>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">List group item heading</h5>
-                            <small class="text-muted">3 days ago</small>
-                        </div>
-                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                            varius blandit.</p>
-                        <small class="text-muted">Donec id elit non mi porta.</small>
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">List group item heading</h5>
-                            <small class="text-muted">3 days ago</small>
-                        </div>
-                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus
-                            varius blandit.</p>
-                        <small class="text-muted">Donec id elit non mi porta.</small>
-                    </a>
+                    {% endfor %}
+
                 </div>
             </div>
         </div>
@@ -241,3 +209,34 @@
 
 {% endblock %}
 
+<!--
+            <div class="col-xxl-6 col-sm-12">
+                <h1 class="text-center align-text-bottom mt-1 mb-2"><i class="bi bi-table text-primary"
+                                                                       style="vertical-align: bottom"></i> Расписание
+                </h1>
+                <hr>
+
+                <div class="list-group">
+                    {% for chapter in shedule_chapter %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col-1 px-1">
+                                    <img src="{{ chapter.novell.poster.url }}" class="img-fluid rounded float-start">
+
+                                </div>
+                                <div class="col-11">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ chapter.novell.rus_title }}</h6>
+                                        <small>{{ chapter.publish }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ chapter.number }} глава. {{ chapter.title }}</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+-->

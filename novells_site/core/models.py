@@ -130,6 +130,7 @@ class Chapter(models.Model):
     publish = models.DateTimeField('Дата публикации', default=timezone.now)
     novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.PROTECT, related_name='chapters')
     chapter_text = models.TextField('Текст главы', blank=True, null=True)
+    created = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def get_absolute_url(self):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])

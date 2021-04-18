@@ -18,3 +18,20 @@
 a:hover {
     color: inherit;
 }
+
+.carousel-indicators .active img {
+    padding: .25rem;
+    background-color: #fff;
+    border: 2px solid #00FF00;
+    border-radius: .25rem;
+    max-width: 100%;
+    height: auto;
+}
+.carousel-indicators button img {
+    padding: .25rem;
+    background-color: #fff;
+    border: 2px solid #1c7430;
+    border-radius: .25rem;
+    max-width: 100%;
+    height: auto;
+}
