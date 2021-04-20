@@ -12,17 +12,21 @@
     <div class="container-xxl" style="background:#ffffff;">
 
         <div class="row mt-2 pt-3">
-            <div class="col-xxl-3 col-sm-3">
-                <img src="{{ novell.poster.url }}" alt="{{ novell.original_title }}"
-                     class="img-fluid w-100 rounded img-thumbnail">
+            <div class="col-xxl-3 col-sm-3 pr-0">
+                <table class="h-100 mx-0">
+                    <td class="text-center">
+                        <img src="{{ novell.poster.url }}" alt="{{ novell.original_title }}"
+                             class="img-fluid w-100 rounded img-thumbnail">
+                    </td>
+                </table>
             </div>
             <div class="col-xxl-9 col-sm-9">
 
                 <div class="card border-0 h-100">
                     <div class="card-body pt-0">
-                        <h1>{{ novell.rus_title }}</h1>
-                        <h2>{{ novell.original_title }}</h2>
-                        <h3>{{ novell.eng_title }}</h3>
+                        <h2>{{ novell.rus_title }}</h2>
+                        <h3>{{ novell.original_title }}</h3>
+                        <h4>{{ novell.eng_title }}</h4>
 
                         <p class="text-muted mb-0 font-weight-bold">Автор</p>
                         <h6>{{ novell.author }}</h6>
@@ -98,7 +102,7 @@
         </div>
 
         <div class="row">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <ul class="nav nav-tabs ml-0" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active h5" id="description-tab" data-toggle="tab" href="#description" role="tab"
                        aria-controls="home" aria-selected="true"><i class="bi bi-info"
@@ -123,7 +127,7 @@
                     <div class="tab-pane fade show active" id="description" role="tabpanel"
                          aria-labelledby="description-tab">
 
-                        <div class="card">
+                        <div class="card mt-2">
                             <div class="card-body">
                                 <h3 class="mb-2">Описание</h3>
                                 <p class="description">
@@ -139,10 +143,7 @@
                         </div>
 
                         <hr>
-                        <div class="card">
-                            <h3>Последнее обновление:</h3>
 
-                        </div>
                     </div>
 
                     <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">

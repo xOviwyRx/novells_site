@@ -5,7 +5,12 @@
 {% block styles %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="{% static "core/home.css" %}">
-
+    <style>
+        .text-vertical {
+            writing-mode: tb-rl;
+            transform: rotate(180deg);
+        }
+    </style>
 {% endblock %}
 {% block title %}
     Домашняя страница
@@ -59,65 +64,75 @@
 
 
             <div class="col-12">
-                <h1 class="text-center mt-1 mb-2"><i class="bi bi-award text-danger"
-                                                     style="vertical-align: bottom"></i>
-                    Выбор редакции</h1>
                 <hr>
-                <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel">
-
-
-                    <div class="carousel-inner">
-                        {% for pop in pops %}
-
-                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-
-                                <img src="{{ pop.poster.url }}" class="float-left w-25 img-thumbnail mr-2 mb-1 mt-2">
-
-                                <h2 class="mb-1">{{ pop.rus_title }}</h2>
-                                {% for genre in pop.genres.all %}
-                                    <span class="badge rounded-pill bg-primary">{{ genre }}</span>
-
-                                {% endfor %}
-                                <h6 class="text-muted">Автор: {{ pop.author }}</h6>
-                                <h6>
-                                    {% stars pop.overall_rating %}
-
-                                    <span>{{ pop.overall_rating }}</span>
-                                </h6>
-                                <p>
-                                    {{ pop.description|safe|truncatechars:400 }}
-                                </p>
-                                <p>
-
-                                </p>
-                            </div>
-                        {% endfor %}
+                <div class="row">
+                    <div class="col-1">
+                        <div class="text-vertical h1">
+                            <i class="bi bi-award text-danger"
+                               style="vertical-align: bottom;" ></i>
+                            Выбор редакции
+                        </div>
                     </div>
+                    <div class="col-11">
+                        <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel">
 
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Предыдущий</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Следующий</span>
-                    </button>
 
-                    <div class="carousel-indicators m-0" style="bottom: 14%;">
-                        {% for pop in pops %}
-                            <button data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="{{ forloop.counter0 }}"
-                                    class="{% if forloop.first %}active{% endif %}" aria-current="true"
-                                    style="height: auto; width: 9%;">
-                                <img src="{{ pop.poster.url }}" class="d-block w-100 img-thumbnail">
+                            <div class="carousel-inner">
+                                {% for pop in pops %}
 
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+
+                                        <img src="{{ pop.poster.url }}"
+                                             class="float-left w-25 img-thumbnail mr-3 mb-1 mt-2">
+
+                                        <h2 class="mb-1">{{ pop.rus_title }}</h2>
+                                        {% for genre in pop.genres.all %}
+                                            <span class="badge rounded-pill bg-primary">{{ genre }}</span>
+
+                                        {% endfor %}
+                                        <h6 class="text-muted">Автор: {{ pop.author }}</h6>
+                                        <h6>
+                                            {% stars pop.overall_rating %}
+
+                                            <span>{{ pop.overall_rating }}</span>
+                                        </h6>
+                                        <p class="p-2">
+                                            {{ pop.description|safe|truncatechars:400 }}
+                                        </p>
+                                        <p>
+
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Предыдущий</span>
                             </button>
-                        {% endfor %}
+                            <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleIndicators"
+                                    data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Следующий</span>
+                            </button>
+
+                            <div class="carousel-indicators m-0">
+                                {% for pop in pops %}
+                                    <button data-bs-target="#carouselExampleIndicators"
+                                            data-bs-slide-to="{{ forloop.counter0 }}"
+                                            class="{% if forloop.first %}active{% endif %}" aria-current="true"
+                                            style="height: auto; width: 9%;">
+                                        <img src="{{ pop.poster.url }}" class="d-block w-100 img-thumbnail">
+
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
@@ -187,11 +202,13 @@
                                 </div>
                                 <div class="col-11">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <a class="mb-1 h5" href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
+                                        <a class="mb-1 h5"
+                                           href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
                                         <small class="font-weight-bold">{{ chapter.created|timesince }} назад</small>
                                     </div>
                                     <p class="mb-1">
-                                        <span class="font-weight-bold text-success">{% if chapter.status %}Добавлена{% else %}Анонсирована{% endif %}</span>
+                                        <span class="font-weight-bold text-success">{% if chapter.status %}
+                                            Добавлена{% else %}Анонсирована{% endif %}</span>
                                         <span>{{ chapter.number }} глава.</span>
                                         <span class="font-weight-bolder">{{ chapter.title }}</span>
                                     </p>
