@@ -8,7 +8,8 @@
     <style>
         .text-vertical {
             writing-mode: tb-rl;
-            transform: rotate(180deg);
+            transform: rotate(360deg);
+            opacity: 20%;
         }
     </style>
 {% endblock %}
@@ -60,82 +61,80 @@
         </div>
 
 
-        <div class="row mb-4">
+
+        <div id="carouselExampleIndicators" class="carousel slide carousel-fade h-100 row mb-4" data-bs-ride="carousel">
+
+            <div class="carousel-inner py-4">
+                {% for pop in pops %}
+
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="row">
+
+                            <div class="col-4"
+                                 style="border-style: dotted; border-width: 3px; border-color: bisque; z-index: 2">
 
 
-            <div class="col-12">
-                <hr>
-                <div class="row">
-                    <div class="col-1 p-0 d-flex justify-content-center">
-                        <div class="text-vertical h1 my-4 text-center">
-                            <i class="bi bi-award text-danger"
-                               style="vertical-align: bottom;" ></i>
-                            Выбор редакции
-                        </div>
-                    </div>
-                    <div class="col-11">
-                        <div id="carouselExampleIndicators" class="carousel slide h-100" data-bs-ride="carousel">
+                                <img src="{{ pop.poster.url }}"
+                                     class="img-fluid p-3">
 
-
-                            <div class="carousel-inner">
-                                {% for pop in pops %}
-
-                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-
-                                        <img src="{{ pop.poster.url }}"
-                                             class="float-left w-25 img-thumbnail mr-3 mb-1 mt-2">
-
-                                        <h2 class="mb-1">{{ pop.rus_title }}</h2>
-                                        {% for genre in pop.genres.all %}
-                                            <span class="badge rounded-pill bg-primary">{{ genre }}</span>
-
-                                        {% endfor %}
-                                        <h6 class="text-muted">Автор: {{ pop.author }}</h6>
-                                        <h6>
-                                            {% stars pop.overall_rating %}
-
-                                            <span>{{ pop.overall_rating }}</span>
-                                        </h6>
-                                        <p class="p-2">
-                                            {{ pop.description|safe|truncatechars:400 }}
-                                        </p>
-                                        <p>
-
-                                        </p>
-                                    </div>
-                                {% endfor %}
                             </div>
 
-                            <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Предыдущий</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Следующий</span>
-                            </button>
-
-                            <div class="carousel-indicators m-0 d-flex justify-content-end">
-                                {% for pop in pops %}
-                                    <button data-bs-target="#carouselExampleIndicators"
-                                            data-bs-slide-to="{{ forloop.counter0 }}"
-                                            class="{% if forloop.first %}active{% endif %}" aria-current="true"
-                                            style="height: auto; width: 9%;">
-                                        <img src="{{ pop.poster.url }}" class="d-block w-100 img-thumbnail">
-
-                                    </button>
-                                {% endfor %}
+                            <div class="col-1 m-0 p-0 d-flex">
+                                <div class="text-vertical text-center h2">
+                                    Выбор редакции
+                                </div>
                             </div>
+
+
+                            <div class="col-7 pl-0 ml-0">
+
+
+                                <h1 class="mb-1">{{ pop.rus_title }}</h1>
+                                {% for genre in pop.genres.all %}
+                                    <span class="badge rounded-pill bg-primary"
+                                          style="font-size: large">{{ genre }}</span>
+
+                                {% endfor %}
+                                <h6 class="text-muted">Автор: {{ pop.author }}</h6>
+                                <h5>
+                                    {% stars pop.overall_rating %}
+
+                                    <span>{{ pop.overall_rating }}</span>
+                                </h5>
+                                <p class="p-2" style="font-size: larger">
+                                    {{ pop.description|safe|truncatechars:400 }}
+                                </p>
+
+
+                            </div>
+
+
                         </div>
                     </div>
-                </div>
+                {% endfor %}
+
+
             </div>
 
+            <button class="btn btn-outline-dark btn-lg font-weight-bold" type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next" style="position: absolute; bottom: 0; left: 30%; width: 10%; z-index: 2000;">
+                Далее
+            </button>
+
+            <div class="carousel-indicators m-0 d-flex justify-content-end" style="bottom: -5%; z-index: 1;">
+                {% for pop in pops %}
+                    <button data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide-to="{{ forloop.counter0 }}"
+                            class="{% if forloop.first %}active{% endif %}" aria-current="true"
+                            style="height: auto; width: 9%;">
+                        <img src="{{ pop.poster.url }}" class="d-block w-100 img-thumbnail">
+
+                    </button>
+                {% endfor %}
+            </div>
         </div>
+
 
         <div class="pops-novells row" style="background-color: #8bbafe;">
             <h1 class="text-center mt-1"><i class="bi bi-card-list text-primary"
