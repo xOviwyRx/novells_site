@@ -36,28 +36,36 @@
         body {
             background-image: inherit;
             background: url({% static 'img/backgs/background2.jpg'%});
-            height: 100%;
+        }
+
+        .wrapper {
+            min-height: 100%;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
         }
 
 
         body .container-xxl {
             max-width: 1170px;
-            min-height: 100%;
         }
+        
     </style>
     {% block scripts %} {% endblock %}
 
     {% block styles %} {% endblock %}
 </head>
 <body>
-{% include 'core/include/navbar.html' %}
-{% block content %}
-{% endblock %}
-{% include 'core/include/footer.html' %}
+<div class="wrapper">
+
+    {% include 'core/include/navbar.html' %}
+    {% block content %}
+    {% endblock %}
+    {% include 'core/include/footer.html' %}
 
 
-{% include 'core/include/login_logout/login_modal.html' %}
+    {% include 'core/include/login_logout/login_modal.html' %}
 
-{% include 'core/include/login_logout/logout_modal.html' %}
+    {% include 'core/include/login_logout/logout_modal.html' %}
+</div>
 </body>
 </html>
