@@ -30,12 +30,14 @@
     <!--
     <script src="{% static 'core/js/script.js' %}"></script>
     <script src="http://twitter.github.com/hogan.js/builds/3.0.1/hogan-3.0.1.js"></script>
-    -->
+
+-->
     <style>
         body {
-            background: rgb(63, 94, 251);
-            background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+            background-image: inherit;
+            background: url({% static 'img/backgs/background1.jpg'%});
         }
+
 
         body .container-xxl {
             max-width: 1170px;
