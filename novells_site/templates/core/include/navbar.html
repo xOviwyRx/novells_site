@@ -48,8 +48,8 @@
             {% endif %}
         </div>
 
-        <form class="d-flex">
-            <input class="form-control mr-2" type="search" placeholder="Поиск" aria-label="Search">
+        <form class="d-flex" action="{% url 'core:filter' %}" method="get">
+            <input class="form-control mr-2" type="search" name="q" placeholder="Поиск" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Поиск</button>
         </form>
 

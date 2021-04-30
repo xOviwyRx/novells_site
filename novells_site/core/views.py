@@ -168,6 +168,10 @@ class FilterNovellsView(GenreYear, ListView):
     context_object_name = 'novells'
 
     def get_queryset(self):
+        q = self.request.GET.get('q')
+        print(q)
+        if q:
+            return Novell.objects.filter(rus_title__icontains=q)
         genre_filter = self.request.GET.getlist('genre')
         year_filter = self.request.GET.getlist('year')
         if genre_filter and year_filter and len(genre_filter) == 1:
