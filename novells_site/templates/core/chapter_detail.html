@@ -11,9 +11,11 @@
         }
 
         .chapter_text {
-            font-family: Arimo;
-            font-size: larger;
-
+            font-family: Calibri;
+            font-size: medium;
+            padding-left: 8%;
+            padding-right: 8%;
+            padding-top: 3%;
         }
     </style>
 {% endblock %}
@@ -46,7 +48,7 @@
     </div>
     <div class="container-xxl mt-2">
         <div class="row">
-            {% include 'core/comments.html' with comments=chapter.chapter_comments %}
+            {% include 'core/comments.html' with comments=chapter.comments %}
                 {% include 'core/include/add_comment_form.html' with chapter=chapter %}
 
         </div>

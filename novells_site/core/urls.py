@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from . import views
-from .models import Comment, LikeDislike
+from .models import Comment, LikeDislike, Chapter
 
 app_name = 'core'
 
 urlpatterns = [
 
-    path('add_comment/to_chapter/<int:pk>', views.AddComment.as_view(), name='add_comment'),
+    path('add_comment/to_chapter/<int:pk>', views.AddComment.as_view(model=Chapter), name='add_comment'),
     path('', views.index, name='home'),
     path('novells_list/', views.NovellListView.as_view(), name='novell_list'),
     path('novells_list/filter/', views.FilterNovellsView.as_view(), name='filter'),
@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/comment/<int:id>/dislike/',
          login_required(views.VotesView.as_view(model=Comment, vote_type=LikeDislike.DISLIKE)),
          name='comment_dislike'),
+
+
     path('add_to_bookmark/novell/<int:pk>', views.add_to_bookmark, name='add_to_bookmarks'),
     path('delete_from_bookmark/novell/<int:pk>/<str:frommm>', views.del_from_bookmark, name='del_from_bookmarks'),
 

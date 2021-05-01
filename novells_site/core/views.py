@@ -63,8 +63,10 @@ class ChapterDetailView(DetailView):
 
 
 class AddComment(View):
+    model = None
 
     def post(self, request, pk):
+        obj = self.model.objects.get(id=pk)
         if request.method == 'POST':
             form = CommentForm(data=request.POST)
             chapter = Chapter.objects.get(id=pk)
@@ -72,8 +74,10 @@ class AddComment(View):
                 form = form.save(commit=False)
                 if request.POST.get("parent", None):
                     form.parent_id = int(request.POST.get("parent"))
+                form.object_id = obj.id
                 form.chapter = chapter
                 form.author = request.user
+                form.content_type = ContentType.objects.get_for_model(obj)
                 form.save()
             return redirect(form.get_absolute_url())
 
@@ -169,7 +173,6 @@ class FilterNovellsView(GenreYear, ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        print(q)
         if q:
             return Novell.objects.filter(rus_title__icontains=q)
         genre_filter = self.request.GET.getlist('genre')

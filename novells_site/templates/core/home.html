@@ -90,7 +90,7 @@
                             <div class="col-7 pl-0 ml-0">
 
 
-                                <h2 class="mb-1">{{ pop.rus_title }}</h2>
+                                <h2 class="mb-1"><a href="{{ pop.get_absolute_url }}">{{ pop.rus_title }}</a></h2>
                                 {% for genre in pop.genres.all %}
                                     <span class="badge rounded-pill bg-primary"
                                           style="font-size: large">{{ genre }}</span>
@@ -199,20 +199,21 @@
                 {% for nov in all_novells %}
                     <div class="slide-item h-100">
 
-
+                        <a href="{{ nov.get_absolute_url }}"
+                        >
                             <img src="{{ nov.poster.url }}" class="card-img-top rounded p-2"
                                  alt="{{ nov.original_title }}">
+                        </a>
+
+                        <div class="card-body">
+                            <h6 class="card-title">
+
+                                {% stars nov.overall_rating %}
 
 
-                            <div class="card-body">
-                                <h6 class="card-title">
-
-                                    {% stars nov.overall_rating %}
-
-
-                                    <span class="align-bottom">{{ nov.overall_rating }}</span>
-                                </h6>
-                                <!--
+                                <span class="align-bottom">{{ nov.overall_rating }}</span>
+                            </h6>
+                            <!--
                                 <h6 class="card-subtitle mt-1">
                                     <div class="pb-2">
 
@@ -229,13 +230,12 @@
                                     </div>
                                 </h6>
 -->
-                                <h6 class="card-subtitle">
+                            <h6 class="card-subtitle">
 
-                                     <a href="{{ nov.get_absolute_url }}"
-                                                          class="stretched-link">{{ nov.rus_title|truncatechars:35 }}</a>
-                                </h6>
-                            </div>
-
+                                <a href="{{ nov.get_absolute_url }}"
+                                >{{ nov.rus_title|truncatechars:35 }}</a>
+                            </h6>
+                        </div>
 
 
                     </div>

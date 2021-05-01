@@ -72,6 +72,38 @@ class LikeDislike(models.Model):
         verbose_name_plural = "Лайк/дизлайк голоса"
 
 
+class Comment(models.Model):
+    #chapter = models.ForeignKey(Chapter, verbose_name='К главе', on_delete=models.CASCADE,
+    #                            related_name='chapter_comments')
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    author = models.ForeignKey(User, verbose_name='Автор', related_name='comments_by_user', on_delete=models.CASCADE)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', verbose_name='Родитель', on_delete=models.SET_NULL, blank=True, null=True,
+                               related_name="childs")
+    votes = GenericRelation(LikeDislike, related_query_name='comments')
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ('-created',)
+
+    def __str__(self):
+        return 'Комментарий от {} к {}'.format(self.author, self.content_type)
+
+    def get_absolute_url(self):
+        obj = self.content_object
+        return '{}#comment{}'.format(obj.get_absolute_url(),self.id)
+    #    a = reverse('core:chapter_detail', args=[self.chapter.novell.slug, self.chapter.number]) + '#comment' + str(
+    #        self.id)
+    #    return a
+
+
+
 class Genre(models.Model):
     title = models.CharField('Жанр', max_length=256)
     description = models.TextField('Описание', blank=True, null=True)
@@ -131,6 +163,8 @@ class Chapter(models.Model):
     novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.PROTECT, related_name='chapters')
     chapter_text = models.TextField('Текст главы', blank=True, null=True)
     created = models.DateTimeField('Дата создания', auto_now_add=True)
+    comments = GenericRelation(Comment, related_query_name='chapter_comments')
+
 
     def get_absolute_url(self):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
@@ -144,12 +178,17 @@ class Chapter(models.Model):
         return 'Глава {} Новеллы {} '.format(self.number, self.novell)
 
     def get_comments(self):
-        return self.chapter_comments.filter(parent__isnull=True)
+        return self.comments.filter(parent__isnull=True)
 
-
+"""
 class Comment(models.Model):
-    chapter = models.ForeignKey(Chapter, verbose_name='К главе', on_delete=models.CASCADE,
-                                related_name='chapter_comments')
+    #chapter = models.ForeignKey(Chapter, verbose_name='К главе', on_delete=models.CASCADE,
+    #                            related_name='chapter_comments')
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
     author = models.ForeignKey(User, verbose_name='Автор', related_name='comments_by_user', on_delete=models.CASCADE)
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -163,13 +202,13 @@ class Comment(models.Model):
         ordering = ('-created',)
 
     def __str__(self):
-        return 'Комментарий от {} к {}'.format(self.author, self.chapter.title)
+        return 'Комментарий от {} к {}'.format(self.author, self.content_type)
 
     def get_absolute_url(self):
         a = reverse('core:chapter_detail', args=[self.chapter.novell.slug, self.chapter.number]) + '#comment' + str(
             self.id)
         return a
-
+"""
 
 class Profile(models.Model):
     MALE = 'M'

@@ -29,7 +29,7 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('chapter',)
+    list_display = ('author',)
 
 
 @admin.register(LikeDislike)
