@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse
 
@@ -69,13 +69,12 @@ class AddComment(View):
         obj = self.model.objects.get(id=pk)
         if request.method == 'POST':
             form = CommentForm(data=request.POST)
-            chapter = Chapter.objects.get(id=pk)
             if form.is_valid():
                 form = form.save(commit=False)
                 if request.POST.get("parent", None):
                     form.parent_id = int(request.POST.get("parent"))
                 form.object_id = obj.id
-                form.chapter = chapter
+                form.chapter = obj
                 form.author = request.user
                 form.content_type = ContentType.objects.get_for_model(obj)
                 form.save()
@@ -221,6 +220,17 @@ class AddNovellRating(View):
         else:
             return HttpResponse(status=400)
 
+
+class AllNewsView(ListView):
+    model = Post
+    template_name = 'core/post/post_list.html'
+    context_object_name = 'posts'
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'core/post/post_detail.html'
+    context_object_name = 'post'
 
 """
 class JsonFilterNovellsView(ListView):

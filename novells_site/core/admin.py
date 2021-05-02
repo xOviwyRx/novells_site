@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider
+from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider, Post
 
 
 # Register your models here.
@@ -63,3 +63,6 @@ class SliderAdmin(admin.ModelAdmin):
         return mark_safe('<img src={} width="210" height="90"/>'.format(obj.shot.url))
 
     shot_img.short_description = 'Изображение'
+
+
+admin.site.register(Post)

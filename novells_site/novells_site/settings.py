@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'allauth',
     'allauth.account',
+    'tinymce',
     #'allauth.socialaccount',
 
 ]

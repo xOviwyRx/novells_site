@@ -9,7 +9,7 @@
         <div class="col-md-7 mt-3">
             {% if user.is_authenticated %}
                 <div class="card bg-c-lite-unknown mb-2 pb-2" style="border-radius: 30px">
-                    <form action="{% url 'core:add_comment_to_chapter' chapter.id %}" method="post" class="mt-4 mx-4" id="CommentForm">
+                    <form action="{% url 'core:add_comment_to_post' post.id %}" method="post" class="mt-4 mx-4" id="CommentForm">
                         {% csrf_token %}
                         <input type="hidden" name="parent" id="contactparent" value="">
                         <div class="form-group editContent">

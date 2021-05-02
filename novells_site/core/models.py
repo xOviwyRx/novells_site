@@ -3,13 +3,15 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from tinymce.models import HTMLField
 
 # Create your models here.
-from django.db.models import Sum
+from django.db.models import Sum, Max
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+
 
 
 class MyQuerySet(models.query.QuerySet):
@@ -73,7 +75,7 @@ class LikeDislike(models.Model):
 
 
 class Comment(models.Model):
-    #chapter = models.ForeignKey(Chapter, verbose_name='К главе', on_delete=models.CASCADE,
+    # chapter = models.ForeignKey(Chapter, verbose_name='К главе', on_delete=models.CASCADE,
     #                            related_name='chapter_comments')
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -97,11 +99,10 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         obj = self.content_object
-        return '{}#comment{}'.format(obj.get_absolute_url(),self.id)
+        return '{}#comment{}'.format(obj.get_absolute_url(), self.id)
     #    a = reverse('core:chapter_detail', args=[self.chapter.novell.slug, self.chapter.number]) + '#comment' + str(
     #        self.id)
     #    return a
-
 
 
 class Genre(models.Model):
@@ -165,7 +166,6 @@ class Chapter(models.Model):
     created = models.DateTimeField('Дата создания', auto_now_add=True)
     comments = GenericRelation(Comment, related_query_name='chapter_comments')
 
-
     def get_absolute_url(self):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
 
@@ -179,6 +179,7 @@ class Chapter(models.Model):
 
     def get_comments(self):
         return self.comments.filter(parent__isnull=True)
+
 
 """
 class Comment(models.Model):
@@ -210,6 +211,41 @@ class Comment(models.Model):
         return a
 """
 
+
+# Модель для поста
+class Post(models.Model):
+    title = models.CharField('Заголовок', max_length=256)
+    author = models.ForeignKey(User, verbose_name='Автор', on_delete=models.CASCADE, related_name='blog_posts')
+    slug = AutoSlugField(populate_from='title', always_update=True)
+    body = HTMLField("Текст поста")
+    #publish = models.DateTimeField('Начало публикации', default=timezone.now)
+    created = models.DateTimeField("Опубликовано", auto_now_add=True)
+    updated = models.DateTimeField("Изменено", auto_now=True)
+    important = models.BooleanField("Закрепленный пост", default=False)
+    votes = GenericRelation(LikeDislike, related_query_name='posts')
+    views = models.PositiveIntegerField(default=0)
+    commentable = models.BooleanField("Комментируемая запись", default=True)
+    comments = GenericRelation(Comment, related_query_name='post_comments')
+
+    def get_absolute_url(self):
+        return reverse('core:post_detail', args=[self.id, self.slug])
+
+    def last_comment(self):
+        return self.comments.annotate(Max('created'))
+
+    def get_comments(self):
+        return self.comments.filter(parent__isnull=True)
+
+
+    def __str__(self):
+        return '{}'.format(self.title)
+
+    class Meta:
+        verbose_name = 'Новость'
+        verbose_name_plural = 'Новости'
+        ordering = ('-created',)
+
+
 class Profile(models.Model):
     MALE = 'M'
     FEMALE = 'F'
@@ -222,7 +258,7 @@ class Profile(models.Model):
     name = models.OneToOneField(User, verbose_name='Пользователь', on_delete=models.CASCADE,
                                 related_name='user_profile')
 
-    realname = models.CharField('Имя',max_length=100, blank=True)
+    realname = models.CharField('Имя', max_length=100, blank=True)
     sex = models.CharField('Пол', max_length=2, choices=GENDER, default=UNKNOWN)
     slug = AutoSlugField(always_update=True, populate_from='name')
     avatar = models.ImageField('Аватар', upload_to='users_avatars/', default='users_avatars/default/default.png')
@@ -255,7 +291,6 @@ class Profile(models.Model):
 
 
 class RatingStar(models.Model):
-
     value = models.SmallIntegerField('Значение', default=0)
 
     def __str__(self):
@@ -268,8 +303,8 @@ class RatingStar(models.Model):
 
 
 class Rating(models.Model):
-
-    author = models.ForeignKey(User, verbose_name='Проголосовавший', related_name='rated_novells', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, verbose_name='Проголосовавший', related_name='rated_novells',
+                               on_delete=models.CASCADE)
     rate = models.ForeignKey(RatingStar, verbose_name='Оценка', on_delete=models.CASCADE)
     novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.CASCADE)
     date = models.DateTimeField("Дата оценки", auto_now_add=True)
@@ -296,4 +331,3 @@ class Slider(models.Model):
     class Meta:
         verbose_name = 'Картинка на главной'
         verbose_name_plural = 'Картинки на главной'
-

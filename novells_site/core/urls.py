@@ -1,16 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 from . import views
-from .models import Comment, LikeDislike, Chapter
+from .models import Comment, LikeDislike, Chapter, Post
 
 app_name = 'core'
 
 urlpatterns = [
 
-    path('add_comment/to_chapter/<int:pk>', views.AddComment.as_view(model=Chapter), name='add_comment'),
+    path('add_comment/to_chapter/<int:pk>', views.AddComment.as_view(model=Chapter), name='add_comment_to_chapter'),
+    path('add_comment/to_post/<int:pk>', views.AddComment.as_view(model=Post), name='add_comment_to_post'),
+
     path('', views.index, name='home'),
     path('novells_list/', views.NovellListView.as_view(), name='novell_list'),
     path('novells_list/filter/', views.FilterNovellsView.as_view(), name='filter'),
+    path('news/', views.AllNewsView.as_view(), name='all_news'),
+    path('new/<int:pk>/<slug:slug>', views.PostDetailView.as_view(), name='post_detail'),
 
     path('add-rating/', views.AddNovellRating.as_view(), name='add_rating'),
 
