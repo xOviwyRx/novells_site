@@ -150,7 +150,8 @@
                 <li class="nav-item">
                     <a class="nav-link h5" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
                        aria-controls="profile" aria-selected="false"><i class="bi bi-chat"
-                                                                        style="vertical-align: bottom"></i> Отзывы</a>
+                                                                        style="vertical-align: bottom"></i> Отзывы<span
+                            class="badge bg-secondary">{{ novell.reviews_to_novell.count }}</span></a>
                 </li>
             </ul>
         </div>
@@ -327,7 +328,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <input type="submit"
-                                                   class="btn btn-primary" value="Оставить отзыв">
+                                                       class="btn btn-primary" value="Оставить отзыв">
                                                 </input>
                                             </div>
                                         </form>
