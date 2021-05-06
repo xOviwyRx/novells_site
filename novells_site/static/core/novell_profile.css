@@ -49,7 +49,7 @@
   position: relative;
   display: block;
   float: right;
-  background: url('../img/star-off-big.png');
+  background: url('../img/star-off-2.png');
   background-size: 30px 30px;
 }
 
@@ -59,7 +59,7 @@
   content: '';
   width: 30px;
   height: 30px;
-  background: url('../img/star-on-big.png');
+  background: url('../img/star-on-2.png');
   background-size: 30px 30px;
   transition: opacity 0.2s linear;
 }

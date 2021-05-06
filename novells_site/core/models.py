@@ -135,7 +135,7 @@ class Novell(models.Model):
     slug = models.SlugField(max_length=250)
     author = models.CharField(max_length=128, verbose_name='Автор')
     translator = models.CharField(max_length=128, verbose_name='Переводчик', default='Privereda1')
-    publish = models.DateTimeField('Начало публикации', default=timezone.now)
+    publish = models.DateTimeField('Дата выхода', default=timezone.now)
     status = models.CharField('Статус', max_length=2, choices=STATUS, default=ANONS)
     important = models.BooleanField('Выбор редакции', default=False)
     created = models.DateTimeField('Опубликовано', auto_now_add=True)

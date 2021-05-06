@@ -3,7 +3,26 @@
 {% load user_tags %}
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static "core/profile.css" %}">
+    <style>
+        .table-fix {
+            overflow-y: auto;
+            height: 500px;
+        }
 
+        .table-fix thead th {
+            position: sticky;
+            top: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+    </style>
 {% endblock %}
 <!------ Include the above in your HEAD tag ---------->
 {% block content %}
@@ -33,6 +52,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                                    aria-controls="profile" aria-selected="false">Закладки</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="rating-tab" data-toggle="tab" href="#ratings" role="tab"
+                                   aria-controls="ratings" aria-selected="false">Оценки</a>
                             </li>
                         </ul>
                     </div>
@@ -159,8 +182,61 @@
                         </div>
 
                     </div>
+                    <div class="tab-pane fade" id="ratings" role="tabpanel" aria-labelledby="rating-tab">
+                        <div class="container-fluid p-0 mx-0">
+                            <div class="table-fix table-responsive">
+                                <table class="table table-hover" style="max-width: 100%">
+                                    <thead class="table-dark py-2 text-center">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Новелла</th>
+                                        <th scope="col">Дата и время</th>
+                                        <th scope="col">Моя оценка</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for novell in profile.name.rated_novells.all %}
+                                        <tr>
+                                            <th scope="row" class="pl-2 pr-1">
+                                                {{ forloop.counter }}
+                                            </th>
+                                            <td class="text-left"><p class="m-0"><a
+                                                    href="{{ novell.novell.get_absolute_url }}"
+                                                    style="font-size: 11pt">{{ novell.novell.rus_title }}</a>
+                                                <span class="text-dark small">({{ novell.novell.publish.year }})</span>
+                                            </p>
+                                                <p class="m-0"><span
+                                                        class="text-warning">{{ novell.novell.overall_rating }}</span>
+                                                    <span class="text-dark small">
+                                                        ({{ novell.novell.rating_set.count }})
+                                                    </span>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <div class="text-left" style="font-size: 12px">
+                                                    {{ novell.updated }}
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge rounded-pill {% if novell.rate.value > 3 %}bg-success{% elif novell.rate.value < 3 %}bg-danger{% else %}bg-warning{% endif %}"
+                                                      style="font-size: 12pt">
+                                                    {{ novell.rate }}
+                                                </span>
+                                            </td>
+                                        </tr>
+
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
+    </div>
     </div>
 {% endblock %}

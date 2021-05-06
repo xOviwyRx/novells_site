@@ -12,7 +12,6 @@ class NovellAdmin(admin.ModelAdmin):
     filter_horizontal = ('genres',)
     prepopulated_fields = {'slug': ('eng_title',)}
     readonly_fields = ('overall_rating','translator')
-    exclude = ('publish',)
 
 
 

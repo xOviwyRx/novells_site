@@ -106,7 +106,6 @@
                                     <label>Пол</label>
                                 </div>
                                 <div class="col-md-6">
-
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="sex"
                                                id="inlineRadio1" value="M" {% if profile.sex ==  'M' %}checked{% endif %}>
@@ -118,9 +117,9 @@
                                         <label class="form-check-label" for="inlineRadio2">Ж</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="sex"
+                                        <input class="form-check-input" type="radio" name="sex" {% if profile.sex ==  'UN' %}checked{% endif %}
                                                id="inlineRadio3" value="UN">
-                                        <label class="form-check-label" for="inlineRadio3" {% if profile.sex ==  'UN' %}checked{% endif %}>Не раскрывать</label>
+                                        <label class="form-check-label" for="inlineRadio3">Не раскрывать</label>
                                     </div>
                                 </div>
                             </div>

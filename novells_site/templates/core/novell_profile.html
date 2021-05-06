@@ -28,32 +28,43 @@
                         <h3>{{ novell.original_title }}</h3>
                         <h4>{{ novell.eng_title }}</h4>
 
-                        <p class="text-muted mb-0 font-weight-bold">Автор</p>
-                        <h6>{{ novell.author }}</h6>
-                        <p class="text-muted mb-0 font-weight-bold">Глав</p>
-                        <h6>{{ novell.chapters.count }}</h6>
-                        <p class="text-muted mb-0 font-weight-bold">Статус</p>
-                        {% if novell.status == 'OG' %}
-                            <h6 class="font-weight-bold"><i
-                                    class="bi bi-circle-fill text-primary" style="
-    vertical-align: bottom;"></i> Онгоинг</h6>
-                        {% elif novell.status == 'AN' %}
-                            <h6 class="font-weight-bold"><i
-                                    class="bi bi-circle-fill text-danger" style="
-    vertical-align: bottom;"></i>
-                                Анонос</h6>
-                        {% elif novell.status == 'CT' %}
-                            Завершено
-                        {% endif %}
+                        <p class="text-muted mb-0 mt-4 font-weight-bold">Автор: <span
+                                class="font-weight-bold text-dark">{{ novell.author }}</span></p>
 
-                        <p class="text-dark mb-0 font-weight-bold">Рейтинг</p>
-                        <h6>
+                        <p class="text-muted mb-0 font-weight-bold">Количество глав: <span
+                                class="font-weight-bold text-dark">{{ novell.chapters.count }}</span></p>
+                     <p class="text-muted mb-0 font-weight-bold">Переведено глав: <span
+                                class="font-weight-bold text-dark">{{ novell.chapters.count }}</span></p>
+                        <p class="text-muted mb-0 font-weight-bold">Состояние перевода:
+                            {% if novell.status == 'OG' %}
+                                <span class="font-weight-bold text-dark"><i
+                                        class="bi bi-circle-fill text-primary" style="
+    vertical-align: text-top; font-size: 11pt;"></i> Продолжается</span>
+                            {% elif novell.status == 'AN' %}
+                                <span class="font-weight-bold text-dark"><i
+                                        class="bi bi-circle-fill text-danger" style="
+    vertical-align: bottom;"></i>
+                                    Запланирован</span>
+                            {% elif novell.status == 'CT' %}
+                                <span class="font-weight-bold text-dark">Завершен</span>
+                            {% endif %}
+                        </p>
+                        <p class="text-muted mb-0 font-weight-bold">Рейтинг:
+                            <span class="h6">
                             {% stars novell.overall_rating %}
-                            <span class="editContent font-weight-bolder">{{ novell.overall_rating }}</span>
-                        </h6>
+                            <span class="editContent font-weight-bolder text-dark">{{ novell.overall_rating }}</span>
+                        </span>
+                        </p>
+
+                        <h5 class="my-2 text-dark">Жанры</h5>
+                        {% for genre in novell.genres.all %}
+                            <button type="button" class="btn btn-outline-primary">
+                                {{ genre }}
+                            </button>
+                        {% endfor %}
 
                         {% if user.is_authenticated %}
-                            <form action="{% url 'core:add_rating' %}" method="post" name="rating">
+                            <form action="{% url 'core:add_rating' %}" class="mt-2" method="post" name="rating">
                                 <p class="m-0 text-muted font-weight-bold">Ваша оценка: </p>
 
                                 {% csrf_token %}
@@ -70,7 +81,7 @@
 
                             </form>
                         {% else %}
-                            <p class="m-0 text-muted font-weight-bold">Войдите, чтобы оценить??</p>
+                            <p class="text-muted font-weight-bold mt-2">Войдите, чтобы оценить??</p>
 
                         {% endif %}
                     </div>
@@ -78,7 +89,7 @@
                         <div class="row w-100">
                             <div class="col">
                                 <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-info">Начать чтение</button>
+                                    <button type="button" class="btn btn-warning">Начать чтение</button>
                                     <button type="button" class="btn btn-dark">Продолжить чтение</button>
                                     {% if novell in user.user_profile.bookmarks.all %}
                                         <a href="{% url 'core:del_from_bookmarks' novell.id 'novell' %}" type="button"
@@ -86,7 +97,7 @@
                                                 class="bi bi-bookmark-check-fill"></i></a>
                                     {% else %}
                                         <a href="{% url 'core:add_to_bookmarks' novell.id %}" type="button"
-                                           class="btn btn-success">Добавить в закладки <i
+                                           class="btn btn-info">Добавить в закладки <i
                                                 class="bi bi-bookmark-check"></i>
                                         </a>
 
@@ -133,16 +144,11 @@
                                 <p class="description">
                                     {{ novell.description|safe|linebreaksbr }}
                                 </p>
-                                <h3 class="mb-4">Жанры</h3>
-                                {% for genre in novell.genres.all %}
-                                    <button type="button" class="btn btn-outline-primary">
-                                        {{ genre }}
-                                    </button>
-                                {% endfor %}
+
                             </div>
                         </div>
 
-                        <hr>
+
 
                     </div>
 
