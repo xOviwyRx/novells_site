@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider, Post
+from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider, Post, Review
 
 
 # Register your models here.
@@ -65,3 +65,5 @@ class SliderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post)
+
+admin.site.register(Review)

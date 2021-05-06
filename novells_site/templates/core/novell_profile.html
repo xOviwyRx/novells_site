@@ -6,6 +6,28 @@
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static "core/novell_profile.css" %}">
+    <style>
+        .review-text {
+            background-image: linear-gradient(to bottom, rgba(147, 159, 176, 0), #fff);
+        }
+
+        .review-text p {
+            margin-bottom: 2px;
+        }
+
+        .spoiler {
+            height: 100px;
+            overflow: hidden;
+        }
+
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.tiny.cloud/1/ucih7y6bf15dmnxjth5y7vhpwc29y07p91usg9pjqivrf2p1/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"></script>
+    <script type="text/javascript" src='{% static "core/js/like-dislike.js" %}'></script>
+
 {% endblock %}
 
 {% block content %}
@@ -33,7 +55,7 @@
 
                         <p class="text-muted mb-0 font-weight-bold">Количество глав: <span
                                 class="font-weight-bold text-dark">{{ novell.chapters.count }}</span></p>
-                     <p class="text-muted mb-0 font-weight-bold">Переведено глав: <span
+                        <p class="text-muted mb-0 font-weight-bold">Переведено глав: <span
                                 class="font-weight-bold text-dark">{{ novell.chapters.count }}</span></p>
                         <p class="text-muted mb-0 font-weight-bold">Состояние перевода:
                             {% if novell.status == 'OG' %}
@@ -149,7 +171,6 @@
                         </div>
 
 
-
                     </div>
 
                     <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
@@ -182,7 +203,139 @@
                     </div>
 
                     <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
-                        <h1>Отзывы</h1>
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-11">
+                                    {% if novell.reviews_to_novell.count == 0 %}
+                                        <div class="card my-3 py-3">
+                                            <div class="h4 text-center my-2">Здесь пока нет отзывов к новелле
+                                                «{{ novell }}»,
+                                                хотите написать?
+                                            </div>
+                                            <div class="text-center">
+                                                {% if user.is_authenticated %}
+                                                    <span class="btn btn-success" style="cursor: pointer;"
+                                                          data-bs-toggle="modal"
+                                                          data-bs-target="#reviewModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                    Написать отзыв
+                                                </span>
+                                                {% else %}
+                                                    <span class="btn btn-success" style="cursor: pointer;"
+                                                          data-toggle="modal" data-target="#loginModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                    Написать отзыв
+                                                </span>
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+                                    {% else %}
+                                        <div class="d-flex justify-content-between mt-3">
+                                            <div><span class="h3"> Отзывы к новелле</span> <span
+                                                    class="small"
+                                                    style="vertical-align: top;">{{ novell.reviews_to_novell.count }}</span>
+                                            </div>
+                                            <div class="text-center">
+                                                {% if user.is_authenticated and not user|user_already_rate:novell %}
+                                                    <span class="btn btn-success" style="cursor: pointer;"
+                                                          data-bs-toggle="modal"
+                                                          data-bs-target="#reviewModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                    Написать отзыв
+                                                </span>
+                                                {% elif user|user_already_rate:novell %}
+                                                    <span class="btn btn-success disabled" style="cursor: pointer;"
+                                                          data-bs-toggle="modal"
+                                                          data-bs-target="#reviewModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                    Вы уже оставили отзыв
+                                                </span>
+                                                {% else %}
+                                                    <span class="btn btn-success" style="cursor: pointer;"
+                                                          data-toggle="modal" data-target="#loginModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                    Написать отзыв
+                                                </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% for rev in novell.reviews_to_novell.all %}
+                                            <div class="card my-3">
+                                                <div class="card-header">
+                                                    <div class="d-flex">
+                                                        <div class="flex-shrink-0 py-3 mr-3">
+                                                            <img src="{{ rev.author.user_profile.avatar.url }}"
+                                                                 alt="{{ rev.author }}" width="60" height="60"
+                                                                 style="border-radius: 50%;">
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <p class="my-0 h6">{{ rev.title }}</p>
+                                                            <p class="my-0">{% stars novell|star_user:rev.author %}</p>
+                                                            <p class="my-0"><a
+                                                                    href="{{ rev.author.user_profile.get_absolute_url }}">{{ rev.author }}</a>
+                                                            </p>
+                                                            <p class="small my-0">{{ rev.created|date }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body review-text">
+                                                    {{ rev.body|safe }}
+                                                    <!--
+                                                    <div class="d-flex justify-content-center">
+                                                        <button class="show-hide button btn btn-light">Показать всё
+                                                        </button>
+                                                    </div>
+                                                       -->
+                                                </div>
+
+                                                <div class="card-footer">
+                                                    Понравился отзыв?
+
+                                                    {% include 'core/include/like_dislike_panel_for_review.html' %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="reviewModalLabel">Отзыв к <<{{ novell }}>></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <form method="POST" id="add-review">
+                                            <div class="modal-body">
+
+                                                {% csrf_token %}
+
+                                                <div class="mb-3">
+                                                    <label for="recipient-name"
+                                                           class="col-form-label">Заголовок:</label>
+                                                    <input type="text" class="form-control" name="title" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="message-text" class="col-form-label">Отзыв:</label>
+                                                    <textarea class="form-control" name="body"></textarea>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit"
+                                                   class="btn btn-primary" value="Оставить отзыв">
+                                                </input>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -191,4 +344,72 @@
 
     <script type="text/javascript" src="{% static "core/js/star_rating.js" %}"></script>
 
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            menubar: false,
+            height: 500,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'bold italic backcolor',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        });
+
+        // Returns text statistics for the specified editor by id
+
+
+    </script>
+    <script>
+
+        function submitForm() {
+            // Check if the user has entered less than 1000 characters
+            if (getStats('textarea').chars < 1000) {
+                alert("You need to enter 1000 characters or more.");
+                return;
+            }
+
+            // Check if the user has entered less than 100 words
+            if (getStats('textarea').words < 100) {
+                alert("You need to enter 100 words or more.");
+                return;
+            }
+
+            // Submit the form
+            document.forms[0].submit();
+        }
+
+
+        function getStats(id) {
+            var body = tinymce.get(id).getBody(), text = tinymce.trim(body.innerText || body.textContent);
+
+            return {
+                chars: text.length,
+                words: text.split(/[\w\u2019\'-]+/).length
+            };
+        }
+    </script>
+    <script>
+        var halfText = $('.spoiler').innerHeight() / 2,
+            textHeight = $('.spoiler').innerHeight();
+
+        $('.spoiler').css('height', $('.spoiler').innerHeight() / 2);
+
+        $('.show-hide').click(function () {
+            if ($('.spoiler').innerHeight() == halfText) {
+                $('.spoiler').animate({height: textHeight}, 500);
+                $(this).text('Скрыть');
+            } else {
+                $('.spoiler').animate({height: halfText}, 500);
+                $(this).text('Показать');
+            }
+        });
+    </script>
+    <script>
+        $('#add-review').submit(function () {
+            $(this).find(':input[type=submit]').prop('disabled', true);
+        });
+    </script>
 {% endblock %}

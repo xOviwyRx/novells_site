@@ -22,6 +22,7 @@
         .table td, .table th {
             vertical-align: middle;
         }
+
     </style>
 {% endblock %}
 <!------ Include the above in your HEAD tag ---------->
@@ -88,35 +89,35 @@
             <div class="col-md-8 mt-3">
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-md-6">
                                 <label>Имя</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ profile.realname }}</p>
+                                <p class="mb-0">{% if profile.realname %}{{ profile.realname }}{% else %}Не указано{% endif %}</p>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-md-6">
                                 <label>Возраст</label>
                             </div>
                             <div class="col-md-6">
-                                <p>
+                                <p class="mb-0">
                                     {% if profile.born_date %}
                                         {% age profile.born_date %}
                                     {% else %}
-                                        не указан
+                                        Не указан
                                     {% endif %}
                                 </p>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-md-6">
                                 <label>Пол</label>
                             </div>
                             <div class="col-md-6">
-                                <p>
+                                <p class="mb-0">
                                     {% if profile.sex == 'UN' %}
                                         Неизвестен
                                     {% elif profile.sex == 'M' %}
@@ -127,26 +128,26 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-md-6">
                                 <label>Город</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ profile.city }}</p>
+                                <p class="mb-0">{% if profile.city %}{{ profile.city }}{% else %}Не указан{% endif %}</p>
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-md-6">
                                 <label>Зарегистрирован</label>
                             </div>
                             <div class="col-md-6">
-                                <p>{{ profile.name.date_joined|date }}</p>
+                                <p class="mb-0">{{ profile.name.date_joined|date }}</p>
                             </div>
                         </div>
 
                         <div class="row mt-4">
-                            <p class="text-muted">{{ profile.about }}</p>
+                            <p class="text-muted mb-0">{{ profile.about }}</p>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">

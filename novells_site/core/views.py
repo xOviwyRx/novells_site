@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse
 
@@ -24,7 +24,7 @@ class GenreYear:
 
 def index(request):
     pop_novell = Novell.objects.filter(important=True)
-    #pop_novell = Novell.objects.order_by('-views').first()
+    # pop_novell = Novell.objects.order_by('-views').first()
     test = pop_novell.first()
     shedule_chapter = Chapter.objects.all().order_by('-created')[:4]
     all_novells = Novell.objects.all()
@@ -32,8 +32,8 @@ def index(request):
     return render(request, 'core/home.html', {'pops': pop_novell,
                                               'last_update': shedule_chapter,
                                               'all_novells': all_novells,
-                                              'image_shots':shots,
-                                              'test':test
+                                              'image_shots': shots,
+                                              'test': test
                                               })
 
 
@@ -50,6 +50,18 @@ class NovellDetailView(GenreYear, DetailView):
         context['star_form'] = RatingForm()
 
         return context
+
+    def post(self, request, slug):
+        data = request.POST
+        novell = get_object_or_404(Novell, slug=slug)
+        if request.user.is_anonymous or data['body'] is None:
+            return redirect(novell.get_absolute_url())
+        try:
+            a = Review.objects.get(author=request.user, novell=novell)
+            return redirect(novell.get_absolute_url())
+        except:
+            Review.objects.create(author=request.user, body=data['body'], title=data['title'], novell=novell)
+        return redirect(novell.get_absolute_url())
 
 
 class ChapterDetailView(DetailView):
@@ -214,7 +226,7 @@ class AddNovellRating(View):
             nov_rates = Rating.objects.filter(novell=nov)
             for i in nov_rates:
                 sum += i.rate.value
-            nov.overall_rating = sum/len(nov_rates)
+            nov.overall_rating = sum / len(nov_rates)
             nov.save(update_fields=['overall_rating'])
             return HttpResponse(status=201)
         else:
@@ -231,6 +243,7 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'core/post/post_detail.html'
     context_object_name = 'post'
+
 
 """
 class JsonFilterNovellsView(ListView):

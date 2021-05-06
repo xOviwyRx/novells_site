@@ -62,3 +62,12 @@ def stars(rating):
         half = False
     rating_plus = rating + 1
     return {'stars': RatingStar.objects.all().order_by('value'), 'rating': rating, 'half': half, 'rating_plus': rating_plus, 'rounded':a}
+
+
+@register.filter
+def user_already_rate(user, novell):
+    nov = novell.reviews_to_novell.filter(author=user)
+    if nov:
+        return True
+    else:
+        return False

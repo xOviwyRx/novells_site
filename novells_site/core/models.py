@@ -13,7 +13,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 
-
 class MyQuerySet(models.query.QuerySet):
 
     def delete(self):
@@ -218,7 +217,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, verbose_name='Автор', on_delete=models.CASCADE, related_name='blog_posts')
     slug = AutoSlugField(populate_from='title', always_update=True)
     body = HTMLField("Текст поста")
-    #publish = models.DateTimeField('Начало публикации', default=timezone.now)
+    # publish = models.DateTimeField('Начало публикации', default=timezone.now)
     created = models.DateTimeField("Опубликовано", auto_now_add=True)
     updated = models.DateTimeField("Изменено", auto_now=True)
     important = models.BooleanField("Закрепленный пост", default=False)
@@ -235,7 +234,6 @@ class Post(models.Model):
 
     def get_comments(self):
         return self.comments.filter(parent__isnull=True)
-
 
     def __str__(self):
         return '{}'.format(self.title)
@@ -331,3 +329,22 @@ class Slider(models.Model):
     class Meta:
         verbose_name = 'Картинка на главной'
         verbose_name_plural = 'Картинки на главной'
+
+
+class Review(models.Model):
+    author = models.ForeignKey(User, verbose_name='Автор отзыва', related_name='reviews_by_user',
+                               on_delete=models.SET_NULL, null=True)
+    novell = models.ForeignKey(Novell, verbose_name='Новелла к которой отзыв', related_name='reviews_to_novell',
+                               on_delete=models.CASCADE)
+    title = models.CharField('Заголовок', max_length=256)
+    body = models.TextField('Текст отзыва')
+    created = models.DateTimeField(auto_now_add=True)
+    votes = GenericRelation(LikeDislike, related_query_name='reviews')
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+        ordering = ('-created',)
+
+    def __str__(self):
+        return 'Отзыв от {} к {}'.format(self.author, self.novell.rus_title)
