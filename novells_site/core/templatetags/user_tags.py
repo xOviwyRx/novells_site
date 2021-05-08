@@ -53,17 +53,16 @@ def star_user(novell, user):
 @register.inclusion_tag('core/include/stars.html')
 def stars(rating):
     try:
-
         a = round(rating)
     except:
-        return {'stars': RatingStar.objects.all().order_by('value'), 'rating': 0, 'half': False, 'rating_plus': 0, 'rounded':0}
+        return {'stars': RatingStar.objects.filter(value__gt=0).order_by('value'), 'rating': 0, 'half': False, 'rating_plus': 0, 'rounded':0}
     a = round(rating)
     if abs(a - rating) > Decimal('0.25') and abs(a - rating) < Decimal('0.75'):
         half = True
     else:
         half = False
     rating_plus = rating + 1
-    return {'stars': RatingStar.objects.all().order_by('value'), 'rating': rating, 'half': half, 'rating_plus': rating_plus, 'rounded':a}
+    return {'stars': RatingStar.objects.filter(value__gt=0).order_by('value'), 'rating': rating, 'half': half, 'rating_plus': rating_plus, 'rounded':a}
 
 
 @register.filter
