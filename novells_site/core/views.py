@@ -140,6 +140,11 @@ def add_to_bookmark(request, pk, type_of):
         request.user.user_profile.planned.add(nov)
     elif type_of == 'readed':
         try:
+            a = Rating.objects.get(author=request.user,
+                                   novell_id=pk)
+            if a:
+                return redirect(nov.get_absolute_url())
+
             rate_readed = RatingStar.objects.get(value=0)
             Rating.objects.update_or_create(
                 author=request.user,
