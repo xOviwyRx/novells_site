@@ -68,13 +68,12 @@ def stars(rating):
 
 @register.filter
 def user_already_rate(user, novell):
-    print(novell)
-    print(user)
     nov = novell.reviews_to_novell.filter(author=user)
     if nov:
         return True
     else:
         return False
+
 
 @register.filter
 def user_already_read(user, novell):
