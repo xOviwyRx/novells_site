@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse
 
@@ -136,20 +136,38 @@ def add_to_bookmark(request, pk, type_of):
     nov = get_object_or_404(Novell, pk=pk)
     if type_of == 'bookmark':
         request.user.user_profile.bookmarks.add(nov)
-    elif type_of == 'planned':
+    if type_of == 'planned':
         request.user.user_profile.planned.add(nov)
+    elif type_of == 'readed':
+        try:
+            rate_readed = RatingStar.objects.get(value=0)
+            Rating.objects.update_or_create(
+                author=request.user,
+                novell_id=pk,
+                rate=rate_readed
+            )
+        except:
+            return HttpResponse('Криво сработало добавление в прочитанные')
+
     return redirect(nov.get_absolute_url())
 
 
 @login_required
 def del_from_bookmark(request, pk, type_of, frommm):
-    print(type_of)
     nov = get_object_or_404(Novell, pk=pk)
-    if type_of == 'bookmark' or type_of == 'all':
+    if type_of == 'bookmark':
         request.user.user_profile.bookmarks.remove(nov)
-    elif type_of == 'planned' or type_of == 'all':
-        print(type_of)
+    elif type_of == 'planned':
         request.user.user_profile.planned.remove(nov)
+    elif type_of == 'readed':
+        try:
+            a = Rating.objects.get(author=request.user,
+                                   novell_id=pk)
+            print(a)
+            a.delete()
+        except:
+            return HttpResponse('Криво сработало удаление из прочитанных')
+
     if frommm == 'profile':
         return redirect(request.user.user_profile.get_absolute_url())
     else:
@@ -224,12 +242,13 @@ class AddNovellRating(View):
     def post(self, request):
         form = RatingForm(request.POST)
         if form.is_valid():
+            nov = Novell.objects.get(id=int(request.POST.get("novell")))
+
             Rating.objects.update_or_create(
                 author=self.request.user,
                 novell_id=int(request.POST.get("novell")),
                 defaults={'rate_id': int(request.POST.get('rate'))}
             )
-            nov = Novell.objects.get(id=int(request.POST.get("novell")))
             sum = 0
             nov_rates = Rating.objects.filter(novell=nov)
             for i in nov_rates:

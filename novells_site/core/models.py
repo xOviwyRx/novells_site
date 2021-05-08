@@ -323,6 +323,8 @@ class Slider(models.Model):
     text_primary = models.CharField("Крупный текст", max_length=100, blank=True)
     text_secondary = models.CharField("Текст помельче", max_length=100, blank=True)
     active = models.BooleanField('Показывать', default=True)
+    novell = models.ForeignKey(Novell, on_delete=models.SET_NULL, null=True, blank=True,
+                               verbose_name='Ссылка на новеллу')
 
     def __str__(self):
         return 'Картинка на главной на {} месте'.format(self.position)

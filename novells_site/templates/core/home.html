@@ -42,8 +42,12 @@
                     {% for img in image_shots %}
 
                         <div class="carousel-item ratio ratio-21x9 {% if forloop.first %}active{% endif %}">
+
                             <img src="{{ img.shot.url }}" class="d-block w-100" alt="{{ img.text_primary }}">
                             <div class="carousel-caption d-none d-md-block">
+                                {% if img.novell.get_absolute_url %}
+                                    <a href="{{ img.novell.get_absolute_url }}" class="stretched-link"></a>
+                                {% endif %}
                                 <h4>{{ img.text_primary }}</h4>
                                 <p>{{ img.text_secondary }}</p>
                             </div>

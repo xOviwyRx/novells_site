@@ -282,10 +282,14 @@
                                                 </div>
                                             </td>
                                             <td class="text-center">
+                                                {% if novell.rate.value == 0 %}
+                                                <span><i class="bi bi-eye-fill h4 text-primary"></i></span>
+                                                {% else %}
                                                 <span class="badge rounded-pill {% if novell.rate.value > 3 %}bg-success{% elif novell.rate.value < 3 %}bg-danger{% else %}bg-warning{% endif %}"
                                                       style="font-size: 12pt">
                                                     {{ novell.rate }}
                                                 </span>
+                                                {% endif %}
                                             </td>
                                         </tr>
 

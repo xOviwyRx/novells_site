@@ -99,7 +99,7 @@
                                     <input id="rating{{ v }}" type="radio" name="rate"
                                            {% if novell|star_user:user == k %}checked{% endif %}
                                            value="{{ k }}">
-                                    <label for="rating{{ v }}">{{ k }}</label>
+                                    <label for="rating{{ v }}" style="cursor: pointer;">{{ k }}</label>
                                 {% endfor %}
                             </span>
 
@@ -117,10 +117,11 @@
                                     <button type="button" class="btn btn-warning">Начать чтение</button>
                                     <button type="button" class="btn btn-dark">Продолжить чтение</button>
                                     {% if novell in user.user_profile.bookmarks.all %}
-                                    <a href="{% url 'core:del_from_bookmarks' novell.id 'bookmark' 'novell' %}" type="button"
-                                       class="btn btn-outline-warning">В избранном <i
-                                            class="bi bi-x-square-fill text-danger"></i>
-                                    </a>
+                                        <a href="{% url 'core:del_from_bookmarks' novell.id 'bookmark' 'novell' %}"
+                                           type="button"
+                                           class="btn btn-outline-warning">В избранном <i
+                                                class="bi bi-x-square-fill text-danger"></i>
+                                        </a>
                                     {% elif novell in user.user_profile.planned.all %}
                                         <a href="{% url 'core:del_from_bookmarks' novell.id 'planned' 'novell' %}"
                                            type="button"
@@ -154,6 +155,26 @@
 
                                                     </div>
                                                 </a>
+                                            </li>
+                                            <li>
+
+                                                {% if user|user_already_read:novell %}
+                                                    <a class="dropdown-item"
+                                                       href="{% url 'core:del_from_bookmarks' novell.id 'readed' 'novell' %}">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>Прочитано</span>
+                                                            <i class="bi bi-check-circle-fill text-success"></i>
+                                                        </div>
+                                                    </a>
+                                                {% else %}
+                                                    <a class="dropdown-item"
+                                                       href="{% url 'core:add_to_bookmarks' novell.id 'readed' %}">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>Прочитано</span>
+                                                            <i class="bi bi-x text-danger"></i>
+                                                        </div>
+                                                    </a>
+                                                {% endif %}
                                             </li>
                                         </ul>
 
