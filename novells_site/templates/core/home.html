@@ -78,10 +78,10 @@
                             <div class="col-4"
                                  style="border-style: dotted; border-width: 3px; border-color: bisque; z-index: 2">
 
-
-                                <img src="{{ pop.poster.url }}"
-                                     class="img-fluid p-3">
-
+                                <div class="ratio-3х4 ratio">
+                                    <img src="{{ pop.poster.url }}"
+                                         class="img-fluid p-3">
+                                </div>
                             </div>
 
                             <div class="col-1 m-0 p-0 d-flex">
@@ -133,13 +133,13 @@
                             data-bs-slide-to="{{ forloop.counter0 }}"
                             class="{% if forloop.first %}active{% endif %}" aria-current="true"
                             style="height: auto; width: 9%;">
-                        <img src="{{ pop.poster.url }}" class="d-block w-100 img-thumbnail">
-
+                        <div class="ratio ratio-3х4">
+                            <img src="{{ pop.poster.url }}" class="d-block w-100 img-thumbnail">
+                        </div>
                     </button>
                 {% endfor %}
             </div>
         </div>
-
 
 
         <div class="pops-novells row mt-4" style="background-color: rgb(245,210,239);">
