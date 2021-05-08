@@ -31,83 +31,71 @@
 {% endblock %}
 <!------ Include the above in your HEAD tag ---------->
 {% block content %}
-    <div class="container emp-profile pt-4" style="min-height: 100%;">
+    <div class="container emp-profile" style="min-height: 100%;">
         <div class="row">
-            <div class="col-md-4 mt-3">
-                <div class="d-flex justify-content-center">
-                    <div class="ratio ratio-1x1" style="width: 80%;">
-                        <img src="{{ profile.avatar.url }}"
-                             alt="{{ profile.name }}" class="rounded img-thumbnail">
-                    </div>
-                </div>
-                <div class="profile-work m-0 pt-3">
-                    <div class="mb-2 h4 d-flex justify-content-between">
-                        {{ profile.name }}
-
-                        <a href="{% url 'core:edit_profile' profile.id profile.slug %}"
-                           class="text-warning">
-                            <i class="bi bi-pencil-square h4"></i>
-                        </a>
-                    </div>
-
-                    <div class="profile-head">
-                        <h6>
-                            Читатель <i class="bi bi-book-half text-danger"></i>
-                        </h6>
-                    </div>
-                    <div class="text-muted font-weight-bolder small">{% user_last_activity profile.name %}</div>
-
-                    <p class="proile-rating mb-1 mt-2">Прочитано : <span>{{ profile.name.rated_novells.count }}</span>
-                    </p>
-                    <h6 class="mb-1 mt-2 text-muted"><i class="bi bi-card-text"></i>
-                        Рецензий : <span>{{ profile.name.reviews_by_user.count }}</span>
-                    </h6>
-
-
-                    <div class="row">
-                        <div class="col-sm-4 text-center">
-                            <p class="m-b-10 f-w-600 mb-1">
-                                <i class="bi bi-chat h5 text-dark"></i>
-                            </p>
-                            <h6 class="text-muted f-w-400">{{ profile.name.comments_by_user.count }}</h6>
-                        </div>
-                        <div class="col-sm-4 text-center">
-                            <p class="m-b-10 f-w-600 mb-1"><i class="bi bi-hand-thumbs-up h5 text-success"></i></p>
-                            <h6 class="text-muted f-w-400">{{ profile.name.likedislike_set.likes.count }}</h6>
-                        </div>
-                        <div class="col-sm-4 text-center">
-                            <p class="m-b-10 f-w-600 mb-1"><i class="bi bi-hand-thumbs-down h5 text-danger"></i></p>
-                            <h6 class="text-muted f-w-400">{{ profile.name.likedislike_set.dislikes.count }}</h6>
-                        </div>
-                    </div>
+            <div class="col-md-4 d-flex justify-content-center">
+                <div class="ratio ratio-1x1" style="width: 80%;">
+                    <img src="{{ profile.avatar.url }}"
+                         alt="{{ profile.name }}">
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="p-0 mb-3 profile-head">
-                    <ul class="nav nav-tabs align-bottom" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                               aria-controls="home" aria-selected="true"><i class="bi bi-info-circle"></i>
-                                Информация</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                               aria-controls="profile" aria-selected="false"><i class="bi bi-bookmark-star-fill"></i>
-                                Избранное</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="planned-tab" data-toggle="tab" href="#planned" role="tab"
-                               aria-controls="planned" aria-selected="false"><i class="bi bi-calendar-event"></i>
-                                Запланированно</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="rating-tab" data-toggle="tab" href="#ratings" role="tab"
-                               aria-controls="ratings" aria-selected="false"><i class="bi bi-book-fill"></i>
-                                Прочитано</a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h4>
+                        {{ profile.name }}
+                    </h4>
+                    <h6>
+                        Читатель
+                    </h6>
+                    <p class="proile-rating mb-1">Прочитано : <span>{{ profile.name.rated_novells.count }}</span></p>
+                    <p>{% user_last_activity profile.name %}</p>
+                    <div class="p-0" style="position: absolute; bottom: 0;">
+                        <ul class="nav nav-tabs align-bottom" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                   aria-controls="home" aria-selected="true">Информация</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                   aria-controls="profile" aria-selected="false">Избранное</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="planned-tab" data-toggle="tab" href="#planned" role="tab"
+                                   aria-controls="planned" aria-selected="false">Запланированно</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="rating-tab" data-toggle="tab" href="#ratings" role="tab"
+                                   aria-controls="ratings" aria-selected="false">Прочитано</a>
+                            </li>
+                        </ul>
+                    </div>
 
+                </div>
+            </div>
+            <div class="col-md-2">
+                {% if user.is_authenticated and user == profile.name %}
+                    <a href="{% url 'core:edit_profile' profile.id profile.slug %}" type="button"
+                       class="btn btn-outline-warning profile-edit-btn">
+                        Редактировать
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    <p>ЧТО ТО</p>
+                    <a href="">Ссылка 1</a><br/>
+                    <a href="">Ссылка 2</a><br/>
+                    <a href="">Ссылка ещё 3</a>
+                    <p>ЕЩЁ ЧТО ТО</p>
+                    <a href="">Ссылка 1</a><br/>
+                    <a href="">Ссылка 2</a><br/>
+                    <a href="">Ссылка ещё 3</a>
+                    <a href="">Не знаю зачем</a><br/>
+                </div>
+            </div>
+            <div class="col-md-8 mt-3">
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row mb-2">
@@ -300,7 +288,60 @@
 
                 </div>
             </div>
-
         </div>
     </div>
+    </div>
 {% endblock %}
+
+     <!--
+        <div class="pops-novells row" style="background-color: rgba(79,150,255,0.51);">
+            <h1 class="text-center mt-1"><i class="bi bi-card-list text-primary"
+                                            style="vertical-align: bottom"></i> Популярное</h1>
+            <hr class="featurette-divider">
+
+
+            <div class="row row-cols-2 row-cols-xxl-6 row-cols-lg-5 row-cols-md-4 row-cols-sm-3 scrolling-wrapper-flexbox mx-0 px-1 pb-3">
+                {% for nov in all_novells %}
+                    <div class="col px-1">
+                        <div class="card p-0 mx-0 h-100">
+
+                            <img src="{{ nov.poster.url }}" class="card-img-top img-fluid rounded p-2"
+                                 alt="{{ nov.original_title }}" style="height: 65%">
+
+
+                            <div class="card-body py-0">
+                                <h6 class="card-title"><a href="{{ nov.get_absolute_url }}"
+                                                          class="stretched-link">{{ nov.rus_title|truncatechars:35 }}</a>
+                                </h6>
+                                <h6 class="card-subtitle mt-1">
+                                    <div class="pb-2">
+
+                                        {% if nov.status == 'OG' %}
+                                            <span class="text-muted font-weight-bold"><i
+                                                    class="bi bi-circle-fill text-primary"></i> Онгоинг</span>
+                                        {% elif nov.status == 'AN' %}
+                                            <span class="text-muted font-weight-bold"><i
+                                                    class="bi bi-circle-fill text-danger"></i> Анонос</span>
+                                        {% elif nov.status == 'CT' %}
+                                            <span class="text-muted font-weight-bold"><i
+                                                    class="bi bi-circle-fill text-success"></i> Завершено</span>
+                                        {% endif %}
+                                    </div>
+                                </h6>
+
+
+                            </div>
+                            <div class="card-footer border-0 bg-white">
+
+                                {% stars nov.overall_rating %}
+
+
+                                <span class="align-bottom">{{ nov.overall_rating }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+-->

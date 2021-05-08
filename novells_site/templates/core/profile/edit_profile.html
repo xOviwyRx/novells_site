@@ -20,7 +20,7 @@
 {% endblock %}
 {% block content %}
 
-    <div class="container emp-profile">
+    <div class="container emp-profile min-vh-100">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
@@ -34,52 +34,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="profile-head">
-                        <h5>
-                            {{ profile.name }}
-                        </h5>
-                        <h6>
-                            Читатель
-                        </h6>
-                        <p class="proile-rating">Прочитано : <span>12</span></p>
-                        <div class="p-0" style="position: absolute; bottom: 0;">
-                            <ul class="nav nav-tabs align-bottom" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                                       aria-controls="home" aria-selected="true">Информация</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                                       aria-controls="profile" aria-selected="false">Закладки</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-success"> Сохранить</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="profile-work">
-                        <p>ЧТО ТО</p>
-                        <a href="">Ссылка 1</a><br/>
-                        <a href="">Ссылка 2</a><br/>
-                        <a href="">Ссылка ещё 3</a>
-                        <p>ЕЩЁ ЧТО ТО</p>
-                        <a href="">Ссылка 1</a><br/>
-                        <a href="">Ссылка 2</a><br/>
-                        <a href="">Ссылка ещё 3</a>
-                        <a href="">Не знаю зачем</a><br/>
-                    </div>
-                </div>
-                <div class="col-md-8 mt-3">
-                    <div class="tab-content profile-tab" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="row my-1">
+                <div class="col-md-8">
+                     <div class="row my-1">
                                 <div class="col-md-6">
                                     <label>Имя</label>
                                 </div>
@@ -140,36 +96,18 @@
                                           rows="2">{{ profile.about }}</textarea>
                                 </p>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <div class="list-group">
-                                {% for novell in profile.bookmarks.all %}
-                                    <div class="list-group-item list-group-item-action">
-                                        <div class="row">
-                                            <div class="col-1 px-1">
-                                                <img src="{{ novell.poster.url }}"
-                                                     class="img-fluid rounded float-start">
+                </div>
+                <div class="col-md-12 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-success"> Сохранить</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
 
-                                            </div>
-                                            <div class="col-11">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <a class="mb-1 h6"
-                                                       href="{{ novell.get_absolute_url }}">{{ novell.original_title }}</a>
-                                                    <a href="{% url 'core:del_from_bookmarks' novell.id 'profile' %}"
-                                                       class="text-dangera"><i class="text-danger bi bi-bookmark-x"></i>
-                                                    </a>
-
-                                                </div>
-                                                <p class="mb-0 text-muted small">Автор: {{ novell.author }}</p>
-                                                <p class="mb-0 text-muted small">Глав: {{ novell.chapters.count }}</p>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                {% endfor %}
-
-                            </div>
+                </div>
+                <div class="col-md-8 mt-3">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
                         </div>
                     </div>

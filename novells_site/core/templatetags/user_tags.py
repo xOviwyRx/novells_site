@@ -7,6 +7,8 @@ from django.db.models import Count, Q
 from django.utils import timezone
 from datetime import date, datetime
 
+from online_users.models import OnlineUserActivity
+
 from ..models import Genre, Rating, RatingStar
 
 register = template.Library()
@@ -71,3 +73,14 @@ def user_already_rate(user, novell):
         return True
     else:
         return False
+
+
+@register.inclusion_tag('core/include/profile/last_activity.html')
+def user_last_activity(user):
+    try:
+        a = OnlineUserActivity.objects.get(user=user)
+        is_online = timezone.now() - a.last_activity < timezone.timedelta(minutes=5)
+    except:
+        return None
+    return {'last_seen': a.last_activity,
+            'is_online': is_online}

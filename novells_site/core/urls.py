@@ -40,7 +40,9 @@ urlpatterns = [
          login_required(views.VotesView.as_view(model=Review, vote_type=LikeDislike.DISLIKE)),
          name='comment_dislike'),
 
-    path('add_to_bookmark/novell/<int:pk>', views.add_to_bookmark, name='add_to_bookmarks'),
-    path('delete_from_bookmark/novell/<int:pk>/<str:frommm>', views.del_from_bookmark, name='del_from_bookmarks'),
+    #  Добавление-удаление из закладок(избранного/запланированного)
+    path('add_to_bookmark/novell/<int:pk>/<str:type_of>', views.add_to_bookmark, name='add_to_bookmarks'),
+    path('delete_from_bookmark/novell/<int:pk>/<str:type_of>/<str:frommm>', views.del_from_bookmark, name='del_from_bookmarks'),
+
 
 ]

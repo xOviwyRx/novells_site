@@ -132,16 +132,24 @@ class VotesView(View):
 
 
 @login_required
-def add_to_bookmark(request, pk):
+def add_to_bookmark(request, pk, type_of):
     nov = get_object_or_404(Novell, pk=pk)
-    request.user.user_profile.bookmarks.add(nov)
+    if type_of == 'bookmark':
+        request.user.user_profile.bookmarks.add(nov)
+    elif type_of == 'planned':
+        request.user.user_profile.planned.add(nov)
     return redirect(nov.get_absolute_url())
 
 
 @login_required
-def del_from_bookmark(request, pk, frommm):
+def del_from_bookmark(request, pk, type_of, frommm):
+    print(type_of)
     nov = get_object_or_404(Novell, pk=pk)
-    request.user.user_profile.bookmarks.remove(nov)
+    if type_of == 'bookmark' or type_of == 'all':
+        request.user.user_profile.bookmarks.remove(nov)
+    elif type_of == 'planned' or type_of == 'all':
+        print(type_of)
+        request.user.user_profile.planned.remove(nov)
     if frommm == 'profile':
         return redirect(request.user.user_profile.get_absolute_url())
     else:

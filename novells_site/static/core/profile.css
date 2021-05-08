@@ -12,8 +12,6 @@
 }
 
 .profile-head {
-    height: 100%;
-    min-height: 220px;
     position: relative;
 }
 
@@ -54,9 +52,8 @@
 }
 
 .proile-rating {
-    font-size: 12px;
+    font-size: 11pt;
     color: #818182;
-    margin-top: 5%;
 }
 
 .proile-rating span {
@@ -65,9 +62,6 @@
     font-weight: 600;
 }
 
-.profile-head .nav-tabs {
-    margin-bottom: 5%;
-}
 
 .profile-head .nav-tabs .nav-link {
     font-weight: 600;
