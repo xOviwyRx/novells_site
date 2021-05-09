@@ -140,10 +140,18 @@
                                                 чтение</a>
                                         {% endif %}
                                     {% else %}
-                                        <a type="button"
-                                           class="btn btn-warning"
-                                           href="{% url 'core:chapter_detail' novell.slug novell|first_chapter_link %}">Начать
-                                            читать</a>
+                                        {% if novell|first_chapter_link == 0 %}
+                                            <button type="button" class="btn btn-outline-secondary disabled">
+                                                Пока нет глав
+                                                <i class="bi bi-x-octagon text-danger"></i>
+                                            </button>
+                                        {% else %}
+                                            <a type="button"
+                                               class="btn btn-warning"
+                                               href="{% url 'core:chapter_detail' novell.slug novell|first_chapter_link %}">Начать
+                                                читать</a>
+                                        {% endif %}
+
                                     {% endif %}
                                     {% if user.is_authenticated %}
 
@@ -337,18 +345,18 @@
                                                     <i class="bi bi-pencil"></i>
                                                     Написать отзыв
                                                 </span>
+                                                {% elif not user.is_authenticated %}
+                                                    <span class="btn btn-success" style="cursor: pointer;"
+                                                          data-toggle="modal" data-target="#loginModal">
+                                                    <i class="bi bi-pencil"></i>
+                                                    Написать отзыв
+                                                </span>
                                                 {% elif user|user_already_rate:novell %}
                                                     <span class="btn btn-success disabled" style="cursor: pointer;"
                                                           data-bs-toggle="modal"
                                                           data-bs-target="#reviewModal">
                                                     <i class="bi bi-pencil"></i>
                                                     Вы уже оставили отзыв
-                                                </span>
-                                                {% else %}
-                                                    <span class="btn btn-success" style="cursor: pointer;"
-                                                          data-toggle="modal" data-target="#loginModal">
-                                                    <i class="bi bi-pencil"></i>
-                                                    Написать отзыв
                                                 </span>
                                                 {% endif %}
                                             </div>
