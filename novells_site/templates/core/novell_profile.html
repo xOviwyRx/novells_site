@@ -106,7 +106,10 @@
 
                             </form>
                         {% else %}
-                            <p class="text-muted font-weight-bold mt-2">Войдите, чтобы оценить??</p>
+                            <p class="text-muted font-weight-bold mt-2">
+                                <a data-toggle="modal" data-target="#loginModal"
+                                   aria-expanded="false" class="text-primary" style="cursor: pointer;">
+                                    Войдите</a>, чтобы оценить</p>
 
                         {% endif %}
                     </div>
@@ -114,72 +117,106 @@
                         <div class="row w-100">
                             <div class="col">
                                 <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-warning">Начать чтение</button>
-                                    <button type="button" class="btn btn-dark">Продолжить чтение</button>
-                                    {% if novell in user.user_profile.bookmarks.all %}
-                                        <a href="{% url 'core:del_from_bookmarks' novell.id 'bookmark' 'novell' %}"
-                                           type="button"
-                                           class="btn btn-outline-warning">В избранном <i
-                                                class="bi bi-x-square-fill text-danger"></i>
-                                        </a>
-                                    {% elif novell in user.user_profile.planned.all %}
-                                        <a href="{% url 'core:del_from_bookmarks' novell.id 'planned' 'novell' %}"
-                                           type="button"
-                                           class="btn btn-outline-secondary">Запланированно <i
-                                                class="bi bi-x-square-fill text-danger"></i>
-                                        </a>
+                                    {% if user.is_authenticated %}
+                                        {% if user|novell_unread:novell %}
+                                            {% if novell|first_chapter_link == 0 %}
+                                                <button type="button" class="btn btn-outline-secondary disabled">
+                                                    Пока нет глав
+                                                    <i class="bi bi-x-octagon text-danger"></i>
+                                                </button>
+                                            {% else %}
+                                                <a type="button"
+                                                   class="btn btn-warning"
+                                                   href="{% url 'core:chapter_detail' novell.slug novell|first_chapter_link %}">Начать
+                                                    читать</a>
+                                            {% endif %}
+                                        {% elif user|novell_readed:novell %}
+                                            <button type="button" class="btn btn-outline-secondary disabled">Прочитано
+                                                <i class="bi bi-patch-check text-success"></i>
+                                            </button>
+                                        {% else %}
+                                            <a type="button" class="btn btn-dark"
+                                               href="{% url 'core:chapter_detail' novell.slug user|last_unread_chapter:novell %}">Продолжить
+                                                чтение</a>
+                                        {% endif %}
                                     {% else %}
-
-                                        <button class="btn btn-info dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-bookmark-check-fill text-success"></i> Добавить в
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li>
-
-                                                <a class="dropdown-item"
-                                                   href="{% url 'core:add_to_bookmarks' novell.id 'bookmark' %}">
-                                                    <div class="d-flex justify-content-between">
-                                                        <span>Избранное</span>
-                                                        <i class="bi bi-bookmark-star text-warning"></i>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-
-                                                <a class="dropdown-item"
-                                                   href="{% url 'core:add_to_bookmarks' novell.id 'planned' %}">
-                                                    <div class="d-flex justify-content-between">
-                                                        <span class="mr-2">Запланированное</span>
-                                                        <i class="bi bi-calendar-event text-primary"></i>
-
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-
-                                                {% if user|user_already_read:novell %}
-                                                    <a class="dropdown-item"
-                                                       href="{% url 'core:del_from_bookmarks' novell.id 'readed' 'novell' %}">
-                                                        <div class="d-flex justify-content-between">
-                                                            <span>Прочитано</span>
-                                                            <i class="bi bi-check-circle-fill text-success"></i>
-                                                        </div>
-                                                    </a>
-                                                {% else %}
-                                                    <a class="dropdown-item"
-                                                       href="{% url 'core:add_to_bookmarks' novell.id 'readed' %}">
-                                                        <div class="d-flex justify-content-between">
-                                                            <span>Прочитано</span>
-                                                            <i class="bi bi-x text-danger"></i>
-                                                        </div>
-                                                    </a>
-                                                {% endif %}
-                                            </li>
-                                        </ul>
-
+                                        <a type="button"
+                                           class="btn btn-warning"
+                                           href="{% url 'core:chapter_detail' novell.slug novell|first_chapter_link %}">Начать
+                                            читать</a>
                                     {% endif %}
+                                    {% if user.is_authenticated %}
 
+
+                                        {% if novell in user.user_profile.bookmarks.all %}
+                                            <a href="{% url 'core:del_from_bookmarks' novell.id 'bookmark' 'novell' %}"
+                                               type="button"
+                                               class="btn btn-outline-warning">В избранном <i
+                                                    class="bi bi-x-square-fill text-danger"></i>
+                                            </a>
+                                        {% elif novell in user.user_profile.planned.all %}
+                                            <a href="{% url 'core:del_from_bookmarks' novell.id 'planned' 'novell' %}"
+                                               type="button"
+                                               class="btn btn-outline-secondary">Запланированно <i
+                                                    class="bi bi-x-square-fill text-danger"></i>
+                                            </a>
+                                        {% else %}
+
+                                            <button class="btn btn-info dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-bookmark-check-fill text-success"></i> Добавить в
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+
+                                                    <a class="dropdown-item"
+                                                       href="{% url 'core:add_to_bookmarks' novell.id 'bookmark' %}">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span>Избранное</span>
+                                                            <i class="bi bi-bookmark-star text-warning"></i>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+
+                                                    <a class="dropdown-item"
+                                                       href="{% url 'core:add_to_bookmarks' novell.id 'planned' %}">
+                                                        <div class="d-flex justify-content-between">
+                                                            <span class="mr-2">Запланированное</span>
+                                                            <i class="bi bi-calendar-event text-primary"></i>
+
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+
+                                                    {% if user|user_already_read:novell %}
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'core:del_from_bookmarks' novell.id 'readed' 'novell' %}">
+                                                            <div class="d-flex justify-content-between">
+                                                                <span>Прочитано</span>
+                                                                <i class="bi bi-check-circle-fill text-success"></i>
+                                                            </div>
+                                                        </a>
+                                                    {% else %}
+                                                        <a class="dropdown-item"
+                                                           href="{% url 'core:add_to_bookmarks' novell.id 'readed' %}">
+                                                            <div class="d-flex justify-content-between">
+                                                                <span>Прочитано</span>
+                                                                <i class="bi bi-x text-danger"></i>
+                                                            </div>
+                                                        </a>
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+
+                                        {% endif %}
+                                    {% else %}
+                                        <a class="btn btn-info dropdown-toggle" data-toggle="modal"
+                                           data-target="#loginModal" type="button" aria-expanded="false">
+                                            <i class="bi bi-bookmark-check-fill text-success"></i> Добавить в
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -230,14 +267,14 @@
                     </div>
 
                     <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
-                        <div class="list-group mt-2">
+                        <div class="list-group mt-2 overflow-auto" style="height:350px;">
 
                             {% for n in novell.chapters.all %}
                                 <a href="{{ n.get_absolute_url }}"
                                    class="list-group-item list-group-item-action
-{% if not n.status %}list-group-item-warning disabled{% else %}list-group-item-success{% endif %}">
+                                    {% if not n.status %}list-group-item-warning disabled{% else %}list-group-item-success{% endif %}">
                                     <div class="d-flex justify-content-between">
-                                        <span class="h5">
+                                        <span class="h5 mb-0">
                                             Глава {{ n.number }}. {{ n.title }}
                                             {% if not n.status %}
                                                 <span class="small">
@@ -361,7 +398,7 @@
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="reviewModalLabel">Отзыв к <<{{ novell }}>></h5>
+                                            <h5 class="modal-title" id="reviewModalLabel">Отзыв к {{ novell }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                         </div>

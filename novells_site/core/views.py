@@ -71,6 +71,9 @@ class ChapterDetailView(DetailView):
 
     def get_object(self):
         nov = get_object_or_404(Novell, slug=self.kwargs['slug'])
+        if not self.request.user.is_anonymous:
+            self.request.user.user_profile.chapter_readed.add(
+                get_object_or_404(Chapter, novell=nov, number=self.kwargs['number']))
         return get_object_or_404(Chapter, novell=nov, number=self.kwargs['number'])
 
 
@@ -144,15 +147,13 @@ def add_to_bookmark(request, pk, type_of):
                                    novell_id=pk)
             if a:
                 return redirect(nov.get_absolute_url())
-
+        except:
             rate_readed = RatingStar.objects.get(value=0)
             Rating.objects.update_or_create(
                 author=request.user,
                 novell_id=pk,
                 rate=rate_readed
             )
-        except:
-            return HttpResponse('Криво сработало добавление в прочитанные')
 
     return redirect(nov.get_absolute_url())
 

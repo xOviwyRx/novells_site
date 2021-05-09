@@ -4,12 +4,13 @@ from django import template
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from datetime import date, datetime
 
 from online_users.models import OnlineUserActivity
 
-from ..models import Genre, Rating, RatingStar
+from ..models import Genre, Rating, RatingStar, Chapter
 
 register = template.Library()
 
@@ -55,14 +56,16 @@ def stars(rating):
     try:
         a = round(rating)
     except:
-        return {'stars': RatingStar.objects.filter(value__gt=0).order_by('value'), 'rating': 0, 'half': False, 'rating_plus': 0, 'rounded':0}
+        return {'stars': RatingStar.objects.filter(value__gt=0).order_by('value'), 'rating': 0, 'half': False,
+                'rating_plus': 0, 'rounded': 0}
     a = round(rating)
     if abs(a - rating) > Decimal('0.25') and abs(a - rating) < Decimal('0.75'):
         half = True
     else:
         half = False
     rating_plus = rating + 1
-    return {'stars': RatingStar.objects.filter(value__gt=0).order_by('value'), 'rating': rating, 'half': half, 'rating_plus': rating_plus, 'rounded':a}
+    return {'stars': RatingStar.objects.filter(value__gt=0).order_by('value'), 'rating': rating, 'half': half,
+            'rating_plus': rating_plus, 'rounded': a}
 
 
 @register.filter
@@ -81,6 +84,53 @@ def user_already_read(user, novell):
         return True
     else:
         return False
+
+
+@register.filter
+def first_chapter(novell):
+    return novell.chapters.filter(status=True).first()
+
+
+@register.filter
+def first_chapter_link(novell):
+    a = novell.chapters.filter(status=True).first()
+    if a:
+        return a.id
+    else:
+        return 0
+
+
+@register.filter
+def novell_unread(user, novell):
+    a = set(user.user_profile.chapter_readed.all())
+    b = set(novell.chapters.all())
+    if len(a & b) == 0:
+        return True
+    else:
+        return False
+
+
+@register.filter
+def novell_readed(user, novell):
+    a = set(user.user_profile.chapter_readed.all())
+    b = set(novell.chapters.filter(status=True))
+    print(b)
+    print(a)
+    if len(a & b) == len(b):
+        return True
+    else:
+        return False
+
+
+@register.filter
+def last_unread_chapter(user, novell):
+    a = set(user.user_profile.chapter_readed.all())
+    b = set(novell.chapters.filter(status=True))
+    x = list(b - a)
+    x.sort(key=lambda l: l.number, reverse=True)
+    print(x)
+    if len(x) > 0:
+        return x[0].number
 
 
 @register.inclusion_tag('core/include/profile/last_activity.html')
