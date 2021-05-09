@@ -114,9 +114,7 @@ def novell_unread(user, novell):
 def novell_readed(user, novell):
     a = set(user.user_profile.chapter_readed.all())
     b = set(novell.chapters.filter(status=True))
-    print(b)
-    print(a)
-    if len(a & b) == len(b):
+    if b <= a:
         return True
     else:
         return False
@@ -127,8 +125,7 @@ def last_unread_chapter(user, novell):
     a = set(user.user_profile.chapter_readed.all())
     b = set(novell.chapters.filter(status=True))
     x = list(b - a)
-    x.sort(key=lambda l: l.number, reverse=True)
-    print(x)
+    x.sort(key=lambda l: l.number)
     if len(x) > 0:
         return x[0].number
 
