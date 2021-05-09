@@ -26,7 +26,7 @@ def index(request):
     pop_novell = Novell.objects.filter(important=True)
     # pop_novell = Novell.objects.order_by('-views').first()
     test = pop_novell.first()
-    shedule_chapter = Chapter.objects.all().order_by('-created')[:4]
+    shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
     all_novells = Novell.objects.all()
     shots = Slider.objects.filter(active=True).order_by('position')
     return render(request, 'core/home.html', {'pops': pop_novell,

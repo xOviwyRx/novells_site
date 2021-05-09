@@ -17,6 +17,11 @@
         .ratio-3х4 {
             --aspect-ratio: calc(4 / 3 * 100%);
         }
+
+        .pops-novells {
+            background-image: inherit;
+            background: url({% static 'img/backgs/background2.jpg'%});
+        }
     </style>
 {% endblock %}
 {% block title %}
@@ -154,7 +159,7 @@
 
             <div class="my-slider">
                 {% for nov in all_novells %}
-                    <div class="slide-item h-100">
+                    <div class="slide-item h-100 mb-3">
 
                         <a href="{{ nov.get_absolute_url }}"
                         >
@@ -191,8 +196,7 @@
 -->
                             <h6 class="card-subtitle">
 
-                                <a href="{{ nov.get_absolute_url }}"
-                                >{{ nov.rus_title|truncatechars:35 }}</a>
+                                <a href="{{ nov.get_absolute_url }}">{{ nov.rus_title|truncatechars:35 }}</a>
                             </h6>
                         </div>
 
@@ -241,23 +245,30 @@
         <hr class="featurette-divider">
         <h1 class="text-center"><i class="bi bi-arrow-repeat text-danger" style="vertical-align: bottom"></i> Последние
             обновления</h1>
-        <div class="row">
-            <div class="col-12">
-                <div class="list-group">
-                    {% for chapter in last_update %}
-                        <div class="list-group-item list-group-item-action py-1">
+
+        <div class="container">
+            <div class="row row-cols-2">
+
+
+                {% for chapter in last_update %}
+                    <div class="col px-0">
+                        <div class="list-group-item list-group-item-action">
                             <div class="row">
-                                <div class="col-1 px-1 justify-content-center d-flex">
-                                    <img src="{{ chapter.novell.poster.url }}" class="rounded w-75">
+
+                                <div class="col-1 p-0">
+                                    <div class="ratio-3х4 ratio">
+                                        <img src="{{ chapter.novell.poster.url }}" class="rounded">
+                                    </div>
 
                                 </div>
                                 <div class="col-11">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <a class="mb-1 h5"
-                                           href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
-                                        <small class="font-weight-bold">{{ chapter.created|timesince }} назад</small>
+                                        <a class="mb-1"
+                                           href="{{ chapter.novell.get_absolute_url }}" style="font-size: 11pt; white-space: nowrap; overflow: hidden;">{{ chapter.novell.rus_title|truncatechars:40 }}</a>
+                                        <span class="font-weight-bold" style="font-size: 9pt;">{{ chapter.created|timesince }}
+                                            назад</span>
                                     </div>
-                                    <p class="mb-1">
+                                    <p class="mb-1" style="font-size: 10pt; white-space: nowrap; overflow: hidden;">
                                         <span class="font-weight-bold text-success">{% if chapter.status %}
                                             Добавлена{% else %}Анонсирована{% endif %}</span>
                                         <span>{{ chapter.number }} глава.</span>
@@ -267,10 +278,35 @@
 
                             </div>
                         </div>
-                    {% endfor %}
+                    </div>
+                {% endfor %}
+
+
+            </div>
+            <!--
+            <div class="list-group-item list-group-item-action py-1">
+                <div class="row">
+                    <div class="col-1 px-1 justify-content-center d-flex">
+                        <img src="{{ chapter.novell.poster.url }}" class="rounded w-75">
+
+                    </div>
+                    <div class="col-11">
+                        <div class="d-flex w-100 justify-content-between">
+                            <a class="mb-1 h5"
+                               href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
+                            <small class="font-weight-bold">{{ chapter.created|timesince }} назад</small>
+                        </div>
+                        <p class="mb-1">
+                                        <span class="font-weight-bold text-success">{% if chapter.status %}
+                                            Добавлена{% else %}Анонсирована{% endif %}</span>
+                            <span>{{ chapter.number }} глава.</span>
+                            <span class="font-weight-bolder">{{ chapter.title }}</span>
+                        </p>
+                    </div>
 
                 </div>
             </div>
+-->
         </div>
 
     </div>
