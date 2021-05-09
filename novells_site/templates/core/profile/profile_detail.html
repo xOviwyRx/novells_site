@@ -43,7 +43,6 @@
                 <div class="profile-work m-0 pt-3">
                     <div class="mb-2 h4 d-flex justify-content-between">
                         {{ profile.name }}
-
                         <a href="{% url 'core:edit_profile' profile.id profile.slug %}"
                            class="text-warning">
                             <i class="bi bi-pencil-square h4"></i>
@@ -52,7 +51,17 @@
 
                     <div class="profile-head">
                         <h6>
-                            Читатель <i class="bi bi-book-half text-danger"></i>
+                            {% if profile.name.groups.all %}
+                                {% for i in profile.name.groups.all %}
+                                    {{ i }}
+                                    {% if i.icon %}
+                                        <img src="{{ i.icon.url }}"
+                                             alt="{{ profile.name }}" width="20px" height="20px">
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                Читатель <i class="bi bi-book-half text-danger"></i>
+                            {% endif %}
                         </h6>
                     </div>
                     <div class="text-muted font-weight-bolder small">{% user_last_activity profile.name %}</div>
@@ -283,10 +292,10 @@
                                             </td>
                                             <td class="text-center">
                                                 {% if novell.rate.value == 0 %}
-                                                <span><i class="bi bi-eye-fill h4 text-primary"></i></span>
+                                                    <span><i class="bi bi-eye-fill h4 text-primary"></i></span>
                                                 {% else %}
-                                                <span class="badge rounded-pill {% if novell.rate.value > 3 %}bg-success{% elif novell.rate.value < 3 %}bg-danger{% else %}bg-warning{% endif %}"
-                                                      style="font-size: 12pt">
+                                                    <span class="badge rounded-pill {% if novell.rate.value > 3 %}bg-success{% elif novell.rate.value < 3 %}bg-danger{% else %}bg-warning{% endif %}"
+                                                          style="font-size: 12pt">
                                                     {{ novell.rate }}
                                                 </span>
                                                 {% endif %}

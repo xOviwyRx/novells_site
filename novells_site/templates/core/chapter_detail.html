@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load user_tags %}
 {% block title %}
     {{ chapter.novell.rus_title }} | {{ chapter.number }} глава. {{ chapter.title }}
 {% endblock %}
@@ -25,9 +25,15 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title chapter_header">
-                            Глава {{ chapter.number }}
-                        </h4>
+                        <div class="h4 card-title chapter_header d-flex justify-content-between">
+                            <div>Глава {{ chapter.number }}</div>
+                            <div>
+                                <a type="button" class="btn btn-outline-danger btn-sm" href="{{ chapter.novell.get_absolute_url }}">
+                                    <i class="bi bi-backspace"></i>
+                                    На страницу новеллы
+                                </a>
+                            </div>
+                        </div>
                         <h5 class="card-subtitle">
                             {{ chapter.title }}
                         </h5>
@@ -37,11 +43,70 @@
                     </div>
                     <div class="card-footer d-flex justify-content-between">
 
+                        {% if chapter.prev_chapter_url %}
+                            <a type="button" class="btn btn-outline-dark" href="{{ chapter.prev_chapter_url }}"><i
+                                    class="bi bi-arrow-bar-left font-weight-bold text-danger h6"></i>
+                                Предыдущая
+                                глава</a>
+                        {% else %}
+                            <button type="button" class="btn btn-outline-dark disabled"><i
+                                    class="bi bi-arrow-bar-left text-danger font-weight-bold h6"></i>
+                                Предыдущая
+                                глава
+                            </button>
+                        {% endif %}
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#chapter-list"><i class="bi bi-list-ol text-light"></i>
+                            Оглавление
+                        </button>
 
-                        <button type="button" class="btn btn-outline-dark">Предыдущая глава</button>
-                        <button type="button" class="btn btn-outline-dark">Оглавление</button>
-                        <button type="button" class="btn btn-outline-dark">Следующая глава</button>
 
+                        <div class="modal fade" id="chapter-list" tabindex="-1"
+                             aria-hidden="true">
+
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header justify-content-center">
+                                        <h4><i class="bi bi-list-ol text-muted"></i>
+                                            Оглавление</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="list-group">
+                                            {% for n in chapter.novell.chapters.all|active_chapters %}
+                                                <a role="button" href="{{ n.get_absolute_url }}"
+                                                   class="list-group-item list-group-item-action
+                                    {% if not n.status %}list-group-item-warning disabled{% else %}list-group-item-success{% endif %}">
+                                                    <div class="d-flex justify-content-between">
+                                        <span class="h5 mb-0">
+                                            Глава {{ n.number }}. {{ n.title }}
+                                            {% if not n.status %}
+                                                <span class="small">
+                                                <i class="bi bi-circle-fill text-danger"
+                                                   style="vertical-align: bottom;"></i>
+                                                Анонос
+                                                </span>
+                                            {% endif %}
+                                        </span>
+                                                        <span class="text-muted"><small>{{ n.publish|date }}</small></span>
+                                                    </div>
+
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if chapter.next_chapter_url %}
+                            <a type="button" class="btn btn-outline-dark" href="{{ chapter.next_chapter_url }}">Следующая
+                                глава <i
+                                        class="bi bi-arrow-bar-right text-success"></i></a>
+                        {% else %}
+                            <button type="button" class="btn btn-outline-dark disabled"><i
+                                    class="bi bi-arrow-bar-right text-success"></i>
+                                Следующая глава
+                            </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>

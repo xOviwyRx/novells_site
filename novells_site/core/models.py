@@ -168,6 +168,20 @@ class Chapter(models.Model):
     def get_absolute_url(self):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
 
+    def next_chapter_url(self):
+        a = Chapter.objects.filter(number__gt=self.number, status=True).order_by('number').first()
+        if a:
+            return reverse('core:chapter_detail', args=[a.novell.slug, a.number])
+        else:
+            return False
+
+    def prev_chapter_url(self):
+        a = Chapter.objects.filter(number__lt=self.number, status=True).order_by('-number').first()
+        if a:
+            return reverse('core:chapter_detail', args=[a.novell.slug, a.number])
+        else:
+            return False
+
     class Meta:
         verbose_name = 'Глава'
         verbose_name_plural = 'Главы'
@@ -269,7 +283,6 @@ class Profile(models.Model):
     bookmarks = models.ManyToManyField(Novell, related_name='in_bookmarks', blank=True)
     planned = models.ManyToManyField(Novell, related_name='plan_to_read', blank=True)
     chapter_readed = models.ManyToManyField(Chapter, related_name='readed_by_users', blank=True)
-
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

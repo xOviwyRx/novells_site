@@ -130,6 +130,11 @@ def last_unread_chapter(user, novell):
         return x[0].number
 
 
+@register.filter
+def active_chapters(chapters):
+    return chapters.filter(status=True)
+
+
 @register.inclusion_tag('core/include/profile/last_activity.html')
 def user_last_activity(user):
     try:
