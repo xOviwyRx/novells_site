@@ -10,13 +10,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold" aria-current="page" href='{% url 'core:home' %}'>Главная</a>
+                    <a class="nav-link font-weight-bold" aria-current="page" href='{% url 'core:home' %}'><i
+                            class="bi bi-house-door"></i>
+                        <span style="vertical-align: middle">Главная</span></a>
                 </li>
 
                 <li class="nav-item dropdown font-weight-bold">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-expanded="false">
-                        Жанры
+                        <i class="bi bi-list"></i>
+                        <span style="vertical-align: middle">Жанры</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% genres %}
@@ -26,7 +29,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link font-weight-bold" href="{% url 'core:all_news' %}">Новости</a>
+                    <a class="nav-link font-weight-bold" href="{% url 'core:all_news' %}"><i
+                            class="bi bi-newspaper"></i>
+                        <span style="vertical-align: middle">Новости</span></a>
                 </li>
             </ul>
 

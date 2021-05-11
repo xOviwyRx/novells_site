@@ -29,11 +29,17 @@ def index(request):
     shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
     all_novells = Novell.objects.all()
     shots = Slider.objects.filter(active=True).order_by('position')
+    if request.user.is_authenticated:
+        prof = request.user.user_profile
+        my_news = Chapter.objects.filter(Q(novell__in=prof.bookmarks.all())|Q(novell__in=prof.planned.all())).order_by('-created')[:10]
+    else:
+        my_news = False
     return render(request, 'core/home.html', {'pops': pop_novell,
                                               'last_update': shedule_chapter,
                                               'all_novells': all_novells,
                                               'image_shots': shots,
-                                              'test': test
+                                              'test': test,
+                                              'my_news':my_news
                                               })
 
 

@@ -27,6 +27,29 @@
             --aspect-ratio: calc(4 / 3 * 100%);
         }
 
+        .active .bi-info-circle {
+            color: #0dfdb9;
+        }
+
+        .bi-info-circle {
+            color: #69fa86;
+        }
+
+        .bi-bookmark-star-fill {
+            color: #fff400;
+        }
+
+        .active .bi-bookmark-star-fill {
+            color: #f9ff91;
+        }
+
+        .bi-calendar-event {
+            color: #5f5d5d;
+        }
+
+        .active .bi-calendar-event {
+            color: rgba(139, 110, 146, 0.75);
+        }
     </style>
 {% endblock %}
 <!------ Include the above in your HEAD tag ---------->
@@ -43,10 +66,12 @@
                 <div class="profile-work m-0 pt-3">
                     <div class="mb-2 h4 d-flex justify-content-between">
                         {{ profile.name }}
-                        <a href="{% url 'core:edit_profile' profile.id profile.slug %}"
-                           class="text-warning">
-                            <i class="bi bi-pencil-square h4"></i>
-                        </a>
+                        {% if user.is_authenticated and user.user_profile == profile %}
+                            <a href="{% url 'core:edit_profile' profile.id profile.slug %}"
+                               class="text-warning">
+                                <i class="bi bi-pencil-square h4"></i>
+                            </a>
+                        {% endif %}
                     </div>
 
                     <div class="profile-head">
@@ -97,23 +122,33 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                                aria-controls="home" aria-selected="true"><i class="bi bi-info-circle"></i>
-                                Информация</a>
+                                <span style="vertical-align: middle;">Информация</span>
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                                aria-controls="profile" aria-selected="false"><i class="bi bi-bookmark-star-fill"></i>
-                                Избранное</a>
+                                <span style="vertical-align: middle;">Избранное</span>
+                            </a>
                         </li>
+                        <!--
+                        <li class="nav-item">
+                            <a class="nav-link" id="news-tab" data-toggle="tab" href="#news" role="tab"
+                               aria-controls="news" aria-selected="false"><i class="bi bi-newspaper"></i>
+                                <span style="vertical-align: middle;">Новинки</span></a>
+                        </li>
+                        -->
                         <li class="nav-item">
                             <a class="nav-link" id="planned-tab" data-toggle="tab" href="#planned" role="tab"
                                aria-controls="planned" aria-selected="false"><i class="bi bi-calendar-event"></i>
-                                Запланированно</a>
+                                <span style="vertical-align: middle;">Запланированно</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="rating-tab" data-toggle="tab" href="#ratings" role="tab"
                                aria-controls="ratings" aria-selected="false"><i class="bi bi-book-fill"></i>
-                                Прочитано</a>
+                                <span style="vertical-align: middle;">Прочитано</span></a>
                         </li>
+
                     </ul>
                 </div>
 
@@ -218,6 +253,43 @@
                         </div>
 
                     </div>
+
+                <!--
+                    <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="list-group">
+                                    {% for chapter in last_update %}
+                                        <div class="list-group-item list-group-item-action py-1">
+                                            <div class="row">
+                                                <div class="col-1 px-1 justify-content-center d-flex">
+                                                    <div class="ratio ratio-3х4">
+                                                        <img src="{{ chapter.novell.poster.url }}" class="rounded">
+                                                    </div>
+                                                </div>
+                                                <div class="col-11">
+                                                    <div class="d-flex w-100 justify-content-between">
+                                                        <a class="mb-1 h5"
+                                                           href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
+                                                        <small class="font-weight-bold">{{ chapter.created|timesince }}
+                                                            назад</small>
+                                                    </div>
+                                                    <p class="mb-1">
+                                        <span class="font-weight-bold text-success">{% if chapter.status %}
+                                            Добавлена{% else %}Анонсирована{% endif %}</span>
+                                                        <span>{{ chapter.number }} глава.</span>
+                                                        <span class="font-weight-bolder">{{ chapter.title }}</span>
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+-->
                     <div class="tab-pane fade" id="planned" role="tabpanel" aria-labelledby="planned-tab">
                         <div class="list-group overflow-auto" style="height: 500px;">
                             {% for novell in profile.planned.all %}
@@ -254,7 +326,6 @@
                         </div>
 
                     </div>
-
                     <div class="tab-pane fade" id="ratings" role="tabpanel" aria-labelledby="rating-tab">
                         <div class="container-fluid p-0 mx-0">
                             <div class="table-fix table-responsive">
