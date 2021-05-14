@@ -32,6 +32,67 @@
     <script src="http://twitter.github.com/hogan.js/builds/3.0.1/hogan-3.0.1.js"></script>
 
 -->
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Настройка AJAX
+        $(function () {
+            $.ajaxSetup({
+                headers: {"X-CSRFToken": getCookie("csrftoken")}
+            });
+        });
+
+        setInterval(function () {
+            $.ajax({
+                url: "/api/get_notifications/",
+                type: 'POST',
+                data: {'check': true},
+
+                success: function (json) {
+
+                    if (json.result) {
+                        $('#notify_icon').addClass("text-success");
+                        var doc = $.parseHTML(json.notifications_list);
+                        $('#notifications-list').html(doc);
+                        $('#notification-count').text(json.news_count);
+                    }
+                }
+            });
+        }, 60000);
+
+        function check() {
+            $.ajax({
+                url: "/api/check_notifications/",
+                type: 'POST',
+
+                success: function (json) {
+                    $('#notify_icon').removeClass("text-success");
+                    $('#notification-count').text('');
+
+                }
+            })
+
+        }
+
+        $(function () {
+            $('[data-action="check-notification"]').click(check);
+        });
+    </script>
+
     <style>
         html, body {
             height: 100%;

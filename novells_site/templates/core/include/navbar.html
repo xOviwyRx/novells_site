@@ -37,7 +37,30 @@
 
 
             {% if user.is_authenticated %}
+                <div class="dropdown">
+
+                    <button type="button" class="btn btn-info dropdown-toggle" data-action="check-notification"
+                            data-bs-toggle="dropdown"
+                            id="collapseNotification" aria-expanded="false">
+                        <i id="notify_icon"
+                           class="h5 bi bi-bell-fill {% if user|count_unchecked > 0 %}text-success{% else %}text-dark{% endif %}"></i>
+
+
+                        <span class="badge bg-dark" id="notification-count">{% if user|count_unchecked > 0 %}
+                            {{ user|count_unchecked }}{% endif %}</span>
+                    </button>
+
+                    <ul class="dropdown-menu" style="width: 500px;">
+                        <div class="row justify-content-center">
+                            {% not_list user %}
+                        </div>
+                    </ul>
+
+
+                </div>
+
                 <a class="p-2 text-muted" href="{{ user.user_profile.get_absolute_url }}">{{ user.username }}</a>
+
             {% else %}
                 <a role="button" class="btn btn-success mr-2" href="{% url 'account_signup' %}">Регистрация</a>
             {% endif %}
@@ -61,3 +84,4 @@
 
     </div>
 </nav>
+

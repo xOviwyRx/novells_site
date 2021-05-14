@@ -5,3 +5,4 @@ django-autoslug==1.9.8
 psycopg2==2.8.6
 pytils==0.3
 django-tinymce==3.3.0
+django-online-users==0.3

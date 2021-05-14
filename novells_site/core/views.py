@@ -1,8 +1,10 @@
 import json
+from django.utils import timezone
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
@@ -29,17 +31,14 @@ def index(request):
     shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
     all_novells = Novell.objects.all()
     shots = Slider.objects.filter(active=True).order_by('position')
-    if request.user.is_authenticated:
-        prof = request.user.user_profile
-        my_news = Chapter.objects.filter(Q(novell__in=prof.bookmarks.all())|Q(novell__in=prof.planned.all())).order_by('-created')[:10]
-    else:
-        my_news = False
+
+
+
     return render(request, 'core/home.html', {'pops': pop_novell,
                                               'last_update': shedule_chapter,
                                               'all_novells': all_novells,
                                               'image_shots': shots,
-                                              'test': test,
-                                              'my_news':my_news
+                                              'test': test
                                               })
 
 
@@ -138,6 +137,45 @@ class VotesView(View):
             }),
             content_type="application/json"
         )
+
+
+class GetNotificationView(View):
+
+    def post(self, request):
+        prof = request.user.user_profile
+        my_news = Chapter.objects.filter(Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all()),
+                                         created__gte=prof.news_check)
+        list_news = Chapter.objects.filter(
+            Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all())).order_by('-created')[:10]
+        news_count = my_news.count()
+        result = news_count > 0
+
+        if result:
+            return HttpResponse(
+                json.dumps({
+                    "result": result,
+                    "news_count": news_count,
+                    "notifications_list": render_to_string('core/include/notifications_list.html',
+                                                           {'user': request.user, 'my_news': list_news}),
+                }),
+                content_type="application/json"
+            )
+        else:
+            return HttpResponse(
+                json.dumps({
+                    "result": result,
+                    "notifications_list": render_to_string('core/include/notifications_list.html',
+                                                           {'user': request.user, 'my_news': list_news}),
+                }),
+                content_type="application/json"
+            )
+
+
+class CheckNotificationView(View):
+    def post(self, request):
+        request.user.user_profile.news_check = timezone.now()
+        request.user.user_profile.save()
+        return HttpResponse(200)
 
 
 @login_required

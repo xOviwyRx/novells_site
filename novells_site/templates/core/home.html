@@ -29,7 +29,17 @@
 {% endblock %}
 {% block content %}
     <div class="container-xxl" style="background:#ffffff;">
+        <!--
+        <div class="collapse" id="collapseNotification"
+             style="z-index: 9999; position: absolute; left: 40%; margin-top: -7px;">
+            <div class="card card-body p-0" style="width: 80%;">
+                <div class="row justify-content-center">
+                    {% include 'core/include/notifications_list.html' %}
+                </div>
 
+            </div>
+        </div>
+-->
         <div class="row mb-2">
 
             <div id="carouselExampleCaptions" class="carousel slide carousel-fade carousel-dark px-0"
@@ -81,41 +91,6 @@
                     <span style="vertical-align: middle;">Новинки для меня</span></h1>
                 <hr class="featurette-divider">
 
-                <div class="row justify-content-center">
-                    <div class="col-9">
-                        <div class="list-group {% if my_news.count > 4 %}overflow-auto{% endif %}" {% if my_news.count > 4 %}style="height: 360px;"{% endif %}>
-                            {% for chapter in my_news %}
-                                <div class="list-group-item list-group-item-action py-1">
-                                    <div class="row">
-                                        <div class="col-1 px-1 justify-content-center d-flex">
-                                            <div class="ratio ratio-3х4">
-                                                <img src="{{ chapter.novell.poster.url }}" class="rounded float-left">
-                                            </div>
-                                        </div>
-                                        <div class="col-11">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <a class="mb-1 h6"
-                                                   href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
-                                                <small class="font-weight-bold">{{ chapter.created|timesince }}
-                                                    назад</small>
-                                            </div>
-                                            <p class="mb-1">
-                                                {% if chapter.status %}
-                                                    <span class="font-weight-bold text-success">Добавлена</span>
-                                                {% else %}
-                                                    <span class="font-weight-bold text-warning">Анонсирована</span>
-                                                {% endif %}
-                                                <span>{{ chapter.number }} глава.</span>
-                                                <span class="font-weight-bolder">{{ chapter.title }}</span>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
 
             </div>
         {% endif %}

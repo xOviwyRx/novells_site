@@ -68,6 +68,22 @@ def stars(rating):
             'rating_plus': rating_plus, 'rounded': a}
 
 
+@register.inclusion_tag('core/include/notifications_list.html')
+def not_list(user):
+    prof = user.user_profile
+    my_news = Chapter.objects.filter(
+        Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all())).order_by('-created')[:10]
+    return {'my_news':my_news}
+
+
+@register.filter
+def count_unchecked(user):
+    prof = user.user_profile
+    my_news = Chapter.objects.filter(Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all()),
+                                     created__gte=prof.news_check).count()
+    return my_news
+
+
 @register.filter
 def user_already_rate(user, novell):
     nov = novell.reviews_to_novell.filter(author=user)
