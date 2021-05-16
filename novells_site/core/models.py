@@ -1,3 +1,5 @@
+import collections
+
 from autoslug import AutoSlugField
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -99,9 +101,27 @@ class Comment(models.Model):
     def get_absolute_url(self):
         obj = self.content_object
         return '{}#comment{}'.format(obj.get_absolute_url(), self.id)
-    #    a = reverse('core:chapter_detail', args=[self.chapter.novell.slug, self.chapter.number]) + '#comment' + str(
-    #        self.id)
-    #    return a
+
+    def is_parent(self):
+        return self.parent == None
+
+    def has_childs(self):
+        return self.childs.count() > 0
+
+    def all_childs(self):
+        return sorted(list(bfs(self)), key=lambda x: x.created)
+
+
+def bfs(root):
+    visited = set()
+    queue = collections.deque([root])
+    while queue:
+        vertex = queue.popleft()
+        for neighbour in vertex.childs.all():
+            if neighbour not in visited:
+                visited.add(neighbour)
+                queue.append(neighbour)
+    return visited
 
 
 class Genre(models.Model):

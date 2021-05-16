@@ -59,6 +59,6 @@ body {
 }
 
 .reply small:hover {
-    color: green;
+    color: #1affe4;
     cursor: pointer
 }

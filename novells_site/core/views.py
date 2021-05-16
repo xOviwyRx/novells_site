@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse
 
@@ -31,8 +31,6 @@ def index(request):
     shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
     all_novells = Novell.objects.all()
     shots = Slider.objects.filter(active=True).order_by('position')
-
-
 
     return render(request, 'core/home.html', {'pops': pop_novell,
                                               'last_update': shedule_chapter,
@@ -147,7 +145,18 @@ class GetNotificationView(View):
                                          created__gte=prof.news_check)
         list_news = Chapter.objects.filter(
             Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all())).order_by('-created')[:10]
-        news_count = my_news.count()
+
+        new_coms = Comment.objects.filter(~Q(author=request.user), parent__author=request.user,
+                                          created__gte=prof.news_check)
+        news_count = my_news.count() + new_coms.count()
+        comments_reply = Comment.objects.filter(~Q(author=request.user), parent__author=request.user).order_by(
+            '-created')[:10]
+
+       # min_cr = max(list_news[0].created, comments_reply[0].created)
+       # print(comments_reply, min_cr)
+        a = list(list_news) + list(comments_reply)
+        b = sorted(a, key=lambda x: x.created, reverse=True)[:10]
+
         result = news_count > 0
 
         if result:
@@ -156,7 +165,7 @@ class GetNotificationView(View):
                     "result": result,
                     "news_count": news_count,
                     "notifications_list": render_to_string('core/include/notifications_list.html',
-                                                           {'user': request.user, 'my_news': list_news}),
+                                                           {'user': request.user, 'my_news': b}),
                 }),
                 content_type="application/json"
             )
@@ -165,7 +174,7 @@ class GetNotificationView(View):
                 json.dumps({
                     "result": result,
                     "notifications_list": render_to_string('core/include/notifications_list.html',
-                                                           {'user': request.user, 'my_news': list_news}),
+                                                           {'user': request.user, 'my_news': b}),
                 }),
                 content_type="application/json"
             )

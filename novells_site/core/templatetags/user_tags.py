@@ -10,7 +10,7 @@ from datetime import date, datetime
 
 from online_users.models import OnlineUserActivity
 
-from ..models import Genre, Rating, RatingStar, Chapter
+from ..models import Genre, Rating, RatingStar, Chapter, Comment, Post
 
 register = template.Library()
 
@@ -71,9 +71,28 @@ def stars(rating):
 @register.inclusion_tag('core/include/notifications_list.html')
 def not_list(user):
     prof = user.user_profile
-    my_news = Chapter.objects.filter(
+    chapter_list = Chapter.objects.filter(
         Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all())).order_by('-created')[:10]
-    return {'my_news':my_news}
+    comments_reply = Comment.objects.filter(~Q(author=user), parent__author=user).order_by(
+        '-created')[:10]
+    my_news = sorted(list(chapter_list) + list(comments_reply), key=lambda x: x.created, reverse=True)[:10]
+    return {'my_news': my_news}
+
+
+@register.filter
+def get_type(element):
+    if isinstance(element, Chapter):
+        return 'chapter'
+    elif isinstance(element, Comment):
+        return 'comment'
+
+
+@register.filter
+def get_theme(element):
+    if isinstance(element, Chapter):
+        return 'Главе'
+    elif isinstance(element, Post):
+        return 'Новости'
 
 
 @register.filter
