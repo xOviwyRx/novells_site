@@ -15,19 +15,30 @@
                         <span style="vertical-align: middle">Главная</span></a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link font-weight-bold" aria-current="page" href='{% url 'core:filter' %}'>
+                        <i class="bi bi-list"></i>
+                        <span style="vertical-align: middle">Каталог новелл</span>
+                    </a>
+                </li>
+                <!--
                 <li class="nav-item dropdown font-weight-bold">
+
+
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-list"></i>
                         <span style="vertical-align: middle">Жанры</span>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% genres %}
+                        {#% genres %#}
                         <hr class="dropdown-divider">
                         <li><a class="dropdown-item" href="{% url 'core:filter' %}">Каталог новелл</a></li>
 
                     </ul>
+
                 </li>
+                -->
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold" href="{% url 'core:all_news' %}"><i
                             class="bi bi-newspaper"></i>

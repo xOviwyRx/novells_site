@@ -24,12 +24,10 @@ SECRET_KEY = '3uby7wv_r$o0gyvt1wmx+j9rv!xuc@l%0r45!+68%nu5=8$+wd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
     ALLOWED_HOSTS = ['31.31.203.141', '127.0.0.1']
-
 
 # Application definition
 
@@ -46,13 +44,11 @@ INSTALLED_APPS = [
     'allauth.account',
     'tinymce',
     'online_users',
-    #'allauth.socialaccount',
+    # 'allauth.socialaccount',
 
 ]
 
-
 SITE_ID = 1
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,8 +117,6 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -151,7 +145,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
@@ -172,37 +165,39 @@ else:
     MEDIA_URL = '/media/'
 
 
-    #if
-EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    # ACCOUNT_EMAIL_REQUIRED = True
-    # ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-    # ACCOUNT_EMAIL_VERIFICATION = True
-"""else:
+if DEBUG:
+    #EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+     ACCOUNT_EMAIL_REQUIRED = True
+     ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+     ACCOUNT_EMAIL_VERIFICATION = True
+else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
     ACCOUNT_EMAIL_VERIFICATION = True
     # ACCOUNT_USERNAME_MIN_LENGTH = 1
- """
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'haxballcis@gmail.com'
-EMAIL_HOST_PASSWORD = 'ebalvrotmarokko32288'
+#EMAIL_HOST_USER = 'privereda1bl@gmail.com'
+#EMAIL_HOST_PASSWORD = '7rW4QObVsh'
+EMAIL_HOST_USER = 'privereda1blnovell@gmail.com'
+EMAIL_HOST_PASSWORD = '{c{IaqaeZMKKY|x7'
+
 
 TINYMCE_DEFAULT_CONFIG = {
     "height": "500px",
     "width": "80%",
     "menubar": "file edit view insert format tools table help",
     "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "
-    "fullscreen insertdatetime media table paste code help wordcount spellchecker",
+               "fullscreen insertdatetime media table paste code help wordcount spellchecker",
     "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
-    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
-    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
-    "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
-    "a11ycheck ltr rtl | showcomments addcomment code",
+               "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
+               "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
+               "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
+               "a11ycheck ltr rtl | showcomments addcomment code",
     "custom_undo_redo_levels": 10,
 
 }

@@ -130,7 +130,7 @@ def first_chapter(novell):
 def first_chapter_link(novell):
     a = novell.chapters.filter(status=True).first()
     if a:
-        return a.id
+        return a.number
     else:
         return 0
 

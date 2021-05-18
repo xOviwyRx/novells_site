@@ -303,7 +303,7 @@ class Profile(models.Model):
     bookmarks = models.ManyToManyField(Novell, related_name='in_bookmarks', blank=True)
     planned = models.ManyToManyField(Novell, related_name='plan_to_read', blank=True)
     chapter_readed = models.ManyToManyField(Chapter, related_name='readed_by_users', blank=True)
-    news_check = models.DateTimeField('Когда чекнул уведомления')
+    news_check = models.DateTimeField('Когда чекнул уведомления', default=timezone.now)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
