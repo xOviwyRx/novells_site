@@ -94,7 +94,7 @@
                         <div class="row">
 
                             <div class="col-4"
-                                 style="border-style: dotted; border-width: 3px; border-color: bisque; z-index: 2">
+                                 style="border-style: dotted; border-width: 3px; border-color: rgba(237,200,184,1); z-index: 2">
 
                                 <div class="ratio-3х4 ratio">
                                     <img src="{{ pop.poster.url }}"
@@ -103,7 +103,7 @@
                             </div>
 
                             <div class="col-1 m-0 p-0 d-flex">
-                                <div class="text-vertical text-center h1">
+                                <div class="text-vertical text-center h1" style="color: rgba(171,59,97,1)">
                                     Выбор редакции
                                 </div>
                             </div>
@@ -114,8 +114,8 @@
 
                                 <h2 class="mb-1"><a href="{{ pop.get_absolute_url }}" class="link-dark">{{ pop.rus_title }}</a></h2>
                                 {% for genre in pop.genres.all %}
-                                    <span class="badge rounded-pill bg-primary my-1"
-                                          style="font-size: large">{{ genre }}</span>
+                                    <span class="badge rounded-pill my-1"
+                                          style="font-size: large; background-color: rgba(18,61,106,1)">{{ genre }}</span>
 
                                 {% endfor %}
                                 <h6 class="text-muted">Автор: {{ pop.author }}</h6>
