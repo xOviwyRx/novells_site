@@ -151,7 +151,9 @@ class Novell(models.Model):
     rus_title = models.CharField(max_length=256, verbose_name='Название на русском', blank=True, null=True)
     eng_title = models.CharField(max_length=256, verbose_name='Название на англ.', blank=True, null=True)
 
-    chapter_count = models.PositiveSmallIntegerField(blank=True, null=True)
+    chapter_count = models.PositiveSmallIntegerField(verbose_name='Глав всего',
+                                                     help_text='Оставить пустым, если неизвестно', blank=True,
+                                                     null=True)
     slug = models.SlugField(max_length=250)
     author = models.CharField(max_length=128, verbose_name='Автор')
     translator = models.CharField(max_length=128, verbose_name='Переводчик', default='Privereda1')
