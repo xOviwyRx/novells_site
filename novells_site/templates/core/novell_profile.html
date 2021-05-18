@@ -23,7 +23,9 @@
         .ratio-3х4 {
             --aspect-ratio: calc(4 / 3 * 100%);
         }
-
+        .my-buttons .btn {
+            margin-left: 10px;
+        }
     </style>
 {% endblock %}
 
@@ -57,7 +59,7 @@
                                 class="font-weight-bold text-dark">{{ novell.author }}</span></p>
 
                         <p class="text-muted mb-0 font-weight-bold">Количество глав: <span
-                                class="font-weight-bold text-dark">{{ novell.chapters.count }}</span></p>
+                                class="font-weight-bold text-dark">{% if novell.chapter_count %}{{ novell.chapter_count }}{% else %}???{% endif %}</span></p>
                         <p class="text-muted mb-0 font-weight-bold">Переведено глав: <span
                                 class="font-weight-bold text-dark">{{ novell.chapters.count }}</span></p>
                         <p class="text-muted mb-0 font-weight-bold">Состояние перевода:
@@ -116,7 +118,7 @@
                     <div class="card-footer border-0" style="background-color: white">
                         <div class="row w-100">
                             <div class="col">
-                                <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-start my-buttons">
                                     {% if user.is_authenticated %}
                                         {% if user|novell_unread:novell %}
                                             {% if novell|first_chapter_link == 0 %}

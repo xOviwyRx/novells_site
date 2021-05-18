@@ -151,6 +151,7 @@ class Novell(models.Model):
     rus_title = models.CharField(max_length=256, verbose_name='Название на русском', blank=True, null=True)
     eng_title = models.CharField(max_length=256, verbose_name='Название на англ.', blank=True, null=True)
 
+    chapter_count = models.PositiveSmallIntegerField(blank=True, null=True)
     slug = models.SlugField(max_length=250)
     author = models.CharField(max_length=128, verbose_name='Автор')
     translator = models.CharField(max_length=128, verbose_name='Переводчик', default='Privereda1')
@@ -189,14 +190,14 @@ class Chapter(models.Model):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
 
     def next_chapter_url(self):
-        a = Chapter.objects.filter(number__gt=self.number, status=True).order_by('number').first()
+        a = Chapter.objects.filter(number__gt=self.number, status=True, novell=self.novell).order_by('number').first()
         if a:
             return reverse('core:chapter_detail', args=[a.novell.slug, a.number])
         else:
             return False
 
     def prev_chapter_url(self):
-        a = Chapter.objects.filter(number__lt=self.number, status=True).order_by('-number').first()
+        a = Chapter.objects.filter(number__lt=self.number, status=True, novell=self.novell).order_by('-number').first()
         if a:
             return reverse('core:chapter_detail', args=[a.novell.slug, a.number])
         else:
