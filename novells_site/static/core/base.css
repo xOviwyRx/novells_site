@@ -1,9 +1,8 @@
 
 body {
-    background: rgb(63, 94, 251);
-    background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+    background-color: rgba(237, 226, 220, 0.75);
 }
 
 body .container-xxl {
-        max-width: 1170px;
+    max-width: 1170px;
 }

@@ -70,7 +70,7 @@
 
                 </div>
 
-                <a class="p-2 text-muted" href="{{ user.user_profile.get_absolute_url }}">{{ user.username }}</a>
+                <a class="p-2 text-dark" href="{{ user.user_profile.get_absolute_url }}">{{ user.username }}</a>
 
             {% else %}
                 <a role="button" class="btn btn-success mr-2" href="{% url 'account_signup' %}">Регистрация</a>
@@ -89,7 +89,7 @@
 
         <form class="d-flex" action="{% url 'core:filter' %}" method="get">
             <input class="form-control mr-2" type="search" name="q" placeholder="Поиск" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Поиск</button>
+            <button class="btn btn-secondary" type="submit">Поиск</button>
         </form>
 
 

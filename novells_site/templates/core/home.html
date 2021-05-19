@@ -19,15 +19,17 @@
         }
 
         .pops-novells {
-            background-image: inherit;
-            background: url({% static 'img/backgs/bg-pop-1.jpg'%});
+            /*background: radial-gradient(ellipse closest-side,#ab3b61, #ede2dc);*/
+            background-color: rgba(171, 59, 97, 0.75);
+
         }
 
-        .rec-novell-title a:hover{
-            color: rgb(229, 154, 252);
+        .rec-novell-title a:hover {
+            color: rgb(129, 129, 129);
         }
-        .rec-novell-title a{
-           color: rgba(171,59,97,0.75);
+
+        .rec-novell-title a {
+            color: rgba(10, 10, 10, 0.75);
         }
     </style>
 {% endblock %}
@@ -121,8 +123,8 @@
 
 
                                 <h2 class="mb-1 rec-novell-title"><a href="{{ pop.get_absolute_url }}"
-                                                    class="font-weight-bold"
-                                                    style="text-decoration: none;">{{ pop.rus_title }}</a>
+                                                                     class="font-weight-bold"
+                                                                     style="text-decoration: none;">{{ pop.rus_title }}</a>
                                 </h2>
                                 {% for genre in pop.genres.all %}
                                     <span class="badge rounded-pill my-1"
@@ -150,9 +152,10 @@
 
             </div>
 
-            <button class="btn btn-outline-dark btn-lg font-weight-bold" type="button"
+            <button class="btn btn-outline-light btn-lg font-weight-bold" type="button"
                     data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="next" style="position: absolute; bottom: 0; left: 42%; width: 10%; z-index: 2000; background-color: rgba(18,61,106,0.75)">
+                    data-bs-slide="next"
+                    style="position: absolute; bottom: 0; left: 42%; width: 10%; z-index: 2000; background-color: rgb(18,61,106)">
                 Далее
             </button>
 
@@ -172,8 +175,8 @@
 
 
         <div class="pops-novells row mt-4" style="background-color: rgb(245,210,239);">
-            <h1 class="text-center mt-1"><i class="bi bi-card-list text-primary"
-                                            style="vertical-align: bottom"></i> Популярное</h1>
+            <h1 class="text-center mt-1"><i class="bi bi-card-list text-white"
+                                            style="vertical-align: bottom"></i> <span class="text-white">Популярное</span></h1>
             <hr class="featurette-divider">
 
 
@@ -216,7 +219,7 @@
 -->
                             <h6 class="card-subtitle">
 
-                                <a href="{{ nov.get_absolute_url }}">{{ nov.rus_title|truncatechars:35 }}</a>
+                                <a href="{{ nov.get_absolute_url }}" class="link-light" style="text-decoration: none;">{{ nov.rus_title|truncatechars:35 }}</a>
                             </h6>
                         </div>
 
@@ -263,7 +266,7 @@
 
 
         <hr class="featurette-divider">
-        <h1 class="text-center"><i class="bi bi-arrow-repeat text-danger" style="vertical-align: bottom"></i> Последние
+        <h1 class="text-center" style="color: rgba(18,61,106,0.75)"><i class="bi bi-arrow-repeat" style="vertical-align: bottom"></i> Последние
             обновления</h1>
 
         <div class="container">
@@ -285,13 +288,13 @@
                                     <div class="d-flex w-100 justify-content-between">
                                         <a class="mb-1"
                                            href="{{ chapter.novell.get_absolute_url }}"
-                                           style="font-size: 11pt; white-space: nowrap; overflow: hidden;">{{ chapter.novell.rus_title|truncatechars:40 }}</a>
+                                           style="font-size: 11pt; white-space: nowrap; overflow: hidden; color: rgba(18,61,106,0.75); font-weight: bold;">{{ chapter.novell.rus_title|truncatechars:40 }}</a>
                                         <span class="font-weight-bold"
                                               style="font-size: 9pt;">{{ chapter.created|timesince }}
                                             назад</span>
                                     </div>
                                     <p class="mb-1" style="font-size: 10pt; white-space: nowrap; overflow: hidden;">
-                                        <span class="font-weight-bold text-success">{% if chapter.status %}
+                                        <span class="font-weight-bolder text-dark">{% if chapter.status %}
                                             Добавлена{% else %}Анонсирована{% endif %}</span>
                                         <span>{{ chapter.number }} глава.</span>
                                         <span class="font-weight-bolder">{{ chapter.title }}</span>
