@@ -50,11 +50,11 @@
             {% if user.is_authenticated %}
                 <div class="dropdown">
 
-                    <button type="button" class="btn dropdown-toggle" data-action="check-notification"
+                    <button type="button" class="btn dropdown-toggle my-bell" data-action="check-notification"
                             data-bs-toggle="dropdown"
-                            id="collapseNotification" aria-expanded="false" style="background-color: rgba(171,59,97,0.75)">
+                            id="collapseNotification" aria-expanded="false" style="background-color: rgb(219,204,192)">
                         <i id="notify_icon"
-                           class="h5 bi bi-bell-fill {% if user|count_unchecked > 0 %}text-success{% endif %}"></i>
+                           class="h5 bi bi-bell-fill{% if user|count_unchecked > 0 %}text-success{% endif %}"></i>
 
 
                         <span class="badge bg-dark" id="notification-count">{% if user|count_unchecked > 0 %}
@@ -77,7 +77,7 @@
             {% endif %}
 
             {% if user.is_authenticated %}
-                <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#logoutModal" style="background-color: rgba(171,59,97,0.75)">
+                <button type="button" class="btn btn-outline-light mr-2" data-toggle="modal" data-target="#logoutModal" style="background-color: rgb(18,61,106)">
                     Выход
                 </button>
             {% else %}
