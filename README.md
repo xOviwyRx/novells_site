@@ -1,6 +1,11 @@
 # novells
-website for reading novels
+https://www.privereda1.ru/
+Сайт для выкладывания, чтения, а также навигации по китайским новеллам
 
+
+
+
+P.S.
 Добавлено поле:
     icon = models.ImageField('Иконка', upload_to='group_icons/', null=True, blank=True)
 
