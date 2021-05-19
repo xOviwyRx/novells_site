@@ -25,7 +25,8 @@
                                 {% else %}
                                     <span class="font-weight-bold text-warning">Анонсирована</span>
                                 {% endif %}
-                                <span class="font-weight-bolder">глава {{ element.title }}</span>
+                                <span>глава</span>
+                                <span class="font-weight-bolder">{{ element.title|truncatechars:50 }}</span>
                             </p>
                         </div>
 
