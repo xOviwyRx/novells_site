@@ -85,7 +85,7 @@
 
                         <h5 class="my-2 text-dark">Жанры</h5>
                         {% for genre in novell.genres.all %}
-                            <a type="button" class="btn btn-outline-primary" href="{% url 'core:filter' %}?genre={{ genre.id }}">
+                            <a type="button" class="btn btn-outline-primary m-1" href="{% url 'core:filter' %}?genre={{ genre.id }}">
                                 {{ genre }}
                             </a>
                         {% endfor %}
