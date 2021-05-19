@@ -75,7 +75,7 @@ def not_list(user):
         Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all())).order_by('-created')[:10]
     comments_reply = Comment.objects.filter(~Q(author=user), parent__author=user).order_by(
         '-created')[:10]
-    my_news = sorted(list(chapter_list) + list(comments_reply), key=lambda x: x.created, reverse=True)[:10]
+    my_news = sorted(list(chapter_list) + list(comments_reply), key=lambda x: x.created, reverse=True)[:5]
     return {'my_news': my_news}
 
 
