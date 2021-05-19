@@ -27,7 +27,7 @@ DEBUG = False
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
-    ALLOWED_HOSTS = ['31.31.203.141', '127.0.0.1']
+    ALLOWED_HOSTS = ['privereda1.ru','31.31.203.141', '127.0.0.1']
 
 # Application definition
 
