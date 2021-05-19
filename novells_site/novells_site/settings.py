@@ -27,7 +27,7 @@ DEBUG = False
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
-    ALLOWED_HOSTS = ['privereda1.ru','31.31.203.141', '127.0.0.1']
+    ALLOWED_HOSTS = ['31.31.203.141', 'privereda1.ru', 'www.privereda1.ru','127.0.0.1']
 
 # Application definition
 
@@ -164,13 +164,12 @@ else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
 
-
 if DEBUG:
-    #EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
-     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-     ACCOUNT_EMAIL_REQUIRED = True
-     ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-     ACCOUNT_EMAIL_VERIFICATION = True
+    # EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+    ACCOUNT_EMAIL_VERIFICATION = True
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     ACCOUNT_EMAIL_REQUIRED = True
@@ -181,11 +180,10 @@ else:
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-#EMAIL_HOST_USER = 'privereda1bl@gmail.com'
-#EMAIL_HOST_PASSWORD = '7rW4QObVsh'
+# EMAIL_HOST_USER = 'privereda1bl@gmail.com'
+# EMAIL_HOST_PASSWORD = '7rW4QObVsh'
 EMAIL_HOST_USER = 'privereda1blnovell@gmail.com'
 EMAIL_HOST_PASSWORD = '{c{IaqaeZMKKY|x7'
-
 
 TINYMCE_DEFAULT_CONFIG = {
     "height": "500px",
