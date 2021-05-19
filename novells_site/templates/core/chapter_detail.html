@@ -18,6 +18,18 @@
             padding-top: 3%;
         }
     </style>
+    <script type="text/javascript">
+        document.ondragstart = noselect;
+        // запрет на перетаскивание
+        document.onselectstart = noselect;
+        // запрет на выделение элементов страницы
+        document.oncontextmenu = noselect;
+
+        // запрет на выведение контекстного меню
+        function noselect() {
+            return false;
+        }
+    </script>
 {% endblock %}
 {% block content %}
     <div class="container-xxl mt-2">
@@ -28,7 +40,8 @@
                         <div class="h4 card-title chapter_header d-flex justify-content-between">
                             <div>Глава {{ chapter.number }}</div>
                             <div>
-                                <a type="button" class="btn btn-outline-danger btn-sm" href="{{ chapter.novell.get_absolute_url }}">
+                                <a type="button" class="btn btn-outline-danger btn-sm"
+                                   href="{{ chapter.novell.get_absolute_url }}">
                                     <i class="bi bi-backspace"></i>
                                     На страницу новеллы
                                 </a>
