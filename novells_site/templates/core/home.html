@@ -113,7 +113,8 @@
                             </div>
 
                             <div class="col-1 m-0 p-0 d-flex">
-                                <div class="text-vertical text-center display-4 font-weight-bolder pl-2" style="color: rgb(171,59,97)">
+                                <div class="text-vertical text-center display-4 font-weight-bolder pl-2"
+                                     style="color: rgb(171,59,97)">
                                     Выбор редакции
                                 </div>
                             </div>
@@ -176,13 +177,15 @@
 
         <div class="pops-novells row mt-4" style="background-color: rgb(245,210,239);">
             <h1 class="text-center mt-1"><i class="bi bi-card-list text-white"
-                                            style="vertical-align: bottom"></i> <span class="text-white">Популярное</span></h1>
+                                            style="vertical-align: bottom"></i> <span
+                    class="text-white">Популярное</span></h1>
             <hr class="featurette-divider">
 
 
             <div class="my-slider">
+
                 {% for nov in all_novells %}
-                    <div class="slide-item h-100 mb-3">
+                    <div class="slide-item h-100 mb-1">
 
                         <a href="{{ nov.get_absolute_url }}"
                         >
@@ -219,7 +222,8 @@
 -->
                             <h6 class="card-subtitle">
 
-                                <a href="{{ nov.get_absolute_url }}" class="link-light" style="text-decoration: none;">{{ nov.rus_title|truncatechars:35 }}</a>
+                                <a href="{{ nov.get_absolute_url }}" class="link-light"
+                                   style="text-decoration: none;">{{ nov.rus_title|truncatechars:35 }}</a>
                             </h6>
                         </div>
 
@@ -229,7 +233,14 @@
 
 
             </div>
-
+            <div class="tns-controls mb-1 d-flex justify-content-center" aria-label="Carousel Navigation" tabindex="0">
+                <button data-controls="prev" class="btn btn-outline-light border-0 py-1 px-4 mr-2" tabindex="-1" aria-controls="tns1" style="background-color: #e27aff;">
+                    <i class="bi bi-arrow-left h4" style="vertical-align: text-bottom;"></i>
+                </button>
+                <button data-controls="next" class="btn btn-outline-light border-0 py-1 px-4" tabindex="-1" aria-controls="tns1" style="background-color: #b485fd;">
+                    <i class="bi bi-arrow-right h4" style="vertical-align: text-bottom;"></i>
+                </button>
+            </div>
             <!-- or ul.my-slider > li -->
 
 
@@ -240,7 +251,8 @@
                     container: '.my-slider',
                     mouseDrag: true,
                     swipeAngle: false,
-                    controls: false,
+                    controls: true,
+                    controlsContainer: '.tns-controls',
                     nav: false,
                     speed: 400,
                     Height: 400,
@@ -266,7 +278,8 @@
 
 
         <hr class="featurette-divider">
-        <h1 class="text-center" style="color: rgba(18,61,106,1)"><i class="bi bi-arrow-repeat" style="vertical-align: bottom"></i> Последние
+        <h1 class="text-center" style="color: rgba(18,61,106,1)"><i class="bi bi-arrow-repeat"
+                                                                    style="vertical-align: bottom"></i> Последние
             обновления</h1>
 
         <div class="container">
