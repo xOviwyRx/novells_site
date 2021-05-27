@@ -27,6 +27,7 @@ urlpatterns = [
     path('<str:slug>/chapter/<int:number>', views.ChapterDetailView.as_view(), name='chapter_detail'),
 
     path('api/get_notifications/', login_required(views.GetNotificationView.as_view()), name='get_notifications'),
+    path('api/get_news/', login_required(views.GetNotificationNewsView.as_view()), name='get_news'),
     path('api/check_notifications/', login_required(views.CheckNotificationView.as_view()),
          name='check_notifications_all'),
 

@@ -42,7 +42,12 @@
                 <li class="nav-item">
                     <a class="nav-link font-weight-bold" href="{% url 'core:all_news' %}"><i
                             class="bi bi-newspaper"></i>
-                        <span style="vertical-align: middle">Новости</span></a>
+                        <span style="vertical-align: middle">Новости</span>
+                        {% if user.is_authenticated %}
+                            <span class="badge bg-dark p-1 text-center" id="news-notification-count"
+                                  style="vertical-align: middle;">{% if user|news_unchecked > 0 %}{{ user|news_unchecked }}{% endif %}</span>
+                        {% endif %}
+                    </a>
                 </li>
             </ul>
 
@@ -77,7 +82,8 @@
             {% endif %}
 
             {% if user.is_authenticated %}
-                <button type="button" class="btn btn-outline-light mr-2 border-0" data-toggle="modal" data-target="#logoutModal" style="background-color: rgb(18,61,106)">
+                <button type="button" class="btn btn-outline-light mr-2 border-0" data-toggle="modal"
+                        data-target="#logoutModal" style="background-color: rgb(18,61,106)">
                     Выход
                 </button>
             {% else %}
@@ -89,7 +95,9 @@
 
         <form class="d-flex" action="{% url 'core:filter' %}" method="get">
             <input class="form-control mr-2" type="search" name="q" placeholder="Поиск" aria-label="Search">
-            <button class="btn btn-outline-light border-0" type="submit" style="background-color: rgb(219,204,192)">Поиск</button>
+            <button class="btn btn-outline-light border-0" type="submit" style="background-color: rgb(219,204,192)">
+                Поиск
+            </button>
         </form>
 
 

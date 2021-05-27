@@ -144,7 +144,8 @@ class GetNotificationView(View):
         my_news = Chapter.objects.filter(Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all()),
                                          created__gte=prof.news_check)
         list_news = Chapter.objects.filter(
-            Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all())).order_by('-created')[:10]
+            Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all()) | Q(
+                novell__in=prof.in_process_reading.all()) | Q(novell__in=prof.readed.all())).order_by('-created')[:10]
 
         new_coms = Comment.objects.filter(~Q(author=request.user), parent__author=request.user,
                                           created__gte=prof.news_check)
@@ -152,8 +153,8 @@ class GetNotificationView(View):
         comments_reply = Comment.objects.filter(~Q(author=request.user), parent__author=request.user).order_by(
             '-created')[:10]
 
-       # min_cr = max(list_news[0].created, comments_reply[0].created)
-       # print(comments_reply, min_cr)
+        # min_cr = max(list_news[0].created, comments_reply[0].created)
+        # print(comments_reply, min_cr)
         a = list(list_news) + list(comments_reply)
         b = sorted(a, key=lambda x: x.created, reverse=True)[:5]
 
@@ -180,6 +181,30 @@ class GetNotificationView(View):
             )
 
 
+class GetNotificationNewsView(View):
+
+    def post(self, request):
+        prof = request.user.user_profile
+        my_news = Post.objects.filter(created__gte=prof.new_post_check)
+        result = my_news.count() > 0
+        print(my_news, my_news.count())
+        if result:
+            return HttpResponse(
+                json.dumps({
+                    "result": result,
+                    "news_count": my_news.count(),
+                }),
+                content_type="application/json"
+            )
+        else:
+            return HttpResponse(
+                json.dumps({
+                    "result": result,
+                }),
+                content_type="application/json"
+            )
+
+
 class CheckNotificationView(View):
     def post(self, request):
         request.user.user_profile.news_check = timezone.now()
@@ -194,7 +219,10 @@ def add_to_bookmark(request, pk, type_of):
         request.user.user_profile.bookmarks.add(nov)
     if type_of == 'planned':
         request.user.user_profile.planned.add(nov)
+    if type_of == 'reading':
+        request.user.user_profile.in_process_reading.add(nov)
     elif type_of == 'readed':
+        request.user.user_profile.readed.add(nov)
         try:
             a = Rating.objects.get(author=request.user,
                                    novell_id=pk)
@@ -207,7 +235,6 @@ def add_to_bookmark(request, pk, type_of):
                 novell_id=pk,
                 rate=rate_readed
             )
-
     return redirect(nov.get_absolute_url())
 
 
@@ -218,7 +245,11 @@ def del_from_bookmark(request, pk, type_of, frommm):
         request.user.user_profile.bookmarks.remove(nov)
     elif type_of == 'planned':
         request.user.user_profile.planned.remove(nov)
+    if type_of == 'reading':
+        request.user.user_profile.in_process_reading.remove(nov)
     elif type_of == 'readed':
+        request.user.user_profile.readed.remove(nov)
+
         try:
             a = Rating.objects.get(author=request.user,
                                    novell_id=pk)
@@ -323,6 +354,14 @@ class AllNewsView(ListView):
     model = Post
     template_name = 'core/post/post_list.html'
     context_object_name = 'posts'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.user_profile:
+            self.request.user.user_profile.new_post_check = timezone.now()
+            self.request.user.user_profile.save()
+        print(self.request.user)
+        return context
 
 
 class PostDetailView(DetailView):

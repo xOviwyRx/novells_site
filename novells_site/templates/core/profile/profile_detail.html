@@ -131,13 +131,13 @@
                                 <span style="vertical-align: middle;">Избранное</span>
                             </a>
                         </li>
-                        <!--
+
                         <li class="nav-item">
                             <a class="nav-link" id="news-tab" data-toggle="tab" href="#news" role="tab"
                                aria-controls="news" aria-selected="false"><i class="bi bi-newspaper"></i>
-                                <span style="vertical-align: middle;">Новинки</span></a>
+                                <span style="vertical-align: middle;">Читаю</span></a>
                         </li>
-                        -->
+
                         <li class="nav-item">
                             <a class="nav-link" id="planned-tab" data-toggle="tab" href="#planned" role="tab"
                                aria-controls="planned" aria-selected="false"><i class="bi bi-calendar-event"></i>
@@ -254,42 +254,44 @@
 
                     </div>
 
-                <!--
-                    <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="list-group">
-                                    {% for chapter in last_update %}
-                                        <div class="list-group-item list-group-item-action py-1">
-                                            <div class="row">
-                                                <div class="col-1 px-1 justify-content-center d-flex">
-                                                    <div class="ratio ratio-3х4">
-                                                        <img src="{{ chapter.novell.poster.url }}" class="rounded">
-                                                    </div>
-                                                </div>
-                                                <div class="col-11">
-                                                    <div class="d-flex w-100 justify-content-between">
-                                                        <a class="mb-1 h5"
-                                                           href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
-                                                        <small class="font-weight-bold">{{ chapter.created|timesince }}
-                                                            назад</small>
-                                                    </div>
-                                                    <p class="mb-1">
-                                        <span class="font-weight-bold text-success">{% if chapter.status %}
-                                            Добавлена{% else %}Анонсирована{% endif %}</span>
-                                                        <span>{{ chapter.number }} глава.</span>
-                                                        <span class="font-weight-bolder">{{ chapter.title }}</span>
-                                                    </p>
-                                                </div>
 
+                    <div class="tab-pane fade" id="news" role="tabpanel" aria-labelledby="news-tab">
+                        <div class="list-group overflow-auto" style="height: 500px;">
+                            {% for novell in profile.in_process_reading.all %}
+                                <div class="list-group-item list-group-item-action py-1">
+                                    <div class="row">
+                                        <div class="col-1 px-1">
+                                            <div class="ratio ratio-3х4">
+
+                                                <img src="{{ novell.poster.url }}"
+                                                     class="rounded float-start ">
                                             </div>
+
                                         </div>
-                                    {% endfor %}
+                                        <div class="col-11">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <a class="mb-0 h6"
+                                                   href="{{ novell.get_absolute_url }}">{{ novell.rus_title }}</a>
+                                                {% if user.is_authenticated and user == profile.name %}
+
+                                                    <a href="{% url 'core:del_from_bookmarks' novell.id 'reading' 'profile' %}"
+                                                       class="text-dangera"><i class="text-danger bi bi-bookmark-x"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                            <p class="mb-0 text-muted small">Автор: {{ novell.author }}</p>
+                                            <p class="mb-0 text-muted small">Глав: {{ novell.chapters.count }}</p>
+
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </div>
+                            {% endfor %}
+
                         </div>
+
                     </div>
--->
+
                     <div class="tab-pane fade" id="planned" role="tabpanel" aria-labelledby="planned-tab">
                         <div class="list-group overflow-auto" style="height: 500px;">
                             {% for novell in profile.planned.all %}
@@ -309,7 +311,7 @@
                                                    href="{{ novell.get_absolute_url }}">{{ novell.rus_title }}</a>
                                                 {% if user.is_authenticated and user == profile.name %}
 
-                                                    <a href="{% url 'core:del_from_bookmarks' novell.id 'bookmark' 'profile' %}"
+                                                    <a href="{% url 'core:del_from_bookmarks' novell.id 'planned' 'profile' %}"
                                                        class="text-dangera"><i class="text-danger bi bi-bookmark-x"></i>
                                                     </a>
                                                 {% endif %}
@@ -339,7 +341,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for novell in profile.name.rated_novells.all %}
+                                    {% for novell in profile.name.rated_novells.all|in_readed:profile %}
                                         <tr>
                                             <th scope="row" class="pl-2 pr-1">
                                                 {{ forloop.counter }}

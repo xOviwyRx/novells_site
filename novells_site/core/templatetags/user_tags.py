@@ -88,6 +88,16 @@ def get_type(element):
 
 
 @register.filter
+def in_readed(novells, profile):
+    nn = []
+    for n in novells:
+        print(n.novell)
+        if n.novell in profile.readed.all():
+            nn.append(n)
+    return nn
+
+
+@register.filter
 def get_theme(element):
     if isinstance(element, Chapter):
         return 'Главе'
@@ -98,8 +108,16 @@ def get_theme(element):
 @register.filter
 def count_unchecked(user):
     prof = user.user_profile
-    my_news = Chapter.objects.filter(Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all()),
+    my_news = Chapter.objects.filter(Q(novell__in=prof.bookmarks.all()) | Q(novell__in=prof.planned.all()) | Q(
+        novell__in=prof.in_process_reading.all()) | Q(novell__in=prof.readed.all()),
                                      created__gte=prof.news_check).count()
+    return my_news
+
+
+@register.filter
+def news_unchecked(user):
+    prof = user.user_profile
+    my_news = Post.objects.filter(created__gte=prof.new_post_check).count()
     return my_news
 
 
