@@ -22,29 +22,31 @@
                 display: none;
             }
         }
+
         body {
             background-color: rgb(237, 226, 220);
         }
 
         .btn-outline-backtonovell {
-            color: rgba(18,61,106,0.75);
-            border-color: rgba(18,61,106,0.75);
+            color: rgba(18, 61, 106, 0.75);
+            border-color: rgba(18, 61, 106, 0.75);
         }
+
         .btn-outline-backtonovell:hover {
             color: white;
-            border-color: rgba(18,61,106,0.75);
-            background-color: rgba(18,61,106,0.75);
+            border-color: rgba(18, 61, 106, 0.75);
+            background-color: rgba(18, 61, 106, 0.75);
         }
 
         .btn-outline-chapter-nav {
             color: black;
-            border-color: rgba(187,178,181,0.75);
+            border-color: rgba(187, 178, 181, 0.75);
         }
 
         .btn-outline-chapter-nav:hover {
             color: white;
-            border-color: rgba(187,178,181,0.75);
-            background-color: rgba(187,178,181,0.75);
+            border-color: rgba(187, 178, 181, 0.75);
+            background-color: rgba(187, 178, 181, 0.75);
         }
     </style>
     <script type="text/javascript">
@@ -86,7 +88,8 @@
                     <div class="card-footer d-flex justify-content-between">
 
                         {% if chapter.prev_chapter_url %}
-                            <a type="button" class="btn btn-outline-chapter-nav" href="{{ chapter.prev_chapter_url }}"><i
+                            <a type="button" class="btn btn-outline-chapter-nav"
+                               href="{{ chapter.prev_chapter_url }}"><i
                                     class="bi bi-arrow-bar-left font-weight-bold text-danger h6"></i>
                                 Предыдущая
                                 глава</a>
@@ -98,7 +101,8 @@
                             </button>
                         {% endif %}
                         <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
-                                data-bs-target="#chapter-list" style="background-color: rgba(18,61,106,0.75);"><i class="bi bi-list-ol"></i>
+                                data-bs-target="#chapter-list" style="background-color: rgba(18,61,106,0.75);"><i
+                                class="bi bi-list-ol"></i>
                             Оглавление
                         </button>
 
@@ -117,10 +121,18 @@
                                             {% for n in chapter.novell.chapters.all|active_chapters %}
                                                 <a role="button" href="{{ n.get_absolute_url }}"
                                                    class="list-group-item list-group-item-action
-                                    {% if not n.status %}list-group-item-warning disabled{% else %}list-group-item-success{% endif %}">
+                                    {% if not n.status %}list-group-item-warning disabled
+                                    {% elif user.is_authenticated and n in user.user_profile.chapter_readed.all %}
+                                    list-group-item-light
+                                    {% else %}
+                                    list-group-item-secondary
+                                    {% endif %}">
                                                     <div class="d-flex justify-content-between">
                                         <span class="h5 mb-0">
-                                            Глава {{ n.number }}. {{ n.title }}
+                                                {{ n.title }}
+                                         {% if user.is_authenticated and n in user.user_profile.chapter_readed.all %}
+                                            <i class="bi bi-check2-square"></i>
+                                        {% endif %}
                                             {% if not n.status %}
                                                 <span class="small">
                                                 <i class="bi bi-circle-fill text-danger"
