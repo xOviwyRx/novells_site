@@ -11,7 +11,6 @@
         }
 
         .chapter_text {
-            font-family: Calibri;
             font-size: 12pt;
             padding-left: 8%;
             padding-right: 8%;
@@ -22,6 +21,30 @@
             .chapter_text {
                 display: none;
             }
+        }
+        body {
+            background-color: rgb(237, 226, 220);
+        }
+
+        .btn-outline-backtonovell {
+            color: rgba(18,61,106,0.75);
+            border-color: rgba(18,61,106,0.75);
+        }
+        .btn-outline-backtonovell:hover {
+            color: white;
+            border-color: rgba(18,61,106,0.75);
+            background-color: rgba(18,61,106,0.75);
+        }
+
+        .btn-outline-chapter-nav {
+            color: black;
+            border-color: rgba(187,178,181,0.75);
+        }
+
+        .btn-outline-chapter-nav:hover {
+            color: white;
+            border-color: rgba(187,178,181,0.75);
+            background-color: rgba(187,178,181,0.75);
         }
     </style>
     <script type="text/javascript">
@@ -46,10 +69,10 @@
                         <div class="h4 card-title chapter_header d-flex justify-content-between">
                             <div>Глава {{ chapter.number }}</div>
                             <div>
-                                <a type="button" class="btn btn-outline-danger btn-sm"
+                                <a type="button" class="btn btn-outline-backtonovell btn-sm"
                                    href="{{ chapter.novell.get_absolute_url }}">
-                                    <i class="bi bi-backspace"></i>
-                                    На страницу новеллы
+                                    <i class="bi bi-backspace" style="vertical-align: text-bottom;"></i>
+                                    <span style="vertical-align: text-bottom;">На страницу новеллы</span>
                                 </a>
                             </div>
                         </div>
@@ -63,19 +86,19 @@
                     <div class="card-footer d-flex justify-content-between">
 
                         {% if chapter.prev_chapter_url %}
-                            <a type="button" class="btn btn-outline-dark" href="{{ chapter.prev_chapter_url }}"><i
+                            <a type="button" class="btn btn-outline-chapter-nav" href="{{ chapter.prev_chapter_url }}"><i
                                     class="bi bi-arrow-bar-left font-weight-bold text-danger h6"></i>
                                 Предыдущая
                                 глава</a>
                         {% else %}
-                            <button type="button" class="btn btn-outline-dark disabled"><i
+                            <button type="button" class="btn btn-outline-chapter-nav disabled"><i
                                     class="bi bi-arrow-bar-left text-danger font-weight-bold h6"></i>
                                 Предыдущая
                                 глава
                             </button>
                         {% endif %}
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#chapter-list"><i class="bi bi-list-ol text-light"></i>
+                        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal"
+                                data-bs-target="#chapter-list" style="background-color: rgba(18,61,106,0.75);"><i class="bi bi-list-ol"></i>
                             Оглавление
                         </button>
 
@@ -117,11 +140,11 @@
                             </div>
                         </div>
                         {% if chapter.next_chapter_url %}
-                            <a type="button" class="btn btn-outline-dark" href="{{ chapter.next_chapter_url }}">Следующая
+                            <a type="button" class="btn btn-outline-chapter-nav" href="{{ chapter.next_chapter_url }}">Следующая
                                 глава <i
                                         class="bi bi-arrow-bar-right text-success"></i></a>
                         {% else %}
-                            <button type="button" class="btn btn-outline-dark disabled"><i
+                            <button type="button" class="btn btn-outline-chapter-nav disabled"><i
                                     class="bi bi-arrow-bar-right text-success"></i>
                                 Следующая глава
                             </button>

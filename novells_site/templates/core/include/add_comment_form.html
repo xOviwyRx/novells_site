@@ -5,7 +5,7 @@
     <div class="row d-flex justify-content-center">
         <div class="col-md-7 mt-3">
             {% if user.is_authenticated %}
-                <div class="card bg-c-lite-unknown mb-2" style="border: 4px groove #a9d1f5;">
+                <div class="card bg-c-lite-unknown mb-2" style="border: 4px solid #a9d1f5; box-shadow: none;">
                     <form action="{% url 'core:add_comment_to_chapter' chapter.id %}" method="post"
                           id="CommentForm">
                         {% csrf_token %}
@@ -24,7 +24,7 @@
                         <div class="card-footer">
                             <div class="d-flex justify-content-end w-100">
                                 <button type="submit"
-                                        class="mt-2 btn btn-success">
+                                        class="mt-2 btn btn-outline-light" style="background-color: rgba(171,59,97,0.75)">
                                     Отправить
                                 </button>
                             </div>
