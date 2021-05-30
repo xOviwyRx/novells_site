@@ -99,7 +99,9 @@
                     <div class="card-body pt-0">
                         <h2>{{ novell.rus_title }}</h2>
                         <h3>{{ novell.original_title }}</h3>
-                        <h4>{{ novell.eng_title }}</h4>
+                        {% if novell.eng_title %}
+                            <h4>{{ novell.eng_title }}</h4>
+                        {% endif %}
 
                         <p class="text-muted mb-0 mt-4 font-weight-bold">Автор: <span
                                 class="font-weight-bold text-dark">{{ novell.author }}</span></p>

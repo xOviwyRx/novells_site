@@ -18,8 +18,8 @@
                     <div class="card-body">
                         {% if socialaccount_providers %}
                             <p>{% blocktrans with site.name as site_name %}Please sign in with one
-                                of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-                                for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+                                of your existing third party accounts. Или, <a href="{{ signup_url }}">зарегистрируйтесь</a>
+                                на {{ site_name }} и войдите ниже:{% endblocktrans %}</p>
 
                             <div class="socialaccount_ballot">
 
@@ -34,8 +34,8 @@
                             {% include "socialaccount/snippets/login_extra.html" %}
 
                         {% else %}
-                            <p>{% blocktrans %}If you have not created an account yet, then please
-                                <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+                            <p>{% blocktrans %}Если у вас ещё нету аккаунта, то сперва
+                                <a href="{{ signup_url }}">зарегестрируйтесь</a>.{% endblocktrans %}</p>
                         {% endif %}
 
                         <form class="login" method="POST" action="{% url 'account_login' %}">
