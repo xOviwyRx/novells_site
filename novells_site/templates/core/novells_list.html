@@ -74,6 +74,7 @@
                                     </div> <!-- card-body.// -->
                                 </div>
 
+                                <!--
                                 <div class="card-header">
                                     <h5 class="title">Опубликовано </h5>
                                 </div>
@@ -86,9 +87,10 @@
                                             <span class="form-check-label">
 				                                {{ year.0 }}
 				                            </span>
-                                        </label> <!-- form-check.// -->
+                                        </label>
                                     {% endfor %}
-                                </div> <!-- card-body.// -->
+                                </div>
+-->
 
                                 <div class="card-header">
                                     <h5 class="title">Оценка от</h5>
@@ -104,7 +106,8 @@
                                     </div>
                                     <div class="d-flex justify-content-center">
 
-                                        <input id="slider11" class="border-0" value="0" name="rating" type="range" min="0"
+                                        <input id="slider11" class="border-0" value="0" name="rating" type="range"
+                                               min="0"
                                                max="5"/>
 
                                         <span class="font-weight-bold text-primary ml-2 mt-1 valueSpan"></span>
@@ -132,11 +135,13 @@
 
 
                                 <div class="card-header">
-                                    <h5 class="title">Статус перевода</h5>
+                                    <h5 class="title">Статус новеллы</h5>
                                 </div>
                                 <div class="card-body text-center">
-                                    <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group">
-                                        <input type="radio" class="btn-check" name="novell-trans-status" value="None" id="btnradio0"
+                                    <div class="btn-group-vertical" role="group"
+                                         aria-label="Basic radio toggle button group">
+                                        <input type="radio" class="btn-check" name="novell-trans-status" value="None"
+                                               id="btnradio0"
                                                autocomplete="off" checked>
                                         <label class="btn btn-outline-secondary" for="btnradio0">Не важно</label>
 
@@ -145,17 +150,48 @@
                                                autocomplete="off" value="AN">
                                         <label class="btn btn-outline-warning" for="btnradio1">Анонс</label>
 
-                                        <input type="radio" class="btn-check" name="novell-trans-status" value="OG" id="btnradio2"
+                                        <input type="radio" class="btn-check" name="novell-trans-status" value="OG"
+                                               id="btnradio2"
                                                autocomplete="off">
                                         <label class="btn btn-outline-primary" for="btnradio2">В процессе</label>
 
-                                        <input type="radio" class="btn-check" name="novell-trans-status" value="CT" id="btnradio3"
+                                        <input type="radio" class="btn-check" name="novell-trans-status" value="CT"
+                                               id="btnradio3"
                                                autocomplete="off">
                                         <label class="btn btn-outline-success" for="btnradio3">Завершён</label>
 
                                     </div>
                                 </div> <!-- card-body.// -->
 
+                                <div class="card-header">
+                                    <h5 class="title">Статус перевода</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="translate-status"
+                                               id="flexRadioDefault1" value="None" checked>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Не важно
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="yes" name="translate-status"
+                                               id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Завершён
+                                        </label>
+                                    </div>
+
+                                     <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="no" name="translate-status"
+                                               id="flexRadioDefault3">
+                                        <label class="form-check-label" for="flexRadioDefault3">
+                                            В процессе
+                                        </label>
+                                    </div>
+
+                                </div>
 
                                 <div class="card-footer">
                                     <button type="submit" class="button btn btn-success btn-block">Найти</button>

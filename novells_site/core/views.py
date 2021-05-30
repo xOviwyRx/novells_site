@@ -399,8 +399,9 @@ class JsonFilterNovellsView(ListView):
         rating = self.request.GET.get('rating')
         novell_status = self.request.GET.get('novell-trans-status')
         preset_query = Novell.objects.all()
+        translate_status = self.request.GET.get('translate-status')
 
-        print(novell_status)
+        print(translate_status)
 
         if chaptet_min:
             preset_query = preset_query.filter(chapter_count__gte=chaptet_min)
@@ -411,13 +412,16 @@ class JsonFilterNovellsView(ListView):
             preset_query = preset_query.filter(overall_rating__gte=upper_limit)
         if novell_status != 'None':
             preset_query = preset_query.filter(status=novell_status)
-
+        if translate_status == 'yes':
+            preset_query = preset_query.filter(translate_status=True)
+        if translate_status == 'no':
+            preset_query = preset_query.filter(translate_status=False)
 
         if genre_filter and year_filter and len(genre_filter) == 1:
             return preset_query.filter(publish__year__in=year_filter, genres__in=genre_filter).values("rus_title",
-                                                                                                        "overall_rating",
-                                                                                                        "slug",
-                                                                                                        "poster")
+                                                                                                      "overall_rating",
+                                                                                                      "slug",
+                                                                                                      "poster")
         elif len(genre_filter) > 1 and year_filter:
             genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
             a = []
@@ -433,7 +437,8 @@ class JsonFilterNovellsView(ListView):
             a = []
             for i in preset_query.all():
                 if set(genres_in_filter) <= set(i.genres.all()):
-                    a.append({"rus_title": i.rus_title, "overall_rating": i.overall_rating, "slug": i.slug, "poster": str(i.poster.url).replace("media/","")})
+                    a.append({"rus_title": i.rus_title, "overall_rating": i.overall_rating, "slug": i.slug,
+                              "poster": str(i.poster.url).replace("media/", "")})
             return a
 
         elif not year_filter and not genre_filter:

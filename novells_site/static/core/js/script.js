@@ -35,7 +35,7 @@ let html = '\
 {{#novells}}\
                             <div class="card d-flex col border-0 mt-1">\
                                 <div class="card-img-top">\
-                                    <a href="/{{ slug }}">\
+                                    <a href="/novell/{{ slug }}">\
                                      <div class="ratio-3х4 ratio">\
                                         <img src="/media/{{ poster }}" class="card-img-top rounded"\
                                              alt="{{ rus_title }}">\
