@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('accounts/', include('allauth.urls')),
     path('tinymce/', include('tinymce.urls')),
+    path('api-auth/', include('rest_framework.urls')),
 
 ]
 

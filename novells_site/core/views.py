@@ -1,4 +1,6 @@
 import json
+from decimal import Decimal
+
 from django.utils import timezone
 
 from django.contrib.contenttypes.models import ContentType
@@ -12,9 +14,17 @@ from django.contrib.auth.decorators import login_required
 from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse
+from rest_framework import viewsets, filters, views
+from rest_framework.response import Response
+from .serializers import NovellListSerializer
 
 
 # Create your views here.
+
+def js_filter_test(request):
+    return render(request, 'core/novells_list_new.html')
+
+
 class GenreYear:
 
     def get_genres(self):
@@ -22,6 +32,9 @@ class GenreYear:
 
     def get_year(self):
         return Novell.objects.all().order_by('publish__year').values_list('publish__year').distinct()
+
+    def get_status(self):
+        return Novell.objects.all().values_list('status').distinct()
 
 
 def index(request):
@@ -370,37 +383,116 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
 
 
-"""
 class JsonFilterNovellsView(ListView):
     template_name = 'core/novells_list.html'
     context_object_name = 'novells'
 
     def get_queryset(self):
+        q = self.request.GET.get('q')
+        if q:
+            return Novell.objects.filter(rus_title__icontains=q).values("rus_title", "overall_rating", "slug", "poster")
+
+        genre_filter = self.request.GET.getlist('genre')
+        year_filter = self.request.GET.getlist('year')
+        chaptet_min = self.request.GET.get('chapter-min')
+        chaptet_max = self.request.GET.get('chapter-max')
+        rating = self.request.GET.get('rating')
+        novell_status = self.request.GET.get('novell-trans-status')
+        preset_query = Novell.objects.all()
+
+        print(novell_status)
+
+        if chaptet_min:
+            preset_query = preset_query.filter(chapter_count__gte=chaptet_min)
+        if chaptet_max:
+            preset_query = preset_query.filter(chapter_count__lte=chaptet_max)
+        if rating:
+            upper_limit = Decimal(rating)
+            preset_query = preset_query.filter(overall_rating__gte=upper_limit)
+        if novell_status != 'None':
+            preset_query = preset_query.filter(status=novell_status)
+
+
+        if genre_filter and year_filter and len(genre_filter) == 1:
+            return preset_query.filter(publish__year__in=year_filter, genres__in=genre_filter).values("rus_title",
+                                                                                                        "overall_rating",
+                                                                                                        "slug",
+                                                                                                        "poster")
+        elif len(genre_filter) > 1 and year_filter:
+            genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
+            a = []
+            for i in preset_query.filter(publish__year__in=year_filter):
+                if set(genres_in_filter) <= set(i.genres.all()):
+                    a.append({
+                        "rus_title": i.rus_title, "overall_rating": i.overall_rating, "slug": i.slug,
+                        "poster": str(i.poster.url).replace("media/", "")
+                    })
+            return a
+        elif len(genre_filter) > 1 and not year_filter:
+            genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
+            a = []
+            for i in preset_query.all():
+                if set(genres_in_filter) <= set(i.genres.all()):
+                    a.append({"rus_title": i.rus_title, "overall_rating": i.overall_rating, "slug": i.slug, "poster": str(i.poster.url).replace("media/","")})
+            return a
+
+        elif not year_filter and not genre_filter:
+            return preset_query.all().values("rus_title", "overall_rating", "slug", "poster")
+        else:
+            return preset_query.filter(
+                Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)).distinct().values("rus_title",
+                                                                                                 "overall_rating",
+                                                                                                 "slug", "poster")
+
+    def get(self, request, *args, **kwargs):
+        queryset = list(self.get_queryset())
+        for q in queryset:
+            q['starsf'] = []
+            a = round(q['overall_rating'])
+            if abs(a - q['overall_rating']) > Decimal('0.25') and abs(a - q['overall_rating']) < Decimal('0.75'):
+                half = True
+            else:
+                half = False
+            for i in range(int(q['overall_rating'])):
+                q['starsf'].append(1)
+            q['half'] = half
+            empty = 5 - len(q['starsf']) - int(half)
+            q['empty'] = []
+            for i in range(empty):
+                q['empty'].append(1)
+        #       return JsonResponse(serializer.data)
+        return JsonResponse({"novells": queryset}, safe=False)
+
+
+class NovellListViewApi(views.APIView):
+
+    def get(self, request):
+        q = self.request.GET.get('q')
+        if q:
+            novells = Novell.objects.filter(rus_title__icontains=q)
+            serializer = NovellListSerializer(novells, many=True)
+            return Response(serializer.data)
         genre_filter = self.request.GET.getlist('genre')
         year_filter = self.request.GET.getlist('year')
         if genre_filter and year_filter and len(genre_filter) == 1:
-            return Novell.objects.filter(publish__year__in=year_filter, genres__in=genre_filter).values('slug','original_title', 'poster')
+            novells = Novell.objects.filter(publish__year__in=year_filter, genres__in=genre_filter)
         elif len(genre_filter) > 1 and year_filter:
             genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
             a = []
             for i in Novell.objects.filter(publish__year__in=year_filter):
                 if set(genres_in_filter) <= set(i.genres.all()):
                     a.append(i)
-            return a
+            novells = a
         elif len(genre_filter) > 1 and not year_filter:
             genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
             a = []
             for i in Novell.objects.all():
                 if set(genres_in_filter) <= set(i.genres.all()):
                     a.append(i)
-            return a
+            novells = a
         elif not year_filter and not genre_filter:
-            return Novell.objects.all()
+            novells = Novell.objects.all()
         else:
-            return Novell.objects.filter(Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)).distinct()
-
-    def get(self, request, *args, **kwargs):
-        queryset = list(self.get_queryset())
-        return JsonResponse({"novells": queryset}, safe=False)
-
-"""
+            novells = Novell.objects.filter(Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)).distinct()
+        serializer = NovellListSerializer(novells, many=True)
+        return Response(serializer.data)

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'tinymce',
     'online_users',
+    'rest_framework',
     # 'allauth.socialaccount',
 
 ]

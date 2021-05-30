@@ -2,32 +2,78 @@
 {% load static %}
 {% load user_tags %}
 {% block title %}Все новеллы{% endblock title %}
+{% block styles %}
+    <style>
+        .ratio-3х4 {
+            --aspect-ratio: calc(4 / 3 * 100%);
+        }
+
+        .checked {
+            color: orange;
+            vertical-align: top;
+        }
+    </style>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+
+            const $valueSpan = $('.valueSpan');
+            const $value = $('#slider11');
+            $valueSpan.html($value.val());
+            $value.on('input change', () => {
+
+                $valueSpan.html($value.val());
+            });
+        });
+    </script>
+    <script>
+        function ChangeText(Element) {
+            if (Element.innerHTML == '<i class="fa fa-chevron-down"></i> Показать') Element.innerHTML = '<i class="fa fa-chevron-up"></i> Скрыть';
+            else Element.innerHTML = '<i class="fa fa-chevron-down"></i> Показать';
+        }
+    </script>
+{% endblock %}
 {% block content %}
     <div class="container-xxl bg-white">
         <div class="row">
             <div class="p-3 bg-white col-2 px-1">
                 <div class="card">
                     <div class="card-group-item">
-                        <form action="{% url 'core:filter' %}" method="get">
+                        <form action="{% url 'core:json_filter' %}" method="get" name="filter">
 
                             <div class="filter-content">
 
                                 <div class="card-header">
-                                    <h5 class="title">Жанры </h5>
+
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="title">Жанры </h5>
+                                        <a class="link-dark" data-bs-toggle="collapse"
+                                           href="#collapseExample"
+                                           role="button" aria-expanded="true"
+                                           aria-controls="collapseExample">
+                                        <span class="small" style="font-size: 8pt;" onclick="ChangeText(this)"><i
+                                                class="fa fa-chevron-up"></i> Cкрыть</span>
+                                        </a>
+                                    </div>
+
                                 </div>
-                                <div class="card-body">
-                                    {% for genre in view.get_genres %}
-                                        <label class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="genre"
-                                                   value="{{ genre.id }}">
-                                            <span class="form-check-label">
+                                <div class="collapse show" id="collapseExample">
+
+                                    <div class="card-body">
+                                        {% for genre in view.get_genres %}
+                                            <label class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="genre"
+                                                       value="{{ genre.id }}">
+                                                <span class="form-check-label">
 				                                {{ genre }}
 				                            </span>
-                                        </label> <!-- form-check.// -->
-                                    {% endfor %}
+                                            </label> <!-- form-check.// -->
+                                        {% endfor %}
 
+                                    </div> <!-- card-body.// -->
+                                </div>
 
-                                </div> <!-- card-body.// -->
                                 <div class="card-header">
                                     <h5 class="title">Опубликовано </h5>
                                 </div>
@@ -42,9 +88,75 @@
 				                            </span>
                                         </label> <!-- form-check.// -->
                                     {% endfor %}
-
-
                                 </div> <!-- card-body.// -->
+
+                                <div class="card-header">
+                                    <h5 class="title">Оценка от</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between ml-4 w-75">
+                                        <span class="bi bi-star-fill checked mr-1"></span>
+                                        <span class="bi bi-star-fill checked mr-1"></span>
+                                        <span class="bi bi-star-fill checked mr-1"></span>
+                                        <span class="bi bi-star-fill checked mr-1"></span>
+                                        <span class="bi bi-star-fill checked mr-1"></span>
+
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+
+                                        <input id="slider11" class="border-0" value="0" name="rating" type="range" min="0"
+                                               max="5"/>
+
+                                        <span class="font-weight-bold text-primary ml-2 mt-1 valueSpan"></span>
+                                    </div>
+                                </div>
+
+                                <div class="card-header">
+                                    <h5 class="title">Глав всего</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="my-class">
+                                            <input type="text" class="form-control" placeholder="От"
+                                                   aria-label="От" name="chapter-min">
+                                        </div>
+
+                                        <span style="vertical-align: bottom;" class="mx-2">_</span>
+
+                                        <div class="my-class">
+                                            <input type="text" class="form-control" placeholder="До"
+                                                   aria-label="До" name="chapter-max">
+                                        </div>
+                                    </div>
+                                </div> <!-- card-body.// -->
+
+
+                                <div class="card-header">
+                                    <h5 class="title">Статус перевода</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group">
+                                        <input type="radio" class="btn-check" name="novell-trans-status" value="None" id="btnradio0"
+                                               autocomplete="off" checked>
+                                        <label class="btn btn-outline-secondary" for="btnradio0">Не важно</label>
+
+
+                                        <input type="radio" class="btn-check" name="novell-trans-status" id="btnradio1"
+                                               autocomplete="off" value="AN">
+                                        <label class="btn btn-outline-warning" for="btnradio1">Анонс</label>
+
+                                        <input type="radio" class="btn-check" name="novell-trans-status" value="OG" id="btnradio2"
+                                               autocomplete="off">
+                                        <label class="btn btn-outline-primary" for="btnradio2">В процессе</label>
+
+                                        <input type="radio" class="btn-check" name="novell-trans-status" value="CT" id="btnradio3"
+                                               autocomplete="off">
+                                        <label class="btn btn-outline-success" for="btnradio3">Завершён</label>
+
+                                    </div>
+                                </div> <!-- card-body.// -->
+
+
                                 <div class="card-footer">
                                     <button type="submit" class="button btn btn-success btn-block">Найти</button>
                                 </div>
@@ -55,15 +167,17 @@
                 </div>
             </div>
             <div class="col-10">
-                <div class="container marat">
+                <div class="container left-ads-display">
                     <div class="row row-cols-1 row-cols-xxl-5 row-cols-lg-4 row-cols-md-3 mt-1">
 
                         {% for nov in novells %}
                             <div class="card d-flex col border-0 mt-1">
                                 <div class="card-img-top">
                                     <a href="{{ nov.get_absolute_url }}">
-                                        <img src="{{ nov.poster.url }}" class="card-img-top rounded"
-                                             alt="{{ nov.rus_title }}">
+                                        <div class="ratio-3х4 ratio">
+                                            <img src="{{ nov.poster.url }}" class="w-100 rounded"
+                                                 alt="{{ nov.rus_title }}">
+                                        </div>
                                     </a>
                                 </div>
                                 <div class="card-body">
