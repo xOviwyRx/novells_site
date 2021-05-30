@@ -8,11 +8,11 @@ from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Ratin
 
 @admin.register(Novell)
 class NovellAdmin(admin.ModelAdmin):
-    list_display = ('rus_title','author', 'status', 'views', 'overall_rating')
+    list_display = ('rus_title','author', 'status', 'views', 'overall_rating', 'translate_status')
     filter_horizontal = ('genres',)
     prepopulated_fields = {'slug': ('eng_title',)}
     readonly_fields = ('overall_rating','translator')
-
+    list_editable = ('translate_status',)
 
 
 @admin.register(Chapter)
