@@ -370,10 +370,9 @@ class AllNewsView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.user_profile:
+        if not self.request.user.is_anonymous:
             self.request.user.user_profile.new_post_check = timezone.now()
             self.request.user.user_profile.save()
-        print(self.request.user)
         return context
 
 
