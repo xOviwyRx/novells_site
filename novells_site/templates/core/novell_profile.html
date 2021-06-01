@@ -85,16 +85,18 @@
         }
 
         .link-login-modal {
-             color: rgba(171,59,97,0.75);
+            color: rgba(171, 59, 97, 0.75);
         }
+
         .link-login-modal:hover {
             color: rgba(167, 0, 70, 0.75);
         }
 
-        .rev-author a{
+        .rev-author a {
             color: #123d6a;
         }
-        .rev-author a:hover{
+
+        .rev-author a:hover {
             color: #2e96ff;
         }
     </style>
@@ -111,7 +113,7 @@
     <div class="container-xxl" style="background:#ffffff;">
 
         <div class="row mt-2 pt-3 justify-content-center">
-            <div class="col-xxl-4 col-md-4 col-md-5 col-sm-10 pr-0">
+            <div class="col-xxl-4 col-md-4 col-md-5 col-sm-10 pr-3 pr-sm-0">
                 <div class="ratio ratio-3х4">
 
                     <img src="{{ novell.poster.url }}" alt="{{ novell.original_title }}"
@@ -136,7 +138,7 @@
                             {{ novell.chapter_count }}{% else %}???{% endif %}</span></p>
                         <p class="text-muted mb-0 font-weight-bold">Переведено глав: <span
                                 class="font-weight-bold text-dark">{{ novell.chapters.count }}</span></p>
-                        <p class="text-muted mb-0 font-weight-bold">Состояние перевода:
+                        <p class="text-muted mb-0 font-weight-bold">Статус новеллы:
                             {% if novell.status == 'OG' %}
                                 <span class="font-weight-bold text-dark"><i
                                         class="bi bi-circle-fill text-primary" style="
@@ -147,6 +149,15 @@
     vertical-align: bottom;"></i>
                                     Запланирован</span>
                             {% elif novell.status == 'CT' %}
+                                <span class="font-weight-bold text-dark">Завершен</span>
+                            {% endif %}
+                        </p>
+                        <p class="text-muted mb-0 font-weight-bold">Состояние перевода:
+                            {% if not novell.translate_status %}
+                                <span class="font-weight-bold text-dark"><i
+                                        class="bi bi-circle-fill text-primary" style="
+    vertical-align: text-top; font-size: 11pt;"></i> В процессе</span>
+                            {% else %}
                                 <span class="font-weight-bold text-dark">Завершен</span>
                             {% endif %}
                         </p>
@@ -185,7 +196,8 @@
                         {% else %}
                             <p class="text-muted font-weight-bold mt-2">
                                 <a data-toggle="modal" data-target="#loginModal"
-                                   aria-expanded="false" class="link-login-modal" style="cursor: pointer; text-decoration: none;">
+                                   aria-expanded="false" class="link-login-modal"
+                                   style="cursor: pointer; text-decoration: none;">
                                     Войдите</a>, чтобы оценить</p>
 
                         {% endif %}
@@ -214,7 +226,8 @@
                                             </button>
                                         {% else %}
                                             <a type="button" class="btn btn-outline-light border-0"
-                                               href="{% url 'core:chapter_detail' novell.slug user|last_unread_chapter:novell %}" style="background-color: #123d6a;">Продолжить
+                                               href="{% url 'core:chapter_detail' novell.slug user|last_unread_chapter:novell %}"
+                                               style="background-color: #123d6a;">Продолжить
                                                 чтение</a>
                                         {% endif %}
                                     {% else %}
@@ -595,7 +608,8 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <input type="submit"
-                                                       class="btn btn-outline-light" value="Оставить отзыв" style="background-color: #ab3b61;">
+                                                       class="btn btn-outline-light" value="Оставить отзыв"
+                                                       style="background-color: #ab3b61;">
 
                                             </div>
                                         </form>

@@ -107,7 +107,7 @@
 {% block content %}
     <div class="container-xxl bg-white">
         <div class="row">
-            <div class="p-3 bg-white col-2 px-1">
+            <div class="p-3 bg-white col-lg-2 col-md-3 col-sm-4 col-6 px-1">
                 <div class="card">
                     <div class="card-group-item">
                         <form action="{% url 'core:json_filter' %}" method="get" name="filter">
@@ -269,8 +269,8 @@
 
                 </div>
             </div>
-            <div class="col-10">
-                <div class="container left-ads-display">
+            <div class="col-lg-10 col-md-9 col-sm-8 col-6 px-lg-3 px-1">
+                <div class="container left-ads-display px-lg-1 px-1">
                     <div class="row row-cols-1 row-cols-xxl-5 row-cols-lg-4 row-cols-md-3 mt-1">
 
                         {% for nov in novells %}
