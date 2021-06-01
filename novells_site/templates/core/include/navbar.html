@@ -1,5 +1,5 @@
 {% load user_tags %}
-{% load static  %}
+{% load static %}
 <style>
 
 </style>
@@ -31,7 +31,8 @@
                         <span style="vertical-align: middle">Новости</span>
                         {% if user.is_authenticated %}
                             <span class="badge bg-dark p-1 text-center" id="news-notification-count"
-                                  style="vertical-align: middle;">{% if user|news_unchecked > 0 %}{{ user|news_unchecked }}{% endif %}</span>
+                                  style="vertical-align: middle;">{% if user|news_unchecked > 0 %}
+                                {{ user|news_unchecked }}{% endif %}</span>
                         {% endif %}
                     </a>
                 </li>
@@ -64,7 +65,8 @@
                 <a class="p-2 text-white" href="{{ user.user_profile.get_absolute_url }}">{{ user.username }}</a>
 
             {% else %}
-                <a role="button" class="btn btn-outline-light border-0 mr-2" href="{% url 'account_signup' %}" style="background-color: rgba(237,226,220,0.75);">Регистрация</a>
+                <a role="button" class="btn btn-outline-light border-0 mr-2" href="{% url 'account_signup' %}"
+                   style="background-color: rgba(237,226,220,0.75);">Регистрация</a>
             {% endif %}
 
             {% if user.is_authenticated %}
@@ -73,18 +75,19 @@
                     Выход
                 </button>
             {% else %}
-                <button type="button" class="btn btn-outline-light border-0 mr-2" data-toggle="modal" data-target="#loginModal" style="background-color: rgba(18,61,106,0.75);">
+                <button type="button" class="btn btn-outline-light border-0 mr-2" data-toggle="modal"
+                        data-target="#loginModal" style="background-color: rgba(18,61,106,0.75);">
                     Вход
                 </button>
             {% endif %}
-        </div>
 
-        <form class="d-flex" action="{% url 'core:filter' %}" method="get">
-            <input class="form-control mr-2" type="search" name="q" placeholder="Поиск" aria-label="Search">
-            <button class="btn btn-outline-light border-0" type="submit" style="background-color: rgb(219,204,192)">
-                Поиск
-            </button>
-        </form>
+            <form class="d-flex" action="{% url 'core:filter' %}" method="get">
+                <input class="form-control mr-2" type="search" name="q" placeholder="Поиск" aria-label="Search">
+                <button class="btn btn-outline-light border-0" type="submit" style="background-color: rgb(219,204,192)">
+                    Поиск
+                </button>
+            </form>
+        </div>
 
 
     </div>

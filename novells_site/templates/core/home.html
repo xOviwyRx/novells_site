@@ -91,9 +91,10 @@
                 {% for pop in pops %}
 
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <div class="row pl-3">
 
-                            <div class="col-4"
+                        <div class="row px-2 justify-content-center">
+
+                            <div class="col-lg-4 col-sm-10 col-xs-6"
                                  style="border-style: dotted; border-width: 3px; border-color: rgb(171,59,97); z-index: 2">
 
                                 <div class="ratio-3х4 ratio">
@@ -102,7 +103,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-1 m-0 p-0 d-flex">
+                            <div class="col-lg-1 m-0 p-0 d-flex d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block">
                                 <div class="text-vertical text-center display-4 font-weight-bolder pl-2"
                                      style="color: rgb(171,59,97)">
                                     Рекомендуем
@@ -110,7 +111,7 @@
                             </div>
 
 
-                            <div class="col-7 pl-0 ml-0">
+                            <div class="col-lg-7 col-sm-12 col-xs-6 pl-0 ml-0">
 
 
                                 <h2 class="mb-1 rec-novell-title"><a href="{{ pop.get_absolute_url }}"
@@ -137,20 +138,21 @@
 
 
                         </div>
+
                     </div>
                 {% endfor %}
 
 
             </div>
 
-            <button class="btn btn-outline-light btn-lg font-weight-bold" type="button"
+            <button class="btn btn-outline-light btn-lg font-weight-bold d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block" type="button"
                     data-bs-target="#carouselExampleIndicators"
                     data-bs-slide="next"
                     style="position: absolute; bottom: 0; left: 42%; width: 10%; z-index: 2000; background-color: rgb(18,61,106)">
                 Далее
             </button>
 
-            <div class="carousel-indicators m-0 d-flex justify-content-end" style="bottom: -5%; z-index: 1;">
+            <div class="carousel-indicators m-0 d-flex justify-content-end" style="bottom: -3%; z-index: 1;">
                 {% for pop in pops %}
                     <button data-bs-target="#carouselExampleIndicators"
                             data-bs-slide-to="{{ forloop.counter0 }}"
@@ -165,7 +167,7 @@
         </div>
 
 
-        <div class="pops-novells carousel row mt-4" style="background-color: rgb(245,210,239);">
+        <div class="pops-novells carousel row mt-5" style="background-color: rgb(245,210,239);">
             <h1 class="text-center mt-1"><i class="bi bi-card-list text-white"
                                             style="vertical-align: bottom"></i> <span
                     class="text-white">Популярное</span></h1>
@@ -225,7 +227,8 @@
             </div>
             <div class="tns-controls mb-1" aria-label="Carousel Navigation"
                  tabindex="0">
-                <button data-controls="prev" class="carousel-control-prev" tabindex="-1" aria-controls="tns1" style="width: 3%;">
+                <button data-controls="prev" class="carousel-control-prev" tabindex="-1" aria-controls="tns1"
+                        style="width: 3%;">
                     <i class="bi bi-chevron-compact-left h1 text-dark"></i>
                 </button>
                 <button data-controls="next" class="carousel-control-next" tabindex="-1"
@@ -252,6 +255,11 @@
 
 
                     responsive: {
+                        350: {
+                            edgePadding: 0,
+                            gutter: 20,
+                            items: 2
+                        },
                         640: {
                             edgePadding: 0,
                             gutter: 20,
@@ -280,7 +288,7 @@
             обновления</h1>
 
         <div class="container">
-            <div class="row row-cols-2">
+            <div class="row row-cols-lg-2 row-cols-md-1 row-cols-sm-1">
 
 
                 {% for chapter in last_update %}
@@ -299,7 +307,7 @@
                                         <a class="mb-1"
                                            href="{{ chapter.novell.get_absolute_url }}"
                                            style="font-size: 11pt; white-space: nowrap; overflow: hidden; color: rgba(18,61,106,1); font-weight: bold;">{{ chapter.novell.rus_title|truncatechars:40 }}</a>
-                                        <span class="font-weight-bold"
+                                        <span class="font-weight-bold d-none d-sm-block"
                                               style="font-size: 9pt;">{{ chapter.created|timesince }}
                                             назад</span>
                                     </div>
