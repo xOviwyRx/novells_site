@@ -168,8 +168,12 @@ class GetNotificationView(View):
 
         # min_cr = max(list_news[0].created, comments_reply[0].created)
         # print(comments_reply, min_cr)
-        a = list(list_news) + list(comments_reply)
-        b = sorted(a, key=lambda x: x.created, reverse=True)[:5]
+        if news_count < 5:
+            a = list(list_news) + list(comments_reply)
+            b = sorted(a, key=lambda x: x.created, reverse=True)[:5]
+        else:
+            a = list(my_news) + list(new_coms)
+            b = sorted(a, key=lambda x: x.created, reverse=True)
 
         result = news_count > 0
 

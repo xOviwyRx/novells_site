@@ -14,6 +14,74 @@
             color: orange;
             vertical-align: top;
         }
+
+        .btn-no-matter {
+            border-color: #bbb2b5;
+            color: #bbb2b5;
+        }
+
+
+        .btn-no-matter:hover {
+            background-color: #bbb2b5;
+            border-color: #bbb2b5;
+            color: white;
+        }
+
+
+        .btn-check:active + .btn-no-matter, .btn-check:checked + .btn-no-matter, .btn-no-matter.active, .btn-no-matter.dropdown-toggle.show, .btn-no-matter:active {
+            background-color: #bbb2b5;
+            border-color: #bbb2b5;
+            color: white;
+        }
+
+        .btn-in-progress {
+            border-color: #123d6a;
+            color: black;
+        }
+
+
+        .btn-in-progress:hover {
+            background-color: #123d6a;
+            border-color: #123d6a;
+            color: white;
+        }
+
+
+        .btn-check:active + .btn-in-progress, .btn-check:checked + .btn-in-progress, .btn-in-progress.active, .btn-in-progress.dropdown-toggle.show, .btn-in-progressr:active {
+            background-color: #123d6a;
+            border-color: #123d6a;
+            color: white;
+        }
+
+        .btn-finished {
+            border-color: #ab3b61;
+            color: #ab3b61;
+        }
+
+
+        .btn-finished:hover {
+            background-color: #ab3b61;
+            border-color: #ab3b61;
+            color: white;
+        }
+
+
+        .btn-check:active + .btn-finished, .btn-check:checked + .btn-finished, .btn-in-progress.active, .btn-finished.dropdown-toggle.show, .btn-finished:active {
+            background-color: #ab3b61;
+            border-color: #ab3b61;
+            color: white;
+        }
+
+        .form-check-input:checked {
+            background-color: #123d6a;
+            border-color: #123d6a;
+        }
+
+        a {
+            color: #123d6a;
+            text-decoration: underline;
+        }
+
     </style>
 {% endblock %}
 {% block scripts %}
@@ -145,22 +213,17 @@
                                         <input type="radio" class="btn-check" name="novell-trans-status" value="None"
                                                id="btnradio0"
                                                autocomplete="off" checked>
-                                        <label class="btn btn-outline-secondary" for="btnradio0">Не важно</label>
-
-
-                                        <input type="radio" class="btn-check" name="novell-trans-status" id="btnradio1"
-                                               autocomplete="off" value="AN">
-                                        <label class="btn btn-outline-warning" for="btnradio1">Анонс</label>
+                                        <label class="btn btn-no-matter" for="btnradio0">Не важно</label>
 
                                         <input type="radio" class="btn-check" name="novell-trans-status" value="OG"
                                                id="btnradio2"
                                                autocomplete="off">
-                                        <label class="btn btn-outline-primary" for="btnradio2">В процессе</label>
+                                        <label class="btn btn-in-progress" for="btnradio2">В процессе</label>
 
                                         <input type="radio" class="btn-check" name="novell-trans-status" value="CT"
                                                id="btnradio3"
                                                autocomplete="off">
-                                        <label class="btn btn-outline-success" for="btnradio3">Завершён</label>
+                                        <label class="btn btn-finished" for="btnradio3">Завершён</label>
 
                                     </div>
                                 </div> <!-- card-body.// -->
@@ -185,7 +248,7 @@
                                         </label>
                                     </div>
 
-                                     <div class="form-check">
+                                    <div class="form-check">
                                         <input class="form-check-input" type="radio" value="no" name="translate-status"
                                                id="flexRadioDefault3">
                                         <label class="form-check-label" for="flexRadioDefault3">
@@ -196,7 +259,9 @@
                                 </div>
 
                                 <div class="card-footer">
-                                    <button type="submit" class="button btn btn-success btn-block">Найти</button>
+                                    <button type="submit" class="button btn btn-outline-light btn-block"
+                                            style="background-color: rgba(171,59,97,0.75);">Найти
+                                    </button>
                                 </div>
                             </div>
                         </form>

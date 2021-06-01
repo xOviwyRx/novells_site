@@ -48,7 +48,21 @@
             border-color: rgba(187, 178, 181, 0.75);
             background-color: rgba(187, 178, 181, 0.75);
         }
+
+
+        .comment-header a {
+            color: rgba(18, 61, 106, 0.75);
+        }
+
+        .comment-header a:hover {
+            color: rgba(50, 150, 255, 0.75);
+        }
+
     </style>
+
+
+{% endblock %}
+{% block scripts %}
     <script type="text/javascript">
         document.ondragstart = noselect;
         // запрет на перетаскивание
@@ -130,9 +144,9 @@
                                                     <div class="d-flex justify-content-between">
                                         <span class="h5 mb-0">
                                                 {{ n.title }}
-                                         {% if user.is_authenticated and n in user.user_profile.chapter_readed.all %}
-                                            <i class="bi bi-check2-square"></i>
-                                        {% endif %}
+                                            {% if user.is_authenticated and n in user.user_profile.chapter_readed.all %}
+                                                <i class="bi bi-check2-square"></i>
+                                            {% endif %}
                                             {% if not n.status %}
                                                 <span class="small">
                                                 <i class="bi bi-circle-fill text-danger"

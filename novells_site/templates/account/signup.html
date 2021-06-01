@@ -3,8 +3,32 @@
 
 {% load i18n %}
 
-{% block head_title %}Регистрация{% endblock %}
+{% block title %} Перевод китайских BL-новелл Privereda1 | Регистрация на сайте{% endblock %}
+{% block styles %}
+    <style>
+        .card-header a {
+            color: #ab3b61;
+            text-decoration: underline;
+        }
 
+        .card-header a:hover {
+            color: #ff5892;
+            text-decoration: underline;
+        }
+
+        .list-group-item.active {
+            z-index: 2;
+            color: #fff;
+            background-color: #123d6a;
+            border-color: #123d6a;
+        }
+
+        .form-check-input:checked {
+            background-color: #123d6a;
+            border-color: #0d6efd;
+        }
+    </style>
+{% endblock %}
 {% block content %}
     <div class="container-xxl">
         <div class="row d-flex justify-content-center">
@@ -162,7 +186,9 @@
                                        value="{{ redirect_field_value }}"/>
                             {% endif %}
                             <div class="d-flex flex-row justify-content-end mt-2">
-                                <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+                                <button type="submit" class="btn border-0 btn-outline-light"
+                                        style="background-color: #ab3b61;">Зарегистрироваться
+                                </button>
                             </div>
                         </form>
                     </div>

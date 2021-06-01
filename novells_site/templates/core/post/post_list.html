@@ -1,10 +1,23 @@
 {% extends 'core/home.html' %}
 {% load static %}
 {% load user_tags %}
+
 {% block title %}
     Перевод китайских BL-новелл Privereda1 | Все новости
 {% endblock title %}
+{% block styles %}
+    <style>
+        .card-header a {
+            color: #ab3b61;
+            text-decoration: none;
+        }
 
+        .card-header a:hover {
+            color: #ff528c;
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
 {% block content %}
     <div class="container-xxl bg-white mb-3">
         <div class="row justify-content-center mb-3">
@@ -31,7 +44,8 @@
                              </span>
 
                             <span class="text-muted">
-                                Комментариев: {{ post.comments.count }} <i class="fa fa-comments-o text-primary" aria-hidden="true"></i>
+                                Комментариев: {{ post.comments.count }} <i class="fa fa-comments-o"
+                                                                           aria-hidden="true" style="color: #123d6a;"></i>
                             </span>
                         </div>
                     </div>

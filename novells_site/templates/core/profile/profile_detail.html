@@ -50,11 +50,48 @@
         .active .bi-calendar-event {
             color: rgba(139, 110, 146, 0.75);
         }
+
+        #myTab li {
+            font-size: 11pt;
+        }
+
+        #myTab li a {
+            color: #ab3b61;
+        }
+
+        #myTab li .active:hover {
+            color: #792a40;
+        }
+
+        #myTab li .active {
+            color: #792a40;
+        }
+
+        #myTab li a:hover {
+            color: #ff5892;
+        }
+
+        .list-group-item a {
+            color: #123d6a;
+        }
+
+        .list-group-item a:hover {
+            color: #298fff;
+        }
+
+
+        .novell-title a {
+            color: #123d6a;
+        }
+
+        .novell-title a:hover {
+            color: #2890fc;
+        }
     </style>
 {% endblock %}
 
 {% block title %}
-        Перевод китайских BL-новелл Privereda1 | Профиль {{ profile.name }}
+    Перевод китайских BL-новелл Privereda1 | Профиль {{ profile.name }}
 {% endblock %}
 <!------ Include the above in your HEAD tag ---------->
 {% block content %}
@@ -79,7 +116,7 @@
                     </div>
 
                     <div class="profile-head">
-                        <h6>
+                        <h6 style="color: #ab3b61;">
                             {% if profile.name.groups.all %}
                                 {% for i in profile.name.groups.all %}
                                     {{ i }}
@@ -350,7 +387,7 @@
                                             <th scope="row" class="pl-2 pr-1">
                                                 {{ forloop.counter }}
                                             </th>
-                                            <td class="text-left"><p class="m-0"><a
+                                            <td class="text-left novell-title"><p class="m-0"><a
                                                     href="{{ novell.novell.get_absolute_url }}"
                                                     style="font-size: 11pt">{{ novell.novell.rus_title }}</a>
                                                 <span class="text-dark small">({{ novell.novell.publish.year }})</span>

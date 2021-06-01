@@ -72,6 +72,31 @@
                 }
 
          */
+
+        .btn-genre {
+            border-color: #123d6a;
+            color: #123d6a;
+        }
+
+        .btn-genre:hover {
+            background-color: #123d6a;
+            border-color: #123d6a;
+            color: beige;
+        }
+
+        .link-login-modal {
+             color: rgba(171,59,97,0.75);
+        }
+        .link-login-modal:hover {
+            color: rgba(167, 0, 70, 0.75);
+        }
+
+        .rev-author a{
+            color: #123d6a;
+        }
+        .rev-author a:hover{
+            color: #2e96ff;
+        }
     </style>
 {% endblock %}
 
@@ -134,7 +159,7 @@
 
                         <h5 class="my-2 text-dark">Жанры</h5>
                         {% for genre in novell.genres.all %}
-                            <a type="button" class="btn btn-outline-primary m-1"
+                            <a type="button" class="btn btn-genre m-1"
                                href="{% url 'core:filter' %}?genre={{ genre.id }}">
                                 {{ genre }}
                             </a>
@@ -160,7 +185,7 @@
                         {% else %}
                             <p class="text-muted font-weight-bold mt-2">
                                 <a data-toggle="modal" data-target="#loginModal"
-                                   aria-expanded="false" class="text-primary" style="cursor: pointer;">
+                                   aria-expanded="false" class="link-login-modal" style="cursor: pointer; text-decoration: none;">
                                     Войдите</a>, чтобы оценить</p>
 
                         {% endif %}
@@ -188,8 +213,8 @@
                                                 <i class="bi bi-patch-check text-success"></i>
                                             </button>
                                         {% else %}
-                                            <a type="button" class="btn btn-dark"
-                                               href="{% url 'core:chapter_detail' novell.slug user|last_unread_chapter:novell %}">Продолжить
+                                            <a type="button" class="btn btn-outline-light border-0"
+                                               href="{% url 'core:chapter_detail' novell.slug user|last_unread_chapter:novell %}" style="background-color: #123d6a;">Продолжить
                                                 чтение</a>
                                         {% endif %}
                                     {% else %}
@@ -515,7 +540,7 @@
                                                         <div class="flex-grow-1 ms-3">
                                                             <p class="my-0 h6">{{ rev.title }}</p>
                                                             <p class="my-0">{% stars novell|star_user:rev.author %}</p>
-                                                            <p class="my-0"><a
+                                                            <p class="my-0 rev-author"><a
                                                                     href="{{ rev.author.user_profile.get_absolute_url }}">{{ rev.author }}</a>
                                                             </p>
                                                             <p class="small my-0">{{ rev.created|date }}</p>
@@ -570,8 +595,8 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <input type="submit"
-                                                       class="btn btn-primary" value="Оставить отзыв">
-                                                </input>
+                                                       class="btn btn-outline-light" value="Оставить отзыв" style="background-color: #ab3b61;">
+
                                             </div>
                                         </form>
                                     </div>
