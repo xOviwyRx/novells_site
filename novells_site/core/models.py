@@ -211,7 +211,7 @@ class Chapter(models.Model):
     chapter_arch = ChainedForeignKey(NovellArch, chained_field="novell",
                                      chained_model_field="novell", verbose_name='Арка', help_text='К какой арке относится?',
                                      related_name='reviews_by_user',
-                                     on_delete=models.SET_NULL, null=True)
+                                     on_delete=models.SET_NULL, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
