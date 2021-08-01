@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 
+from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 
 from django.contrib.contenttypes.models import ContentType
@@ -13,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment
 from .forms import CommentForm, EditProfileForm, RatingForm
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidden
 from rest_framework import viewsets, filters, views
 from rest_framework.response import Response
 from .serializers import NovellListSerializer
@@ -87,10 +88,49 @@ class ChapterDetailView(DetailView):
 
     def get_object(self):
         nov = get_object_or_404(Novell, slug=self.kwargs['slug'])
+        chapter = get_object_or_404(Chapter, novell=nov, number=self.kwargs['number'])
+        #
+        if not self.request.user.is_anonymous:
+            self.request.user.user_profile.chapter_readed.add(chapter)
+
+
+        if self.request.user.is_anonymous and not chapter.premium:
+            return chapter
+
+        print(chapter, self.request.user.user_profile.buyed_chapters.all())
+        if chapter.premium and self.request.user.is_anonymous:
+            # "Вы пытаетесь открыть платную главу. Войдите в аккаунт, где она куплена, или купите её!"
+            raise PermissionDenied
+        elif self.request.user.is_anonymous and chapter.premium and chapter not in self.request.user.user_profile.buyed_chapters.all():
+            #"Вы пытаетесь открыть платную главу. Купите её, это не так дорого!"
+            raise PermissionDenied
+        elif not self.request.user.is_anonymous and chapter.premium and chapter in self.request.user.user_profile.buyed_chapters.all():
+            return chapter
+        else:
+            raise Http404('Неизвестная ошибка')
+
+
+"""
+    def get_object(self):
+        nov = get_object_or_404(Novell, slug=self.kwargs['slug'])
         if not self.request.user.is_anonymous:
             self.request.user.user_profile.chapter_readed.add(
                 get_object_or_404(Chapter, novell=nov, number=self.kwargs['number']))
         return get_object_or_404(Chapter, novell=nov, number=self.kwargs['number'])
+"""
+
+"""
+        #
+        if chapter.premium and self.request.user.is_anonymous:
+            return HttpResponse("Вы пытаетесь открыть платную главу. Войдите в аккаунт, где она куплена, или купите её!")
+        elif self.request.user.is_anonymous and chapter.premium and chapter not in self.request.user.user_profile.buyed_chapters.all():
+            :raise HttpResponse(
+                "Вы пытаетесь открыть платную главу. Купите её, это не так дорого!")
+        elif self.request.user.is_anonymous and chapter.premium and chapter in self.request.user.user_profile.buyed_chapters.all():
+            return chapter
+        else:
+            return HttpResponse('Неизвестная ошибка')
+"""
 
 
 class AddComment(View):
@@ -279,6 +319,18 @@ def del_from_bookmark(request, pk, type_of, frommm):
         return redirect(request.user.user_profile.get_absolute_url())
     else:
         return redirect(nov.get_absolute_url())
+
+
+@login_required
+def buy_chapter(request, pk):
+    chapter = get_object_or_404(Chapter, id=pk)
+    if chapter.premium and chapter.cost <= request.user.user_profile.balance:
+        request.user.user_profile.balance -= chapter.cost
+        request.user.user_profile.save(update_fields=["balance"])
+        request.user.user_profile.buyed_chapters.add(chapter)
+        return redirect(chapter.get_absolute_url())
+    else:
+        return HttpResponse('Недостаточно средств или просто кривой разраб, сорри((')
 
 
 class ProfileDetail(DetailView):

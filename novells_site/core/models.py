@@ -13,6 +13,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils import timezone
+from smart_selects.db_fields import ChainedForeignKey
 
 
 class MyQuerySet(models.query.QuerySet):
@@ -155,6 +156,8 @@ class Novell(models.Model):
                                                      help_text='Оставить пустым, если неизвестно', blank=True,
                                                      null=True)
     slug = models.SlugField(max_length=250)
+    # user_author = models.ForeignKey(User, verbose_name='Автор', on_delete=models.SET_NULL,
+    #                                related_name='written_by_user')
     author = models.CharField(max_length=128, verbose_name='Автор')
     translator = models.CharField(max_length=128, verbose_name='Переводчик', default='Privereda1')
     publish = models.DateTimeField('Дата выхода', default=timezone.now)
@@ -179,6 +182,20 @@ class Novell(models.Model):
         return self.rus_title
 
 
+class NovellArch(models.Model):
+    novell = models.ForeignKey(Novell, verbose_name='В какой новелле', related_name='novell_arch',
+                               on_delete=models.PROTECT, null=True)
+    name = models.CharField('Название арки', max_length=256)
+
+    class Meta:
+        verbose_name = 'Арка'
+        verbose_name_plural = 'Арки/Тома новелл'
+        ordering = ('-name',)
+
+    def __str__(self):
+        return 'Арка {} в {}'.format(self.name, self.novell)
+
+
 class Chapter(models.Model):
     number = models.PositiveSmallIntegerField('Номер главы')
     title = models.CharField('Заголовок главы', max_length=256)
@@ -188,6 +205,13 @@ class Chapter(models.Model):
     chapter_text = models.TextField('Текст главы', blank=True, null=True)
     created = models.DateTimeField('Дата создания', auto_now_add=True)
     comments = GenericRelation(Comment, related_query_name='chapter_comments')
+    premium = models.BooleanField('Платная', help_text='Ставим, если платная', default=False)
+    cost = models.DecimalField('Стоимость главы', help_text='Если бесплатная, оставляем 0', default=0, max_digits=18,
+                               decimal_places=6)
+    chapter_arch = ChainedForeignKey(NovellArch, chained_field="novell",
+                                     chained_model_field="novell", verbose_name='Арка', help_text='К какой арке относится?',
+                                     related_name='reviews_by_user',
+                                     on_delete=models.SET_NULL, null=True)
 
     def get_absolute_url(self):
         return reverse('core:chapter_detail', args=[self.novell.slug, self.number])
@@ -311,6 +335,8 @@ class Profile(models.Model):
     chapter_readed = models.ManyToManyField(Chapter, related_name='readed_by_users', blank=True)
     news_check = models.DateTimeField('Когда чекнул уведомления', default=timezone.now)
     new_post_check = models.DateTimeField('Когда чекнул новости', default=timezone.now)
+    balance = models.DecimalField('Баланс пользователя', default=0, max_digits=18, decimal_places=6)
+    buyed_chapters = models.ManyToManyField(Chapter, related_name='buyed_by_users', blank=True)
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
@@ -395,3 +421,20 @@ class Review(models.Model):
 
     def __str__(self):
         return 'Отзыв от {} к {}'.format(self.author, self.novell.rus_title)
+
+
+# Транзакции пользователей
+class UserBalanceChange(models.Model):
+    user = models.ForeignKey(User, verbose_name='Пользователь', related_name='balance_changes',
+                             on_delete=models.SET_NULL, null=True)
+    # reason = models.IntegerField(choices=REASON_CHOICES, default=NO_REASON)
+    amount = models.DecimalField('Сумма платежа', default=0, max_digits=18, decimal_places=6)
+    datetime = models.DateTimeField('Дата', default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Транзакция'
+        verbose_name_plural = 'Транзакции'
+        ordering = ('-datetime',)
+
+    def __str__(self):
+        return 'Транзакция на {} от {}'.format(self.amount, self.user)

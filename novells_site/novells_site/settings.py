@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'tinymce',
     'online_users',
     'rest_framework',
+    'smart_selects',
     # 'allauth.socialaccount',
 
 ]
@@ -145,6 +146,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+USE_DJANGO_JQUERY = True
 
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'

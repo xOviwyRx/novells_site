@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider, Post, Review
+from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Rating, RatingStar, Slider, Post, Review, \
+    UserBalanceChange, NovellArch
 
 
 # Register your models here.
@@ -11,15 +12,16 @@ class NovellAdmin(admin.ModelAdmin):
     list_display = ('rus_title','author', 'status', 'views', 'overall_rating', 'translate_status')
     filter_horizontal = ('genres',)
     prepopulated_fields = {'slug': ('eng_title',)}
-    readonly_fields = ('overall_rating','translator')
+    readonly_fields = ('overall_rating',)
     list_editable = ('translate_status',)
+    list_filter = ('translator',)
 
 
 @admin.register(Chapter)
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ('number', 'title', 'status', 'novell')
     exclude = ('publish',)
-    list_filter = ('novell','status')
+    list_filter = ('novell','status',)
 
 
 @admin.register(Genre)
@@ -68,3 +70,7 @@ class SliderAdmin(admin.ModelAdmin):
 admin.site.register(Post)
 
 admin.site.register(Review)
+
+admin.site.register(UserBalanceChange)
+
+admin.site.register(NovellArch)

@@ -53,6 +53,9 @@ urlpatterns = [
 
 
     path('novell_filter_test/', views.js_filter_test),
-    path('api/nov_list/', views.NovellListViewApi.as_view())
+    path('api/nov_list/', views.NovellListViewApi.as_view()),
+
+    path('buying_chapter/<int:pk>/', views.buy_chapter, name='buy_chapter'),
+
 
 ]

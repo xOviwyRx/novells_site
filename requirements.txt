@@ -7,3 +7,4 @@ pytils==0.3
 django-tinymce==3.3.0
 django-online-users==0.3
 djangorestframework==3.12.4
+django-smart-selects
