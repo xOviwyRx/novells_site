@@ -94,10 +94,9 @@ class ChapterDetailView(DetailView):
             self.request.user.user_profile.chapter_readed.add(chapter)
 
 
-        if self.request.user.is_anonymous and not chapter.premium:
+        if not chapter.premium:
             return chapter
 
-        print(chapter, self.request.user.user_profile.buyed_chapters.all())
         if chapter.premium and self.request.user.is_anonymous:
             # "Вы пытаетесь открыть платную главу. Войдите в аккаунт, где она куплена, или купите её!"
             raise PermissionDenied
