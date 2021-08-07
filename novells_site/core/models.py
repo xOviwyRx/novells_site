@@ -166,6 +166,7 @@ class Novell(models.Model):
     important = models.BooleanField('Выбор редакции', default=False)
     created = models.DateTimeField('Опубликовано', auto_now_add=True)
     poster = models.ImageField('Постер', upload_to='novells_poster/')
+
     description = models.TextField('Описание')
     genres = models.ManyToManyField(Genre, related_name='novells', verbose_name='Жанры')
     views = models.PositiveSmallIntegerField('Просмотры', default=0)

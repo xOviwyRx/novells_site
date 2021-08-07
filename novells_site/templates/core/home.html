@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load user_tags %}
+{% load thumbnail %}
 
 {% block styles %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -57,7 +58,9 @@
 
                         <div class="carousel-item ratio ratio-21x9 {% if forloop.first %}active{% endif %}">
 
-                            <img src="{{ img.shot.url }}" class="d-block w-100" alt="{{ img.text_primary }}">
+                            {% thumbnail img.shot "1200x514" crop="center" as im %}
+                                <img src="{{ im.url }}" class="d-block w-100" alt="{{ im.text_primary }}">
+                            {% endthumbnail %}
                             <div class="carousel-caption d-none d-md-block">
                                 {% if img.novell.get_absolute_url %}
                                     <a href="{{ img.novell.get_absolute_url }}" class="stretched-link"></a>
@@ -98,8 +101,11 @@
                                  style="border-style: dotted; border-width: 3px; border-color: rgb(171,59,97); z-index: 2">
 
                                 <div class="ratio-3х4 ratio">
-                                    <img src="{{ pop.poster.url }}"
-                                         class="img-fluid p-3">
+
+                                    {% thumbnail pop.poster "333x454" crop="center" as im %}
+                                        <img src="{{ im.url }}"
+                                             class="img-fluid p-3">
+                                    {% endthumbnail %}
                                 </div>
                             </div>
 
@@ -145,7 +151,8 @@
 
             </div>
 
-            <button class="btn btn-outline-light btn-lg font-weight-bold d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block" type="button"
+            <button class="btn btn-outline-light btn-lg font-weight-bold d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block"
+                    type="button"
                     data-bs-target="#carouselExampleIndicators"
                     data-bs-slide="next"
                     style="position: absolute; bottom: 0; left: 42%; width: 10%; z-index: 2000; background-color: rgb(18,61,106)">
@@ -159,7 +166,10 @@
                             class="{% if forloop.first %}active{% endif %}" aria-current="true"
                             style="height: auto; width: 9%;">
                         <div class="ratio ratio-3х4">
-                            <img src="{{ pop.poster.url }}" class="img-fluid" style="height: 100%;">
+                            {% thumbnail pop.poster "95x131" crop="center" as im %}
+                                <img src="{{ im.url }}" class="img-fluid" style="height: 100%;">
+                            {% endthumbnail %}
+
                         </div>
                     </button>
                 {% endfor %}
@@ -182,8 +192,10 @@
                         <a href="{{ nov.get_absolute_url }}"
                         >
                             <div class="ratio ratio-3х4">
-                                <img src="{{ nov.poster.url }}" class="card-img-top rounded p-2"
-                                     alt="{{ nov.original_title }}">
+                                {% thumbnail nov.poster "200x272" crop="center" as im %}
+                                    <img src="{{ im.url }}" class="card-img-top rounded p-2"
+                                         alt="{{ im.original_title }}">
+                                {% endthumbnail %}
                             </div>
                         </a>
 
@@ -298,7 +310,9 @@
 
                                 <div class="col-1 p-0">
                                     <div class="ratio-3х4 ratio">
-                                        <img src="{{ chapter.novell.poster.url }}" class="rounded">
+                                        {% thumbnail chapter.novell.poster "59x79" crop="center" as im %}
+                                            <img src="{{ im.url }}" class="rounded">
+                                        {% endthumbnail %}
                                     </div>
 
                                 </div>

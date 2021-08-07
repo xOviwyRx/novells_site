@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'online_users',
     'rest_framework',
     'smart_selects',
+    'sorl.thumbnail',
+
     # 'allauth.socialaccount',
 
 ]
