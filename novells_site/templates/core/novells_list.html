@@ -278,8 +278,11 @@
                                 <div class="card-img-top">
                                     <a href="{{ nov.get_absolute_url }}">
                                         <div class="ratio-3х4 ratio">
-                                            <img src="{{ nov.poster.url }}" class="w-100 rounded"
-                                                 alt="{{ nov.rus_title }}">
+                                            {% thumbnail nov.poster "270x360" crop="center" as im %}
+                                                <img src="{{ im.url }}" class="w-100 rounded"
+                                                     alt="{{ im.rus_title }}">
+                                            {% endthumbnail %}
+
                                         </div>
                                     </a>
                                 </div>
