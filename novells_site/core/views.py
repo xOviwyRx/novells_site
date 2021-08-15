@@ -105,7 +105,8 @@ class ChapterDetailView(DetailView):
         elif not self.request.user.is_anonymous and chapter.premium and chapter in self.request.user.user_profile.buyed_chapters.all():
             return chapter
         else:
-            raise Http404('Неизвестная ошибка')
+            raise PermissionDenied
+#            raise Http404('Неизвестная ошибка')
 
 
 """

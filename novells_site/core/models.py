@@ -224,12 +224,28 @@ class Chapter(models.Model):
         else:
             return False
 
+    def next_chapter(self):
+        a = Chapter.objects.filter(number__gt=self.number, status=True, novell=self.novell).order_by('number').first()
+        if a:
+            return a
+        else:
+            return False
+
     def prev_chapter_url(self):
         a = Chapter.objects.filter(number__lt=self.number, status=True, novell=self.novell).order_by('-number').first()
         if a:
             return reverse('core:chapter_detail', args=[a.novell.slug, a.number])
         else:
             return False
+
+
+    def prev_chapter(self):
+        a = Chapter.objects.filter(number__lt=self.number, status=True, novell=self.novell).order_by('-number').first()
+        if a:
+            return a
+        else:
+            return False
+
 
     class Meta:
         verbose_name = 'Глава'
