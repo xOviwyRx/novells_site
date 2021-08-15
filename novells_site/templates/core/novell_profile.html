@@ -99,6 +99,15 @@
         .rev-author a:hover {
             color: #2e96ff;
         }
+
+        .list-group-item a {
+            color: #123d6a;
+            text-decoration: none;
+        }
+
+        .list-group-item a:hover {
+            color: #2e96ff;
+        }
     </style>
 {% endblock %}
 
@@ -106,7 +115,15 @@
     <script src="https://cdn.tiny.cloud/1/ucih7y6bf15dmnxjth5y7vhpwc29y07p91usg9pjqivrf2p1/tinymce/5/tinymce.min.js"
             referrerpolicy="origin"></script>
     <script type="text/javascript" src='{% static "core/js/like-dislike.js" %}'></script>
+    <script>
 
+        function eventCheckBox() {
+            let checkboxs = document.getElementsByTagName("input");
+            for (let i = 0; i < checkboxs.length; i++) { //zero-based array
+                checkboxs[i].checked = !checkboxs[i].checked;
+            }
+        }
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -446,8 +463,9 @@
 
                     <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
                         <div class="list-group mt-2">
-
-                            {% for n in novell.chapters.all %}
+                            <form method="post" action="{% url 'core:buying_many_chapters' %}">
+                                {% csrf_token %}
+                                {% for n in novell.chapters.all %}
 
 
                                     <!-- Всплывающее окно покупки главы -->
@@ -462,10 +480,8 @@
                                                     <p>С Вашего баланса будет списано {{ n.cost|floatformat:2 }} ₽</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <form method="post" action="{% url 'core:buy_chapter' n.id %}">
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-primary">Да</button>
-                                                    </form>
+                                                    <a href="{% url 'core:buy_chapter' n.id %}" class="btn btn-primary">Да</a>
+
                                                     <button type="button" class="btn btn-danger" data-dismiss="modal">
                                                         Нет
                                                     </button>
@@ -474,30 +490,47 @@
                                         </div>
                                     </div>
 
-                                <a
-                                        {% if n.premium and user.is_authenticated and n in user.user_profile.buyed_chapters.all or not n.premium %}
-                                            href="{{ n.get_absolute_url }}"
-                                        {% elif not user.is_authenticated %}
-                                            data-toggle="modal" data-target="#loginModal" style="cursor: pointer;"
-                                        {% else %}
-                                            data-toggle="modal" data-target="#buychapterModal{{ n.id }}"
-                                            style="cursor: pointer;"
-                                        {% endif %}
-                                            class="list-group-item list-group-item-action
+
+                                    <li class="list-group-item list-group-item-action
                                     {% if not n.status %}list-group-item-danger disabled{% elif user.is_authenticated and n in user.user_profile.chapter_readed.all %}
                                     list-group-item-light
                                     {% else %}list-group-item-secondary{% endif %}">
 
-                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex justify-content-between">
                                         <span class="h5 mb-0">
-                                            {% if n.premium %}
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                     fill="currentColor" class="bi bi-coin"
-                                                     viewBox="0 0 16 16">
-                                                    <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
-                                                </svg>
+                                            {% if n.premium and user.is_authenticated and n in user.user_profile.buyed_chapters.all %}
+                                                <i class="fa fa-unlock" aria-hidden="true"></i>
+
+                                                <!--
+                                                <i class="bi bi-lock"></i>
+                                                <i class="bi bi-file-lock2 h5 text-danger"></i>
+                                                -->
+                                            {% elif n.premium %}
+                                                <input class="form-check-input" type="checkbox" name="chosen"
+                                                       value="{{ n.id }}"
+                                                       id="c{{ n.id }}">
+                                                <i class="fa fa-lock" aria-hidden="true"></i>
                                             {% endif %}
+
+
+                                            {% if n.premium %}
+                                                <span class="small">
+                                                {{ n.cost|floatformat:0 }} ₽
+                                                </span>
+                                            {% endif %}
+                                            <a
+                                                    {% if n.premium and user.is_authenticated and n in user.user_profile.buyed_chapters.all or not n.premium %}
+                                                        href="{{ n.get_absolute_url }}"
+                                                    {% elif not user.is_authenticated %}
+                                                        data-toggle="modal" data-target="#loginModal"
+                                                        style="cursor: pointer;"
+                                                    {% else %}
+                                                        data-toggle="modal" data-target="#buychapterModal{{ n.id }}"
+                                                        style="cursor: pointer;"
+                                                    {% endif %}
+                                            >
                                             {{ n.title }}
+                                            </a>
                                             {% if user.is_authenticated and n in user.user_profile.chapter_readed.all %}
                                                 <i class="bi bi-check2-square"></i>
                                             {% endif %}
@@ -510,23 +543,26 @@
                                             {% endif %}
 
 
-                                            {% if n.premium %}
-                                                <span class="small">
-                                                {{ n.cost|floatformat:2 }} ₽
-                                                </span>
-                                            {% endif %}
-
                                         </span>
 
-                                        <span class="text-muted"><small>{{ n.publish|date }}</small></span>
-                                    </div>
+                                            <span class="text-muted"><small>{{ n.publish|date }}</small></span>
+                                        </div>
 
 
-                                </a>
+                                    </li>
 
 
 
-                            {% endfor %}
+                                {% endfor %}
+                                <div class="mt-2 px-2">
+                                    <span class="btn btn btn-success"
+                                          onclick="eventCheckBox()">Выбрать всё/отменить</span>
+
+                                    <button type="submit" class="btn btn-primary">Купить выбранные</button>
+                                </div>
+
+                            </form>
+
                         </div>
                     </div>
 

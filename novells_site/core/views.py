@@ -93,7 +93,6 @@ class ChapterDetailView(DetailView):
         if not self.request.user.is_anonymous:
             self.request.user.user_profile.chapter_readed.add(chapter)
 
-
         if not chapter.premium:
             return chapter
 
@@ -101,7 +100,7 @@ class ChapterDetailView(DetailView):
             # "Вы пытаетесь открыть платную главу. Войдите в аккаунт, где она куплена, или купите её!"
             raise PermissionDenied
         elif self.request.user.is_anonymous and chapter.premium and chapter not in self.request.user.user_profile.buyed_chapters.all():
-            #"Вы пытаетесь открыть платную главу. Купите её, это не так дорого!"
+            # "Вы пытаетесь открыть платную главу. Купите её, это не так дорого!"
             raise PermissionDenied
         elif not self.request.user.is_anonymous and chapter.premium and chapter in self.request.user.user_profile.buyed_chapters.all():
             return chapter
@@ -330,6 +329,27 @@ def buy_chapter(request, pk):
         return redirect(chapter.get_absolute_url())
     else:
         return HttpResponse('Недостаточно средств или просто кривой разраб, сорри((')
+
+
+@login_required
+def buy_many_chapters(request):
+    sum_cost = 0
+    print(request.POST.getlist('chosen'))
+    for i in request.POST.getlist('chosen'):
+        chapter = get_object_or_404(Chapter, id=int(i))
+        sum_cost += chapter.cost
+    print(sum_cost)
+    if sum_cost <= request.user.user_profile.balance:
+        request.user.user_profile.balance -= sum_cost
+        request.user.user_profile.save(update_fields=["balance"])
+        for i in request.POST.getlist('chosen'):
+            chapter = get_object_or_404(Chapter, id=i)
+            n = chapter.novell
+            request.user.user_profile.buyed_chapters.add(chapter)
+        return redirect(n.get_absolute_url())
+    else:
+        return HttpResponse('Недостаточно средств или сбой системы')
+
 
 
 class ProfileDetail(DetailView):

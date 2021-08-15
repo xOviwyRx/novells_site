@@ -57,5 +57,6 @@ urlpatterns = [
 
     path('buying_chapter/<int:pk>/', views.buy_chapter, name='buy_chapter'),
 
+    path('buying_many_chapters', views.buy_many_chapters, name='buying_many_chapters'),
 
 ]
