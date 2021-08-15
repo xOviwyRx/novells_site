@@ -332,24 +332,21 @@ def buy_chapter(request, pk):
 
 
 @login_required
-def buy_many_chapters(request):
+def buy_many_chapters(request, pk):
+    n = get_object_or_404(Novell, id=pk)
     sum_cost = 0
-    print(request.POST.getlist('chosen'))
     for i in request.POST.getlist('chosen'):
         chapter = get_object_or_404(Chapter, id=int(i))
         sum_cost += chapter.cost
-    print(sum_cost)
     if sum_cost <= request.user.user_profile.balance:
         request.user.user_profile.balance -= sum_cost
         request.user.user_profile.save(update_fields=["balance"])
         for i in request.POST.getlist('chosen'):
             chapter = get_object_or_404(Chapter, id=i)
-            n = chapter.novell
             request.user.user_profile.buyed_chapters.add(chapter)
         return redirect(n.get_absolute_url())
     else:
         return HttpResponse('Недостаточно средств или сбой системы')
-
 
 
 class ProfileDetail(DetailView):
