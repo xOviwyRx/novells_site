@@ -12,6 +12,7 @@ urlpatterns = [
     path('add_comment/to_post/<int:pk>', views.AddComment.as_view(model=Post), name='add_comment_to_post'),
     # path(''),
     path('', views.index, name='home'),
+    path('contacts', views.contact, name='contacts'),
     path('novells_list/', views.NovellListView.as_view(), name='novell_list'),
     path('novells_list/filter/', views.FilterNovellsView.as_view(), name='filter'),
     path('news/', views.AllNewsView.as_view(), name='all_news'),

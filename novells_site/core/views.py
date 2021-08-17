@@ -38,6 +38,10 @@ class GenreYear:
         return Novell.objects.all().values_list('status').distinct()
 
 
+def contact(request):
+    return render(request, 'core/contacts.html')
+
+
 def index(request):
     pop_novell = Novell.objects.filter(important=True)
     # pop_novell = Novell.objects.order_by('-views').first()
@@ -106,6 +110,8 @@ class ChapterDetailView(DetailView):
             return chapter
         else:
             raise PermissionDenied
+
+
 #            raise Http404('Неизвестная ошибка')
 
 
