@@ -1,0 +1,56 @@
+{% extends 'core/home.html' %}
+{% load static %}
+{% load user_tags %}
+
+{% block title %}
+    Перевод китайских BL-новелл Privereda1 | Все новости
+{% endblock title %}
+{% block styles %}
+    <style>
+        .card-header a {
+            color: #ab3b61;
+            text-decoration: none;
+        }
+
+        .card-header a:hover {
+            color: #ff528c;
+            text-decoration: underline;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container-xxl bg-white mb-3">
+        <div class="row justify-content-center mb-3">
+
+            {% for post in posts %}
+                <div class="col-md-8 col-12 mt-3">
+                    <div class="card border-dark">
+                        <div class="card-header text-center h2 bg-light">
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        </div>
+
+                        <div class="card-body px-5">
+                            <p class="card-text">
+                                {{ post.body|safe }}
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                             <span class="text-muted"> <img src="{% static "img/icons/calendar_1.png" %}" height="21"
+                                                            width="21">  {{ post.created|date:"SHORT_DATE_FORMAT" }} <img
+                                     src="{% static "img/icons/clock_1.png" %}" height="19"
+                                     width="19"> {{ post.created|time:"H:i" }} <img
+                                     src="{% static "img/icons/user_1.png" %}" height="19" width="19"><a
+                                     href="{{ post.author.user_profile.get_absolute_url }}">{{ post.author }}</a>
+                             </span>
+
+                            <span class="text-muted">
+                                Комментариев: {{ post.comments.count }} <i class="fa fa-comments-o"
+                                                                           aria-hidden="true" style="color: #123d6a;"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

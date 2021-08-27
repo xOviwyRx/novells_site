@@ -1,0 +1,53 @@
+{% extends "core/home.html" %}
+{% load static %}
+
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
+
+
+{% block content %}
+    <div class="container-xxl">
+        <div class="row d-flex justify-content-center mt-2">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h1>{% trans "Confirm E-mail Address" %}</h1>
+
+
+                    </div>
+                    <div class="card-body">
+
+                        {% if confirmation %}
+
+                            {% user_display confirmation.email_address.user as user_display %}
+
+                            <p style="font-size: 13pt;">{% blocktrans with confirmation.email_address.email as email %}Пожалуйста, подтвердите, что
+                                <a href="mailto:{{ email }}">{{ email }}</a> является e-mail адресом для пользователя
+                                <span class="font-weight-bold">{{ user_display }}</span>.{% endblocktrans %}</p>
+
+                            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                                {% csrf_token %}
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-success">{% trans 'Confirm' %}</button>
+                                </div>
+                            </form>
+
+                        {% else %}
+
+                            {% url 'account_email' as email_url %}
+
+                            <p>{% blocktrans %}Эта ссылка на подтверждение просрочена или неверна. Пожалуйста
+                                <a href="{{ email_url }}">запросите новое email-подтверждение</a>
+                                .{% endblocktrans %}</p>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

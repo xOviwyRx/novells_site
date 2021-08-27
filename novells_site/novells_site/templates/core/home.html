@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load user_tags %}
+{% load thumbnail %}
+
+{% block styles %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static "core/home.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
+
+    <style>
+        .text-vertical {
+            writing-mode: tb-rl;
+            transform: rotate(360deg);
+        }
+
+        .ratio-3х4 {
+            --aspect-ratio: calc(4 / 3 * 100%);
+        }
+
+        .pops-novells {
+            /*background: radial-gradient(ellipse closest-side,#ab3b61, #ede2dc);*/
+            background-image: inherit;
+            background: url({% static 'img/backgs/bg-pop-2.jpg'%});
+
+        }
+
+        .rec-novell-title a:hover {
+            color: rgb(129, 129, 129);
+        }
+
+        .rec-novell-title a {
+            color: rgba(10, 10, 10, 0.75);
+        }
+    </style>
+{% endblock %}
+{% block title %}
+    Перевод китайских BL-новелл Privereda1
+{% endblock %}
+{% block content %}
+    <div class="container-xxl" style="background:#ffffff;">
+
+        <div class="row mb-2">
+
+            <div id="carouselExampleCaptions" class="carousel slide carousel-fade carousel-dark px-0"
+                 data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    {% for img in image_shots %}
+                        <button type="button" data-bs-target="#carouselExampleCaptions"
+                                data-bs-slide-to="{{ forloop.counter0 }}"
+                                {% if forloop.counter == 1 %}class="active" aria-current="true"{% endif %}
+                                aria-label="Slide {{ forloop.counter }}"></button>
+                    {% endfor %}
+                </div>
+
+                <div class="carousel-inner">
+                    {% for img in image_shots %}
+
+                        <div class="carousel-item ratio ratio-21x9 {% if forloop.first %}active{% endif %}">
+
+                            {% thumbnail img.shot "1200x514" crop="center" as im %}
+                                <img src="{{ im.url }}" class="d-block w-100" alt="{{ im.text_primary }}">
+                            {% endthumbnail %}
+                            <div class="carousel-caption d-none d-md-block">
+                                {% if img.novell.get_absolute_url %}
+                                    <a href="{{ img.novell.get_absolute_url }}" class="stretched-link"></a>
+                                {% endif %}
+                                <h4>{{ img.text_primary }}</h4>
+                                <p>{{ img.text_secondary }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Предыдущий</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Следующий</span>
+                </button>
+            </div>
+
+
+        </div>
+
+        <div id="carouselExampleIndicators" class="carousel slide carousel-fade h-100 row mt-4 mb-5"
+             data-bs-ride="carousel">
+
+            <div class="carousel-inner py-4">
+                {% for pop in pops %}
+
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+
+                        <div class="row px-2 justify-content-center">
+
+                            <div class="col-lg-4 col-sm-10 col-xs-6"
+                                 style="border-style: dotted; border-width: 3px; border-color: rgb(171,59,97); z-index: 2">
+
+                                <div class="ratio-3х4 ratio">
+
+                                    {% thumbnail pop.poster "333x454" crop="center" as im %}
+                                        <img src="{{ im.url }}"
+                                             class="img-fluid p-3">
+                                    {% endthumbnail %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-1 m-0 p-0 d-flex d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block">
+                                <div class="text-vertical text-center display-4 font-weight-bolder pl-2"
+                                     style="color: rgb(171,59,97)">
+                                    Рекомендуем
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-7 col-sm-12 col-xs-6 pl-0 ml-0">
+
+
+                                <h2 class="mb-1 rec-novell-title"><a href="{{ pop.get_absolute_url }}"
+                                                                     class="font-weight-bold"
+                                                                     style="text-decoration: none;">{{ pop.rus_title }}</a>
+                                </h2>
+                                {% for genre in pop.genres.all %}
+                                    <span class="badge rounded-pill my-1"
+                                          style="font-size: large; background-color: rgba(18,61,106,1)">{{ genre }}</span>
+
+                                {% endfor %}
+                                <h6 class="text-muted">Автор: {{ pop.author }}</h6>
+                                <h5>
+                                    {% stars pop.overall_rating %}
+
+                                    <span>{{ pop.overall_rating }}</span>
+                                </h5>
+                                <p class="p-2" style="font-size: medium">
+                                    {{ pop.description|safe|truncatechars:400 }}
+                                </p>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+
+            </div>
+
+            <button class="btn btn-outline-light btn-lg font-weight-bold d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block"
+                    type="button"
+                    data-bs-target="#carouselExampleIndicators"
+                    data-bs-slide="next"
+                    style="position: absolute; bottom: 0; left: 42%; width: 10%; z-index: 2000; background-color: rgb(18,61,106)">
+                Далее
+            </button>
+
+            <div class="carousel-indicators m-0 d-flex justify-content-end" style="bottom: -3%; z-index: 1;">
+                {% for pop in pops %}
+                    <button data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide-to="{{ forloop.counter0 }}"
+                            class="{% if forloop.first %}active{% endif %}" aria-current="true"
+                            style="height: auto; width: 9%;">
+                        <div class="ratio ratio-3х4">
+                            {% thumbnail pop.poster "95x131" crop="center" as im %}
+                                <img src="{{ im.url }}" class="img-fluid" style="height: 100%;">
+                            {% endthumbnail %}
+
+                        </div>
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <div class="pops-novells carousel row mt-5" style="background-color: rgb(245,210,239);">
+            <h1 class="text-center mt-1"><i class="bi bi-card-list text-white"
+                                            style="vertical-align: bottom"></i> <span
+                    class="text-white">Популярное</span></h1>
+            <hr class="featurette-divider">
+
+
+            <div class="my-slider">
+
+                {% for nov in all_novells %}
+                    <div class="slide-item h-100 mb-1">
+
+                        <a href="{{ nov.get_absolute_url }}"
+                        >
+                            <div class="ratio ratio-3х4">
+                                {% thumbnail nov.poster "200x272" crop="center" as im %}
+                                    <img src="{{ im.url }}" class="card-img-top rounded p-2"
+                                         alt="{{ im.original_title }}">
+                                {% endthumbnail %}
+                            </div>
+                        </a>
+
+                        <div class="card-body pt-0">
+                            <h6 class="card-title">
+
+                                {% stars nov.overall_rating %}
+
+
+                                <span class="align-bottom">{{ nov.overall_rating }}</span>
+                            </h6>
+                            <!--
+                                <h6 class="card-subtitle mt-1">
+                                    <div class="pb-2">
+
+                                        {% if nov.status == 'OG' %}
+                                            <span class="text-muted font-weight-bold"><i
+                                                    class="bi bi-circle-fill text-primary"></i> Онгоинг</span>
+                                        {% elif nov.status == 'AN' %}
+                                            <span class="text-muted font-weight-bold"><i
+                                                    class="bi bi-circle-fill text-danger"></i> Анонос</span>
+                                        {% elif nov.status == 'CT' %}
+                                            <span class="text-muted font-weight-bold"><i
+                                                    class="bi bi-circle-fill text-success"></i> Завершено</span>
+                                        {% endif %}
+                                    </div>
+                                </h6>
+-->
+                            <h6 class="card-subtitle">
+
+                                <a href="{{ nov.get_absolute_url }}" class="link-light"
+                                   style="text-decoration: none;">{{ nov.rus_title|truncatechars:35 }}</a>
+                            </h6>
+                        </div>
+
+
+                    </div>
+                {% endfor %}
+
+
+            </div>
+            <div class="tns-controls mb-1" aria-label="Carousel Navigation"
+                 tabindex="0">
+                <button data-controls="prev" class="carousel-control-prev" tabindex="-1" aria-controls="tns1"
+                        style="width: 3%;">
+                    <i class="bi bi-chevron-compact-left h1 text-dark"></i>
+                </button>
+                <button data-controls="next" class="carousel-control-next" tabindex="-1"
+                        aria-controls="tns1" style="width: 3%;">
+                    <i class="bi bi-chevron-compact-right h1 text-dark"></i>
+                </button>
+            </div>
+            <!-- or ul.my-slider > li -->
+
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
+
+            <script>
+                var slider = tns({
+                    container: '.my-slider',
+                    mouseDrag: true,
+                    swipeAngle: false,
+                    controls: true,
+                    controlsContainer: '.tns-controls',
+                    nav: false,
+                    speed: 400,
+                    Height: 400,
+                    edgePadding: 0,
+
+
+                    responsive: {
+                        350: {
+                            edgePadding: 0,
+                            gutter: 20,
+                            items: 2
+                        },
+                        640: {
+                            edgePadding: 0,
+                            gutter: 20,
+                            items: 2
+                        },
+                        700: {
+                            items: 3,
+                            edgePadding: 20,
+                            gutter: 15
+                        },
+                        900: {
+                            items: 5,
+                            gutter: 20,
+                            edgePadding: 20,
+                        }
+                    }
+                });
+            </script>
+
+        </div>
+
+
+        <hr class="featurette-divider">
+        <h1 class="text-center" style="color: rgba(18,61,106,1)"><i class="bi bi-journal-bookmark-fill"
+                                                                    style="vertical-align: bottom"></i> Последние
+            обновления</h1>
+
+        <div class="container">
+            <div class="row row-cols-lg-2 row-cols-md-1 row-cols-sm-1">
+
+
+                {% for chapter in last_update %}
+                    <div class="col px-0">
+                        <div class="list-group-item list-group-item-action">
+                            <div class="row">
+
+                                <div class="col-1 p-0">
+                                    <div class="ratio-3х4 ratio">
+                                        {% thumbnail chapter.novell.poster "59x79" crop="center" as im %}
+                                            <img src="{{ im.url }}" class="rounded">
+                                        {% endthumbnail %}
+                                    </div>
+
+                                </div>
+                                <div class="col-11">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <a class="mb-1"
+                                           href="{{ chapter.novell.get_absolute_url }}"
+                                           style="font-size: 11pt; white-space: nowrap; overflow: hidden; color: rgba(18,61,106,1); font-weight: bold;">{{ chapter.novell.rus_title|truncatechars:40 }}</a>
+                                        <span class="font-weight-bold d-none d-sm-block"
+                                              style="font-size: 9pt;">{{ chapter.created|timesince }}
+                                            назад</span>
+                                    </div>
+                                    <p class="mb-1" style="font-size: 10pt; white-space: nowrap; overflow: hidden;">
+                                        <span class="font-weight-bolder text-dark">{% if chapter.status %}
+                                            Добавлена{% else %}Анонсирована{% endif %}</span>
+                                        <span>{{ chapter.number }} глава.</span>
+                                        <span class="font-weight-bolder">{{ chapter.title }}</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+            <!--
+            <div class="list-group-item list-group-item-action py-1">
+                <div class="row">
+                    <div class="col-1 px-1 justify-content-center d-flex">
+                        <img src="{{ chapter.novell.poster.url }}" class="rounded w-75">
+
+                    </div>
+                    <div class="col-11">
+                        <div class="d-flex w-100 justify-content-between">
+                            <a class="mb-1 h5"
+                               href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
+                            <small class="font-weight-bold">{{ chapter.created|timesince }} назад</small>
+                        </div>
+                        <p class="mb-1">
+                                        <span class="font-weight-bold text-success">{% if chapter.status %}
+                                            Добавлена{% else %}Анонсирована{% endif %}</span>
+                            <span>{{ chapter.number }} глава.</span>
+                            <span class="font-weight-bolder">{{ chapter.title }}</span>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+-->
+        </div>
+
+    </div>
+
+{% endblock %}
+
+<!--
+            <div class="col-xxl-6 col-sm-12">
+                <h1 class="text-center align-text-bottom mt-1 mb-2"><i class="bi bi-table text-primary"
+                                                                       style="vertical-align: bottom"></i> Расписание
+                </h1>
+                <hr>
+
+                <div class="list-group">
+                    {% for chapter in shedule_chapter %}
+                        <div class="list-group-item list-group-item-action">
+                            <div class="row">
+                                <div class="col-1 px-1">
+                                    <img src="{{ chapter.novell.poster.url }}" class="img-fluid rounded float-start">
+
+                                </div>
+                                <div class="col-11">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ chapter.novell.rus_title }}</h6>
+                                        <small>{{ chapter.publish }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ chapter.number }} глава. {{ chapter.title }}</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+-->
