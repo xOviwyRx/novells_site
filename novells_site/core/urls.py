@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
+from django.views.decorators.csrf import csrf_exempt
+
 from . import views
 from .models import Comment, LikeDislike, Chapter, Post, Review
 
@@ -65,6 +67,6 @@ urlpatterns = [
     path('donate_money', views.donate_money, name='donate_money'),
 
     # адресс вебхука
-    path('payment-notification', views.my_webhook_handler)
+    path('payment-notification', csrf_exempt(views.my_webhook_handler))
 
 ]

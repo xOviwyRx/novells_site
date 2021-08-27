@@ -64,7 +64,7 @@ def donate_money(request):
 
     builder = PaymentRequestBuilder()
     builder.set_amount({"value": request.POST.get('sum'), "currency": Currency.RUB}) \
-        .set_confirmation({"type": ConfirmationType.REDIRECT, "return_url": "https://merchant-site.ru/return_url"}) \
+        .set_confirmation({"type": ConfirmationType.REDIRECT, "return_url": "https://privereda1.ru"}) \
         .set_capture(False) \
         .set_description("Заказ №72") \
         .set_metadata({"user": int(request.user.id)}) \
@@ -85,6 +85,8 @@ def donate_money(request):
 
 def my_webhook_handler(request):
     # Извлечение JSON объекта из тела запроса
+    print(request)
+
     event_json = json.loads(request.body)
     print(event_json)
     try:
@@ -104,7 +106,6 @@ def my_webhook_handler(request):
                 'paymentStatus': response_object.status,
             }
             print(some_data)
-            HttpResponse(status=200)
     except Exception:
         # Обработка ошибок
         return HttpResponse(status=400)  # Сообщаем кассе об ошибке
