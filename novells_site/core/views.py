@@ -104,8 +104,7 @@ def my_webhook_handler(request):
                 'paymentStatus': response_object.status,
             }
             print(some_data)
-
-            return HttpResponse('proshel')
+            HttpResponse(status=200)
     except Exception:
         # Обработка ошибок
         return HttpResponse(status=400)  # Сообщаем кассе об ошибке
