@@ -1,0 +1,8 @@
+
+body {
+    background-color: rgba(237, 226, 220, 0.75);
+}
+
+body .container-xxl {
+    max-width: 1170px;
+}

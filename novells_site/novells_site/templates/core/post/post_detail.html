@@ -1,0 +1,24 @@
+{% extends 'core/home.html' %}
+{% load static %}
+{% load user_tags %}
+{% block title %}
+    Перевод китайских BL-новелл Privereda1 | {{ post.title }}
+{% endblock title %}
+
+{% block content %}
+    <div class="container-xxl bg-white mb-3">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-12 mt-5">
+                <h1 class="text-center">{{ post.title }}</h1>
+                <p>
+                    {{ post.body|safe }}
+                </p>
+            </div>
+        </div>
+        <div class="row mt-4">
+            {% include 'core/comments.html' with comments=post.comments chapter=post %}
+            {% include 'core/include/add_comment_to_post_form.html' with post=post %}
+
+        </div>
+    </div>
+{% endblock %}

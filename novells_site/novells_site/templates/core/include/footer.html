@@ -1,0 +1,41 @@
+{% load static %}
+<footer class="text-center text-lg-start d-flex justify-content-between" style="background: rgb(171,59,97);">
+    <!-- Copyright -->
+    <div class="text-center p-2">
+
+        <a href="https://vk.com/bl_novel_privereda1" style="text-decoration: none">
+            <img src="{% static "img/icons/vk_belaya.png" %}" class="img-fluid" width="40">
+        </a>
+
+        <!--
+        <a class="ml-2" href="https://tl.rulate.ru/users/169401">
+            <img src="{% static "img/icons/ruletka.png" %}" width="40">
+        </a>
+-->
+
+
+    </div>
+
+    <ul class="nav mt-2">
+
+        <li class="nav-item">
+            <a href='{% url 'core:contacts' %}' class="nav-link link-light"><i
+                    class="bi bi-person-lines-fill"></i>
+                <span class="font-weight-bold">Контакты</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a href='https://vk.com/im?sel=-181277189' class="nav-link link-light">
+                <i class="bi bi-question-circle"></i>
+                <span class="font-weight-bold">Поддержка</span>
+            </a>
+        </li>
+
+
+    </ul>
+
+    <div class="font-weight-bold text-white p-3">
+        © 2021
+    </div>
+    <!-- Copyright -->
+</footer>

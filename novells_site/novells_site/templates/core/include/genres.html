@@ -1,0 +1,11 @@
+{% for i in all_genres %}
+    <li><a class="dropdown-item" href="{% url 'core:filter' %}?genre={{ i.id }}">{{ i }}</a></li>
+
+    <!--
+<li><a class="dropdown-item" href="#">Another action</a></li>
+<li>
+
+</li>
+<li><a class="dropdown-item" href="#">Something else here</a></li>
+-->
+{% endfor %}
