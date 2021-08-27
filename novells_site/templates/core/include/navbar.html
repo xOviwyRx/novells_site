@@ -69,7 +69,7 @@
                     </p>
                     <p class="m-0 text-center">
                         <span style="font-size: 9pt">{{ user.user_profile.balance|floatformat:2 }} ₽ </span>
-                        <a href="#"> <i class="bi bi-patch-plus-fill text-success"></i></a>
+                        <a href="{% url 'core:pay_prepare' %}"> <i class="bi bi-patch-plus-fill text-success"></i></a>
                     </p>
                 </div>
 
