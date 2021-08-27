@@ -18,9 +18,100 @@ from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidd
 from rest_framework import viewsets, filters, views
 from rest_framework.response import Response
 from .serializers import NovellListSerializer
+import yookassa
+import var_dump as var_dump
+from yookassa.domain.models.currency import Currency
+from yookassa.domain.models.receipt import Receipt
+from yookassa.domain.models.receipt_item import ReceiptItem
+from yookassa.domain.common.confirmation_type import ConfirmationType
+from yookassa.domain.request.payment_request_builder import PaymentRequestBuilder
+import json
+from django.http import HttpResponse
+from yookassa import Configuration, Payment
+from yookassa.domain.notification import WebhookNotificationEventType, WebhookNotification
 
 
 # Create your views here.
+
+
+@login_required
+def pay_prepare(request):
+    return render(request, 'core/include/pay_prepare.html')
+
+
+@login_required
+def donate_money(request):
+    Configuration.account_id = '819176'
+    Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
+    # Configuration.configure('819176', 'test__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ')
+    receipt = Receipt()
+    receipt.customer = {"phone": "79990000000", "email": "test@email.com"}
+    receipt.tax_system_code = 1
+    receipt.items = [
+        ReceiptItem({
+            "description": "Пополнения баланса на сумму {}".format(request.POST.get('sum')),
+            "quantity": 1,
+            "amount": {
+                "value": request.POST.get('sum'),
+                "currency": Currency.RUB
+            },
+            "vat_code": 2
+        }),
+    ]
+
+    s = {'user': str(request.user)}
+    print(request.user)
+
+    builder = PaymentRequestBuilder()
+    builder.set_amount({"value": request.POST.get('sum'), "currency": Currency.RUB}) \
+        .set_confirmation({"type": ConfirmationType.REDIRECT, "return_url": "https://merchant-site.ru/return_url"}) \
+        .set_capture(False) \
+        .set_description("Заказ №72") \
+        .set_metadata({"user": int(request.user.id)}) \
+        .set_receipt(receipt)
+
+    request = builder.build()
+    # Можно что-то поменять, если нужно
+    # request.client_ip = '1.2.3.4'
+    res = Payment.create(request)
+    print(res.json())
+    a = json.loads(res.json())
+    print(a['confirmation']['confirmation_url'])
+    var_dump.var_dump(res)
+    # print(request.POST)
+    # print(request.POST.get('sum'))
+    return redirect(a['confirmation']['confirmation_url'])
+
+
+def my_webhook_handler(request):
+    # Извлечение JSON объекта из тела запроса
+    event_json = json.loads(request.body)
+    print(event_json)
+    try:
+        # Создание объекта класса уведомлений в зависимости от события
+        notification_object = WebhookNotification(event_json)
+        response_object = notification_object.object
+        if notification_object.event == WebhookNotificationEventType.PAYMENT_SUCCEEDED:
+            payed_user = response_object.metadata['user']
+            payed_money = response_object.amount.value
+            print(payed_user, payed_money)
+            p = Profile.objects.get(name_id=payed_user)
+            p.balance += payed_money
+            p.save(update_fields=['balance'])
+
+            some_data = {
+                'paymentId': response_object.id,
+                'paymentStatus': response_object.status,
+            }
+            print(some_data)
+
+            return HttpResponse('proshel')
+    except Exception:
+        # Обработка ошибок
+        return HttpResponse(status=400)  # Сообщаем кассе об ошибке
+
+    return HttpResponse(status=200)  # Сообщаем кассе, что все хорошо
+
 
 def js_filter_test(request):
     return render(request, 'core/novells_list_new.html')

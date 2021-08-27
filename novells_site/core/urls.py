@@ -60,4 +60,11 @@ urlpatterns = [
 
     path('buying_many_chapters/<int:pk>/', views.buy_many_chapters, name='buying_many_chapters'),
 
+    path('pay_prepare', views.pay_prepare, name='pay_prepare'),
+
+    path('donate_money', views.donate_money, name='donate_money'),
+
+    # адресс вебхука
+    path('payment-notification', views.my_webhook_handler)
+
 ]
