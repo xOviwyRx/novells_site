@@ -80,8 +80,8 @@ def donate_money(request):
     var_dump.var_dump(res)
     # print(request.POST)
     # print(request.POST.get('sum'))
-    #return redirect(a['confirmation']['confirmation_url'])
-    return HttpResponse('Временно недоступен')
+    return redirect(a['confirmation']['confirmation_url'])
+    #return HttpResponse('Временно недоступен')
 
 
 def my_webhook_handler(request):
