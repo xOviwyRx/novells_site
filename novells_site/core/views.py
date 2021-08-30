@@ -34,6 +34,10 @@ from yookassa.domain.notification import WebhookNotificationEventType, WebhookNo
 # Create your views here.
 
 
+Configuration.account_id = '819176'
+Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
+
+
 @login_required
 def pay_prepare(request):
     return render(request, 'core/include/pay_prepare.html')
@@ -85,6 +89,8 @@ def donate_money(request):
 
 
 def my_webhook_handler(request):
+    Configuration.account_id = '819176'
+    Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
     # Извлечение JSON объекта из тела запроса
     event_json = json.loads(request.body)
     print(event_json)
