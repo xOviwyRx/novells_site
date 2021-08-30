@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.views import View
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
@@ -29,7 +30,6 @@ import json
 from django.http import HttpResponse
 from yookassa import Configuration, Payment
 from yookassa.domain.notification import WebhookNotificationEventType, WebhookNotification
-
 
 # Create your views here.
 
@@ -76,7 +76,6 @@ def donate_money(request):
 
     request = builder.build()
     # Можно что-то поменять, если нужно
-    # request.client_ip = '1.2.3.4'
     res = Payment.create(request)
     print(res.json())
     a = json.loads(res.json())
@@ -85,9 +84,10 @@ def donate_money(request):
     # print(request.POST)
     # print(request.POST.get('sum'))
     return redirect(a['confirmation']['confirmation_url'])
-    #return HttpResponse('Временно недоступен')
+    # return HttpResponse('Временно недоступен')
 
 
+@csrf_protect
 def my_webhook_handler(request):
     Configuration.account_id = '819176'
     Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
