@@ -9,7 +9,7 @@ from .models import Genre, Novell, Chapter, Comment, LikeDislike, Profile, Ratin
 
 @admin.register(Novell)
 class NovellAdmin(admin.ModelAdmin):
-    list_display = ('rus_title','author', 'status', 'views', 'overall_rating', 'translate_status')
+    list_display = ('rus_title', 'author', 'status', 'views', 'overall_rating', 'translate_status')
     filter_horizontal = ('genres',)
     prepopulated_fields = {'slug': ('eng_title',)}
     readonly_fields = ('overall_rating',)
@@ -21,7 +21,7 @@ class NovellAdmin(admin.ModelAdmin):
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ('number', 'title', 'status', 'novell')
     exclude = ('publish',)
-    list_filter = ('novell','status',)
+    list_filter = ('novell', 'status',)
 
 
 @admin.register(Genre)
@@ -44,22 +44,22 @@ class LikeDisLikeAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-
+    list_display = ('name', 'balance','name_id')
 
 
 @admin.register(RatingStar)
 class RatingStarAdmin(admin.ModelAdmin):
     list_display = ('value',)
 
+
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
-    list_display = ('author','rate','novell')
+    list_display = ('author', 'rate', 'novell')
 
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
-    list_display = ('shot_img','position', 'active',)
+    list_display = ('shot_img', 'position', 'active',)
 
     def shot_img(self, obj):
         return mark_safe('<img src={} width="210" height="90"/>'.format(obj.shot.url))
