@@ -68,7 +68,7 @@ def donate_money(request):
 
     builder = PaymentRequestBuilder()
     builder.set_amount({"value": request.POST.get('sum'), "currency": Currency.RUB}) \
-        .set_confirmation({"type": ConfirmationType.REDIRECT, "return_url": "https://merchant-site.ru/return_url"}) \
+        .set_confirmation({"type": ConfirmationType.REDIRECT, "return_url": "https://privereda1.ru"}) \
         .set_capture(False) \
         .set_description("Заказ №72") \
         .set_metadata({"user": int(request.user.id)}) \
@@ -92,6 +92,8 @@ def my_webhook_handler(request):
     Configuration.account_id = '819176'
     Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
     # Извлечение JSON объекта из тела запроса
+    print(request)
+
     event_json = json.loads(request.body)
     print(event_json)
     try:
@@ -111,7 +113,6 @@ def my_webhook_handler(request):
                 'paymentStatus': response_object.status,
             }
             print(some_data)
-            HttpResponse(status=200)
     except Exception:
         # Обработка ошибок
         return HttpResponse(status=400)  # Сообщаем кассе об ошибке
@@ -140,20 +141,35 @@ def contact(request):
 
 
 def index(request):
-    pop_novell = Novell.objects.filter(important=True)
-    # pop_novell = Novell.objects.order_by('-views').first()
-    test = pop_novell.first()
-    shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
-    all_novells = Novell.objects.filter().order_by('-views')[:6]
-    shots = Slider.objects.filter(active=True).order_by('position')
+    print(request.get_host())
+    if request.get_host() == 'privereda1.ru':
+        pop_novell = Novell.objects.filter(important=True)
+        # pop_novell = Novell.objects.order_by('-views').first()
+        test = pop_novell.first()
+        shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
+        all_novells = Novell.objects.filter().order_by('-views')[:6]
+        shots = Slider.objects.filter(active=True).order_by('position')
 
-    return render(request, 'core/home.html', {'pops': pop_novell,
-                                              'last_update': shedule_chapter,
-                                              'all_novells': all_novells,
-                                              'image_shots': shots,
-                                              'test': test
-                                              })
+        return render(request, 'core/home.html', {'pops': pop_novell,
+                                                  'last_update': shedule_chapter,
+                                                  'all_novells': all_novells,
+                                                  'image_shots': shots,
+                                                  'test': test
+                                                  })
+    else:
+        pop_novell = Novell.objects.filter(important=True)
+        # pop_novell = Novell.objects.order_by('-views').first()
+        test = pop_novell.first()
+        shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
+        all_novells = Novell.objects.filter().order_by('-views')[:6]
+        shots = Slider.objects.filter(active=True).order_by('position')
 
+        return render(request, 'core/home_second.html', {'pops': pop_novell,
+                                                         'last_update': shedule_chapter,
+                                                         'all_novells': all_novells,
+                                                         'image_shots': shots,
+                                                         'test': test
+                                                         })
 
 class NovellDetailView(GenreYear, DetailView):
     model = Novell
