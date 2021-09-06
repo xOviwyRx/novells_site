@@ -176,7 +176,12 @@ class Novell(models.Model):
     color_reader = ColorField(default='#f2e9e5', verbose_name='Цвет в читалке у этой новеллы')
 
     def get_absolute_url(self):
-        return reverse('core:novell_detail', args=[self.slug])
+        if self.translator == 'Oksiji13':
+            return 'https://www.oksiji13.ru/novell/{}'.format(self.slug)
+        else:
+            return 'https://www.privereda1.ru/novell/{}'.format(self.slug)
+            #return reverse('core:novell_detail', args=[self.slug])
+
 
     class Meta:
         verbose_name = 'Новелла'
