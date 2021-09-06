@@ -141,7 +141,6 @@ def contact(request):
 
 
 def index(request):
-    print(request.get_host())
     if request.get_host() == 'www.privereda1.ru':
         pop_novell = Novell.objects.filter(important=True, translator='Privereda1')
         # pop_novell = Novell.objects.order_by('-views').first()
@@ -505,30 +504,34 @@ class FilterNovellsView(GenreYear, ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
+        if self.request.get_host() == 'www.privereda1.ru':
+            translator = 'Privereda1'
+        else:
+            translator = 'Oksiji13'
         if q:
-            return Novell.objects.filter(rus_title__icontains=q)
+            return Novell.objects.filter(rus_title__icontains=q, translator=translator)
         genre_filter = self.request.GET.getlist('genre')
         year_filter = self.request.GET.getlist('year')
         if genre_filter and year_filter and len(genre_filter) == 1:
-            return Novell.objects.filter(publish__year__in=year_filter, genres__in=genre_filter)
+            return Novell.objects.filter(publish__year__in=year_filter, genres__in=genre_filter, translator=translator)
         elif len(genre_filter) > 1 and year_filter:
             genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
             a = []
-            for i in Novell.objects.filter(publish__year__in=year_filter):
+            for i in Novell.objects.filter(publish__year__in=year_filter, translator=translator):
                 if set(genres_in_filter) <= set(i.genres.all()):
                     a.append(i)
             return a
         elif len(genre_filter) > 1 and not year_filter:
             genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
             a = []
-            for i in Novell.objects.all():
+            for i in Novell.objects.filter(translator=translator):
                 if set(genres_in_filter) <= set(i.genres.all()):
                     a.append(i)
             return a
         elif not year_filter and not genre_filter:
-            return Novell.objects.all()
+            return Novell.objects.filter(translator=translator)
         else:
-            return Novell.objects.filter(Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)).distinct()
+            return Novell.objects.filter((Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)) and Q(translator=translator)).distinct()
         # print(self.request.GET.getlist('year'))
 
 
@@ -579,9 +582,14 @@ class JsonFilterNovellsView(ListView):
     context_object_name = 'novells'
 
     def get_queryset(self):
+        if self.request.get_host() == 'www.privereda1.ru':
+            translator = 'Privereda1'
+        else:
+            translator = 'Oksiji13'
+
         q = self.request.GET.get('q')
         if q:
-            return Novell.objects.filter(rus_title__icontains=q).values("rus_title", "overall_rating", "slug", "poster")
+            return Novell.objects.filter(rus_title__icontains=q, translator=translator).values("rus_title", "overall_rating", "slug", "poster")
 
         genre_filter = self.request.GET.getlist('genre')
         year_filter = self.request.GET.getlist('year')
@@ -592,7 +600,6 @@ class JsonFilterNovellsView(ListView):
         preset_query = Novell.objects.all()
         translate_status = self.request.GET.get('translate-status')
 
-        print(translate_status)
 
         if chaptet_min:
             preset_query = preset_query.filter(chapter_count__gte=chaptet_min)
@@ -609,14 +616,14 @@ class JsonFilterNovellsView(ListView):
             preset_query = preset_query.filter(translate_status=False)
 
         if genre_filter and year_filter and len(genre_filter) == 1:
-            return preset_query.filter(publish__year__in=year_filter, genres__in=genre_filter).values("rus_title",
+            return preset_query.filter(publish__year__in=year_filter, genres__in=genre_filter, translator=translator).values("rus_title",
                                                                                                       "overall_rating",
                                                                                                       "slug",
                                                                                                       "poster")
         elif len(genre_filter) > 1 and year_filter:
             genres_in_filter = [Genre.objects.get(id=i) for i in genre_filter]
             a = []
-            for i in preset_query.filter(publish__year__in=year_filter):
+            for i in preset_query.filter(publish__year__in=year_filter, translator=translator):
                 if set(genres_in_filter) <= set(i.genres.all()):
                     a.append({
                         "rus_title": i.rus_title, "overall_rating": i.overall_rating, "slug": i.slug,
