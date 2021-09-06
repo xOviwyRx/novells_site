@@ -10,7 +10,7 @@
 
     <style>
         body {
-            background-color: rgba(200,218,236,0.75);
+            background-color: rgba(200, 218, 236, 0.75);
         }
 
 
@@ -160,29 +160,31 @@
 
             </div>
 
-            <button class="btn btn-outline-light btn-lg font-weight-bold d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block"
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide="next"
-                    style="position: absolute; bottom: 0; left: 42%; width: 10%; z-index: 2000; background-color: rgb(18,61,106)">
-                Далее
-            </button>
+            {% if pops.count > 1 %}
+                <button class="btn btn-outline-light btn-lg font-weight-bold d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block"
+                        type="button"
+                        data-bs-target="#carouselExampleIndicators"
+                        data-bs-slide="next"
+                        style="position: absolute; bottom: 0; left: 42%; width: 10%; z-index: 2000; background-color: rgb(18,61,106)">
+                    Далее
+                </button>
 
-            <div class="carousel-indicators m-0 d-flex justify-content-end" style="bottom: -3%; z-index: 1;">
-                {% for pop in pops %}
-                    <button data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide-to="{{ forloop.counter0 }}"
-                            class="{% if forloop.first %}active{% endif %}" aria-current="true"
-                            style="height: auto; width: 9%;">
-                        <div class="ratio ratio-3х4">
-                            {% thumbnail pop.poster "95x131" crop="center" as im %}
-                                <img src="{{ im.url }}" class="img-fluid" style="height: 100%;">
-                            {% endthumbnail %}
+                <div class="carousel-indicators m-0 d-flex justify-content-end" style="bottom: -3%; z-index: 1;">
+                    {% for pop in pops %}
+                        <button data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide-to="{{ forloop.counter0 }}"
+                                class="{% if forloop.first %}active{% endif %}" aria-current="true"
+                                style="height: auto; width: 9%;">
+                            <div class="ratio ratio-3х4">
+                                {% thumbnail pop.poster "95x131" crop="center" as im %}
+                                    <img src="{{ im.url }}" class="img-fluid" style="height: 100%;">
+                                {% endthumbnail %}
 
-                        </div>
-                    </button>
-                {% endfor %}
-            </div>
+                            </div>
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
 
