@@ -146,7 +146,7 @@ def index(request):
         pop_novell = Novell.objects.filter(important=True, translator='Privereda1')
         # pop_novell = Novell.objects.order_by('-views').first()
         test = pop_novell.first()
-        shedule_chapter = Chapter.objects.filter(translator='Privereda1').order_by('-created')[:8]
+        shedule_chapter = Chapter.objects.filter(novell__translator='Privereda1').order_by('-created')[:8]
         all_novells = Novell.objects.filter(translator='Privereda1').order_by('-views')[:6]
         shots = Slider.objects.filter(active=True).order_by('position')
 
@@ -160,7 +160,7 @@ def index(request):
         pop_novell = Novell.objects.filter(important=True, translator='Oksiji13')
         # pop_novell = Novell.objects.order_by('-views').first()
         test = pop_novell.first()
-        shedule_chapter = Chapter.objects.filter(translator='Oksiji13').order_by('-created')[:8]
+        shedule_chapter = Chapter.objects.filter(novell__translator='Oksiji13').order_by('-created')[:8]
         all_novells = Novell.objects.filter(translator='Oksiji13').order_by('-views')[:6]
         shots = Slider.objects.filter(active=True).order_by('position')
 
