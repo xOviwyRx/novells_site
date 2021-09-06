@@ -143,11 +143,11 @@ def contact(request):
 def index(request):
     print(request.get_host())
     if request.get_host() == 'www.privereda1.ru':
-        pop_novell = Novell.objects.filter(important=True)
+        pop_novell = Novell.objects.filter(important=True, translator='Privereda1')
         # pop_novell = Novell.objects.order_by('-views').first()
         test = pop_novell.first()
-        shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
-        all_novells = Novell.objects.filter().order_by('-views')[:6]
+        shedule_chapter = Chapter.objects.filter(translator='Privereda1').order_by('-created')[:8]
+        all_novells = Novell.objects.filter(translator='Privereda1').order_by('-views')[:6]
         shots = Slider.objects.filter(active=True).order_by('position')
 
         return render(request, 'core/home.html', {'pops': pop_novell,
@@ -157,11 +157,11 @@ def index(request):
                                                   'test': test
                                                   })
     else:
-        pop_novell = Novell.objects.filter(important=True)
+        pop_novell = Novell.objects.filter(important=True, translator='Oksiji13')
         # pop_novell = Novell.objects.order_by('-views').first()
         test = pop_novell.first()
-        shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
-        all_novells = Novell.objects.filter().order_by('-views')[:6]
+        shedule_chapter = Chapter.objects.filter(translator='Oksiji13').order_by('-created')[:8]
+        all_novells = Novell.objects.filter(translator='Oksiji13').order_by('-views')[:6]
         shots = Slider.objects.filter(active=True).order_by('position')
 
         return render(request, 'core/home_second.html', {'pops': pop_novell,
