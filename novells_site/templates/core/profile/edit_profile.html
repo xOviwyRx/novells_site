@@ -6,7 +6,7 @@
 
 {% endblock %}
 {% block title %}
-    Перевод китайских BL-новелл Privereda1 | Редактировать профиль {{ profile.name }}
+    Перевод китайских BL-новелл {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.privereda1.ru' %}Privereda1{% else %}Oksiji13{% endif %} | Редактировать профиль {{ profile.name }}
 {% endblock title %}
 {% block scripts %}
 

@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-    Перевод китайских BL-новелл Privereda1 | Каталог новелл
+    Перевод китайских BL-новелл {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.privereda1.ru' %}Privereda1{% else %}Oksiji13{% endif %} | Каталог новелл
 {% endblock title %}
 {% block styles %}
     <style>

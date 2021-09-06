@@ -597,7 +597,7 @@ class JsonFilterNovellsView(ListView):
         chaptet_max = self.request.GET.get('chapter-max')
         rating = self.request.GET.get('rating')
         novell_status = self.request.GET.get('novell-trans-status')
-        preset_query = Novell.objects.all()
+        preset_query = Novell.objects.filter(translator=translator)
         translate_status = self.request.GET.get('translate-status')
 
 
