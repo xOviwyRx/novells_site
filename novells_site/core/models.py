@@ -6,6 +6,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from tinymce.models import HTMLField
+from colorfield.fields import ColorField
+
 
 # Create your models here.
 from django.db.models import Sum, Max
@@ -171,6 +173,7 @@ class Novell(models.Model):
     genres = models.ManyToManyField(Genre, related_name='novells', verbose_name='Жанры')
     views = models.PositiveSmallIntegerField('Просмотры', default=0)
     overall_rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг', default='0.00')
+    color_reader = models.ColorField(default='#ff8a41', verbose_name='Цвет в читалке')
 
     def get_absolute_url(self):
         return reverse('core:novell_detail', args=[self.slug])
