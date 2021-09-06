@@ -425,13 +425,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link h5 my-nav-tabs" id="list-tab" data-toggle="tab" href="#list" role="tab"
-                       aria-controls="profile" aria-selected="false"><i class="bi bi-list-ol"
+                       aria-controls="profile" {% if request.get_host == 'www.oksiji13.ru' %}aria-selected="true"{% else %}aria-selected="false"{% endif %}><i class="bi bi-list-ol"
                                                                         style="vertical-align: bottom"></i>
                         Оглавление</a>
                 </li>
                 <li class="nav-item my-nav-tabs">
                     <a class="nav-link h5 my-nav-tabs" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
-                       aria-controls="profile" {% if request.get_host == 'www.oksiji13.ru' %}aria-selected="true"{% else %}aria-selected="false"{% endif %}><i class="bi bi-chat"
+                       aria-controls="profile"><i class="bi bi-chat"
                                                                         style="vertical-align: bottom"></i> <span
                             style="vertical-align: bottom;">Отзывы</span>
                         <span class="badge rounded-pill"
@@ -445,7 +445,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade show active" id="description" role="tabpanel"
+                    <div {% if request.get_host == 'www.oksiji13.ru' %}class="tab-pane fade"{% else %}class="tab-pane fade show active"{% endif %} id="description" role="tabpanel"
                          aria-labelledby="description-tab">
 
                         <div class="card mt-2">
@@ -461,7 +461,7 @@
 
                     </div>
 
-                    <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
+                    <div {% if request.get_host == 'www.oksiji13.ru' %}class="tab-pane fade show active"{% else %}class="tab-pane fade"{% endif %} id="list" role="tabpanel" aria-labelledby="list-tab">
                         <div class="list-group mt-2">
                             <form method="post" action="{% url 'core:buying_many_chapters' novell.id %}">
                                 {% csrf_token %}
