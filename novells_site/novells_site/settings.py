@@ -63,6 +63,8 @@ MIDDLEWARE = [
     'online_users.middleware.OnlineNowMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #'core.middleware.MultiSiteMiddleware',
 ]
 
 ROOT_URLCONF = 'novells_site.urls'

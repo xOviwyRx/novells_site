@@ -37,7 +37,11 @@
 {% block title %}
     Перевод китайских BL-новелл Privereda1
 {% endblock %}
+
+
+
 {% block content %}
+
     <div class="container-xxl" style="background:#ffffff;">
 
         <div class="row mb-2">
@@ -207,23 +211,6 @@
 
                                 <span class="align-bottom">{{ nov.overall_rating }}</span>
                             </h6>
-                            <!--
-                                <h6 class="card-subtitle mt-1">
-                                    <div class="pb-2">
-
-                                        {% if nov.status == 'OG' %}
-                                            <span class="text-muted font-weight-bold"><i
-                                                    class="bi bi-circle-fill text-primary"></i> Онгоинг</span>
-                                        {% elif nov.status == 'AN' %}
-                                            <span class="text-muted font-weight-bold"><i
-                                                    class="bi bi-circle-fill text-danger"></i> Анонос</span>
-                                        {% elif nov.status == 'CT' %}
-                                            <span class="text-muted font-weight-bold"><i
-                                                    class="bi bi-circle-fill text-success"></i> Завершено</span>
-                                        {% endif %}
-                                    </div>
-                                </h6>
--->
                             <h6 class="card-subtitle">
 
                                 <a href="{{ nov.get_absolute_url }}" class="link-light"
@@ -340,64 +327,9 @@
 
 
             </div>
-            <!--
-            <div class="list-group-item list-group-item-action py-1">
-                <div class="row">
-                    <div class="col-1 px-1 justify-content-center d-flex">
-                        <img src="{{ chapter.novell.poster.url }}" class="rounded w-75">
-
-                    </div>
-                    <div class="col-11">
-                        <div class="d-flex w-100 justify-content-between">
-                            <a class="mb-1 h5"
-                               href="{{ chapter.novell.get_absolute_url }}">{{ chapter.novell.rus_title }}</a>
-                            <small class="font-weight-bold">{{ chapter.created|timesince }} назад</small>
-                        </div>
-                        <p class="mb-1">
-                                        <span class="font-weight-bold text-success">{% if chapter.status %}
-                                            Добавлена{% else %}Анонсирована{% endif %}</span>
-                            <span>{{ chapter.number }} глава.</span>
-                            <span class="font-weight-bolder">{{ chapter.title }}</span>
-                        </p>
-                    </div>
-
-                </div>
-            </div>
--->
         </div>
 
     </div>
 
 {% endblock %}
 
-<!--
-            <div class="col-xxl-6 col-sm-12">
-                <h1 class="text-center align-text-bottom mt-1 mb-2"><i class="bi bi-table text-primary"
-                                                                       style="vertical-align: bottom"></i> Расписание
-                </h1>
-                <hr>
-
-                <div class="list-group">
-                    {% for chapter in shedule_chapter %}
-                        <div class="list-group-item list-group-item-action">
-                            <div class="row">
-                                <div class="col-1 px-1">
-                                    <img src="{{ chapter.novell.poster.url }}" class="img-fluid rounded float-start">
-
-                                </div>
-                                <div class="col-11">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">{{ chapter.novell.rus_title }}</h6>
-                                        <small>{{ chapter.publish }}</small>
-                                    </div>
-                                    <p class="mb-1">{{ chapter.number }} глава. {{ chapter.title }}</p>
-                                </div>
-
-                            </div>
-                        </div>
-                    {% endfor %}
-
-                </div>
-            </div>
-
--->

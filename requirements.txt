@@ -9,3 +9,5 @@ django-online-users==0.3
 djangorestframework==3.12.4
 django-smart-selects
 sorl-thumbnail==12.7.0
+django-colorfield==0.4.2
+
