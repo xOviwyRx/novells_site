@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '3uby7wv_r$o0gyvt1wmx+j9rv!xuc@l%0r45!+68%nu5=8$+wd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
-    ALLOWED_HOSTS = ['31.31.203.141', 'privereda1.ru', 'www.privereda1.ru','127.0.0.1']
+    ALLOWED_HOSTS = ['31.31.203.141', 'privereda1.ru', 'oksiji13.ru', 'www.oksiji13.ru','www.privereda1.ru','127.0.0.1']
 
 # Application definition
 
