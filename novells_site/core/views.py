@@ -142,7 +142,7 @@ def contact(request):
 
 def index(request):
     print(request.get_host())
-    if request.get_host() == 'privereda1.ru':
+    if request.get_host() == 'www.privereda1.ru':
         pop_novell = Novell.objects.filter(important=True)
         # pop_novell = Novell.objects.order_by('-views').first()
         test = pop_novell.first()
