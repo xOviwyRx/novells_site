@@ -415,6 +415,7 @@ class Slider(models.Model):
     active = models.BooleanField('Показывать', default=True)
     novell = models.ForeignKey(Novell, on_delete=models.SET_NULL, null=True, blank=True,
                                verbose_name='Ссылка на новеллу')
+    translator = models.CharField("Переводчик", max_length=100, blank=True)
 
     def __str__(self):
         return 'Картинка на главной на {} месте'.format(self.position)

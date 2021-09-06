@@ -148,7 +148,7 @@ def index(request):
         test = pop_novell.first()
         shedule_chapter = Chapter.objects.filter(novell__translator='Privereda1').order_by('-created')[:8]
         all_novells = Novell.objects.filter(translator='Privereda1').order_by('-views')[:6]
-        shots = Slider.objects.filter(active=True).order_by('position')
+        shots = Slider.objects.filter(active=True, translator='Privereda1').order_by('position')
 
         return render(request, 'core/home.html', {'pops': pop_novell,
                                                   'last_update': shedule_chapter,
@@ -162,7 +162,7 @@ def index(request):
         test = pop_novell.first()
         shedule_chapter = Chapter.objects.filter(novell__translator='Oksiji13').order_by('-created')[:8]
         all_novells = Novell.objects.filter(translator='Oksiji13').order_by('-views')[:6]
-        shots = Slider.objects.filter(active=True).order_by('position')
+        shots = Slider.objects.filter(active=True, translator='Oksiji13').order_by('position')
 
         return render(request, 'core/home_second.html', {'pops': pop_novell,
                                                          'last_update': shedule_chapter,
