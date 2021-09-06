@@ -142,20 +142,34 @@ def contact(request):
 
 def index(request):
     print(request.get_host())
-    pop_novell = Novell.objects.filter(important=True)
-    # pop_novell = Novell.objects.order_by('-views').first()
-    test = pop_novell.first()
-    shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
-    all_novells = Novell.objects.filter().order_by('-views')[:6]
-    shots = Slider.objects.filter(active=True).order_by('position')
+    if request.get_host() == 'privereda1.ru':
+        pop_novell = Novell.objects.filter(important=True)
+        # pop_novell = Novell.objects.order_by('-views').first()
+        test = pop_novell.first()
+        shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
+        all_novells = Novell.objects.filter().order_by('-views')[:6]
+        shots = Slider.objects.filter(active=True).order_by('position')
 
-    return render(request, 'core/home_second.html', {'pops': pop_novell,
-                                              'last_update': shedule_chapter,
-                                              'all_novells': all_novells,
-                                              'image_shots': shots,
-                                              'test': test
-                                              })
+        return render(request, 'core/home.html', {'pops': pop_novell,
+                                                  'last_update': shedule_chapter,
+                                                  'all_novells': all_novells,
+                                                  'image_shots': shots,
+                                                  'test': test
+                                                  })
+    else:
+        pop_novell = Novell.objects.filter(important=True)
+        # pop_novell = Novell.objects.order_by('-views').first()
+        test = pop_novell.first()
+        shedule_chapter = Chapter.objects.all().order_by('-created')[:8]
+        all_novells = Novell.objects.filter().order_by('-views')[:6]
+        shots = Slider.objects.filter(active=True).order_by('position')
 
+        return render(request, 'core/home_second.html', {'pops': pop_novell,
+                                                         'last_update': shedule_chapter,
+                                                         'all_novells': all_novells,
+                                                         'image_shots': shots,
+                                                         'test': test
+                                                         })
 
 class NovellDetailView(GenreYear, DetailView):
     model = Novell
