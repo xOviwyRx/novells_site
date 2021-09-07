@@ -649,7 +649,7 @@
                                             </div>
                                             <div class="text-center">
                                                 {% if user.is_authenticated and not user|user_already_rate:novell %}
-                                                    <span class="btn btn-outline-light border-0 write-review"
+                                                    <span class="btn btn-outline-light border-0 {% if request.get_host == 'www.oksiji13.ru' %}write-review-2{% else %}write-review{% endif %}"
                                                           style="cursor: pointer;"
                                                           data-bs-toggle="modal"
                                                           data-bs-target="#reviewModal">
@@ -657,7 +657,7 @@
                                                     Написать отзыв
                                                 </span>
                                                 {% elif not user.is_authenticated %}
-                                                    <span class="btn btn-outline-light border-0 write-review"
+                                                    <span class="btn btn-outline-light border-0 {% if request.get_host == 'www.oksiji13.ru' %}write-review-2{% else %}write-review{% endif %}"
                                                           style="cursor: pointer;"
                                                           data-toggle="modal" data-target="#loginModal">
                                                     <i class="bi bi-pencil"></i>
