@@ -55,6 +55,10 @@
             font-size: 11pt;
         }
 
+        #myTab2 li {
+            font-size: 11pt;
+        }
+
         #myTab li a {
             color: #ab3b61;
         }
@@ -69,6 +73,22 @@
 
         #myTab li a:hover {
             color: #ff5892;
+        }
+
+        #myTab2 li a {
+            color: #696265;
+        }
+
+        #myTab2 li .active:hover {
+            color: #999999;
+        }
+
+        #myTab2 li .active {
+            color: #535353;
+        }
+
+        #myTab2 li a:hover {
+            color: #d7d2d2;
         }
 
         .list-group-item a {
@@ -91,7 +111,8 @@
 {% endblock %}
 
 {% block title %}
-    Перевод китайских BL-новелл {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.privereda1.ru' %}Privereda1{% else %}Oksiji13{% endif %} | Профиль {{ profile.name }}
+    Перевод китайских BL-новелл {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.privereda1.ru' %}
+    Privereda1{% else %}Oksiji13{% endif %} | Профиль {{ profile.name }}
 {% endblock %}
 <!------ Include the above in your HEAD tag ---------->
 {% block content %}
@@ -159,7 +180,7 @@
             </div>
             <div class="col-md-8">
                 <div class="p-0 mb-3 profile-head">
-                    <ul class="nav nav-tabs align-bottom" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs align-bottom" {% if request.get_host == 'www.oksiji13.ru' %}id="myTab2"{% else %}id="myTab"{% endif %} role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                                aria-controls="home" aria-selected="true"><i class="bi bi-info-circle"></i>
