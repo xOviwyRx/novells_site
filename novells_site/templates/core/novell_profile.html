@@ -39,6 +39,15 @@
             background-color: rgb(196, 69, 113);
         }
 
+
+        .write-review-2 {
+            background-color: rgba(172, 200, 227, 0.75);
+        }
+
+        .write-review-2:hover {
+            background-color: rgb(103, 118, 137);
+        }
+
         .written-review {
             background-color: rgba(18, 61, 106, 0.75);
         }
@@ -578,7 +587,8 @@
                                 <div class="mt-2 px-2">
                                     {% if request.get_host == 'www.oksiji13.ru' %}
                                         <span class="btn btn-outline-light border-0"
-                                              onclick="eventCheckBox()" style="background-color: rgba(172,200,227,0.75)">Выбрать всё/отменить</span>
+                                              onclick="eventCheckBox()"
+                                              style="background-color: rgba(172,200,227,0.75)">Выбрать всё/отменить</span>
                                     {% else %}
                                         <span class="btn btn btn-success"
                                               onclick="eventCheckBox()">Выбрать всё/отменить</span>
@@ -603,7 +613,7 @@
                                             </div>
                                             <div class="text-center">
                                                 {% if user.is_authenticated %}
-                                                    <span class="btn btn-outline-light border-0 write-review"
+                                                    <span class="btn btn-outline-light border-0 {% if request.get_host == 'www.oksiji13.ru' %}write-review-2{% else %}write-review{% endif %}"
                                                           style="cursor: pointer;"
                                                           data-bs-toggle="modal"
                                                           data-bs-target="#reviewModal">
@@ -611,7 +621,7 @@
                                                     Написать отзыв
                                                 </span>
                                                 {% else %}
-                                                    <span class="btn btn-outline-light border-0 write-review"
+                                                    <span class="btn btn-outline-light border-0 {% if request.get_host == 'www.oksiji13.ru' %}write-review-2{% else %}write-review{% endif %}"
                                                           style="cursor: pointer;"
                                                           data-toggle="modal" data-target="#loginModal">
                                                     <i class="bi bi-pencil"></i>
