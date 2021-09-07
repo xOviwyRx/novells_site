@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {#% load account socialaccount %#}
-{% if request.get_host != 'www.oksiji13.ru' %}
+{% if request.get_host == 'www.oksiji13.ru' %}
 
     <style>
         body {
@@ -77,7 +77,7 @@
                             <a class="button secondaryAction"
                                href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
                             <div class="d-flex flex-row justify-content-end mt-2">
-                                {% if request.get_host != 'www.oksiji13.ru' %}
+                                {% if request.get_host == 'www.oksiji13.ru' %}
                                     <button class="primaryAction btn btn-outline-light"
                                             style="background-color: rgba(172,200,227,0.75);">{% trans "Sign In" %}</button>
                                 {% else %}

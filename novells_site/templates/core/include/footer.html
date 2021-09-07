@@ -1,5 +1,5 @@
 {% load static %}
-<footer class="text-center text-lg-start d-flex justify-content-between" style="background: rgb(171,59,97);">
+<footer class="text-center text-lg-start d-flex justify-content-between" {% if request.get_host == 'www.oksiji13.ru' %}style="background: rgb(103,118,137)"{% else %}style="background: rgb(171,59,97);"{% endif %}>
     <!-- Copyright -->
     <div class="text-center p-2">
 
