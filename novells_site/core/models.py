@@ -8,7 +8,6 @@ from django.db import models
 from tinymce.models import HTMLField
 from colorfield.fields import ColorField
 
-
 # Create your models here.
 from django.db.models import Sum, Max
 from django.db.models.signals import post_save
@@ -180,12 +179,12 @@ class Novell(models.Model):
             return 'https://www.oksiji13.ru/novell/{}'.format(self.slug)
         else:
             return 'https://www.privereda1.ru/novell/{}'.format(self.slug)
-            #return reverse('core:novell_detail', args=[self.slug])
-
+            # return reverse('core:novell_detail', args=[self.slug])
 
     class Meta:
         verbose_name = 'Новелла'
         verbose_name_plural = 'Новеллы'
+        ordering = ('rus_title',)
 
     def __str__(self):
         return self.rus_title
@@ -207,10 +206,10 @@ class NovellArch(models.Model):
 
 class Chapter(models.Model):
     number = models.PositiveSmallIntegerField('Номер главы')
-    title = models.CharField('Заголовок главы', max_length=256)
-    status = models.BooleanField('Выпущена', help_text='Если вышла, галочка стоит. Нет - запланирована', default=False)
+    status = models.BooleanField('Выпущена', help_text='Если вышла, галочка стоит. Нет - запланирована', default=True)
     publish = models.DateTimeField('Дата публикации', default=timezone.now)
     novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.PROTECT, related_name='chapters')
+    title = models.CharField('Заголовок главы', max_length=256)
     chapter_text = models.TextField('Текст главы', blank=True, null=True)
     created = models.DateTimeField('Дата создания', auto_now_add=True)
     comments = GenericRelation(Comment, related_query_name='chapter_comments')
@@ -218,7 +217,8 @@ class Chapter(models.Model):
     cost = models.DecimalField('Стоимость главы', help_text='Если бесплатная, оставляем 0', default=0, max_digits=18,
                                decimal_places=6)
     chapter_arch = ChainedForeignKey(NovellArch, chained_field="novell",
-                                     chained_model_field="novell", verbose_name='Арка', help_text='К какой арке относится?',
+                                     chained_model_field="novell", verbose_name='Арка',
+                                     help_text='К какой арке относится?',
                                      related_name='reviews_by_user',
                                      on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -246,14 +246,12 @@ class Chapter(models.Model):
         else:
             return False
 
-
     def prev_chapter(self):
         a = Chapter.objects.filter(number__lt=self.number, status=True, novell=self.novell).order_by('-number').first()
         if a:
             return a
         else:
             return False
-
 
     class Meta:
         verbose_name = 'Глава'

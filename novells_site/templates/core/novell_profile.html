@@ -2,7 +2,8 @@
 {% load static %}
 {% load user_tags %}
 {% block title %}
-    Перевод китайских BL-новелл {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.privereda1.ru' %}Privereda1{% else %}Oksiji13{% endif %} | {{ novell.rus_title }}
+    Перевод китайских BL-новелл {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.privereda1.ru' %}
+    Privereda1{% else %}Oksiji13{% endif %} | {{ novell.rus_title }}
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static "core/novell_profile.css" %}">
@@ -150,6 +151,9 @@
                         <p class="text-muted mb-0 mt-4 font-weight-bold">Автор: <span
                                 class="font-weight-bold text-dark">{{ novell.author }}</span></p>
 
+                        <p class="text-muted mb-0 mt-4 font-weight-bold">Переводчик: <span
+                                class="font-weight-bold text-dark">{{ novell.translator }}</span></p>
+
                         <p class="text-muted mb-0 font-weight-bold">Количество глав: <span
                                 class="font-weight-bold text-dark">{% if novell.chapter_count %}
                             {{ novell.chapter_count }}{% else %}???{% endif %}</span></p>
@@ -213,7 +217,8 @@
                         {% else %}
                             <p class="text-muted font-weight-bold mt-2">
                                 <a data-toggle="modal" data-target="#loginModal"
-                                   aria-expanded="false" class="link-login-modal"
+                                   aria-expanded="false" {% if request.get_host != 'www.oksiji13.ru' %}class="link-dark"
+                                   {% else %}class="link-login-modal"{% endif %}
                                    style="cursor: pointer; text-decoration: none;">
                                     Войдите</a>, чтобы оценить</p>
 
@@ -231,11 +236,20 @@
                                                     <i class="bi bi-x-octagon text-danger"></i>
                                                 </button>
                                             {% else %}
-                                                <a type="button"
-                                                   class="btn btn-outline-light border-0"
-                                                   href="{% url 'core:chapter_detail' novell.slug novell|first_chapter_link %}"
-                                                   style="background-color: rgba(171,59,97,0.75)">Начать
-                                                    читать</a>
+                                                {% if request.get_host != 'www.oksiji13.ru' %}
+
+                                                    <a type="button"
+                                                       class="btn btn-outline-light border-0"
+                                                       href="{% url 'core:chapter_detail' novell.slug novell|first_chapter_link %}"
+                                                       style="background-color: rgb(172,200,227)">Начать
+                                                        читать</a>
+                                                {% else %}
+                                                    <a type="button"
+                                                       class="btn btn-outline-light border-0"
+                                                       href="{% url 'core:chapter_detail' novell.slug novell|first_chapter_link %}"
+                                                       style="background-color: rgba(171,59,97,0.75)">Начать
+                                                        читать</a>
+                                                {% endif %}
                                             {% endif %}
                                         {% elif user|novell_readed:novell %}
                                             <button type="button" class="btn btn-outline-secondary disabled">Прочитано
@@ -418,21 +432,25 @@
         <div class="row">
             <ul class="nav nav-tabs ml-0" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link my-nav-tabs {% if request.get_host != 'www.oksiji13.ru' %}active{% endif %} h5" id="description-tab" data-toggle="tab" href="#description"
+                    <a class="nav-link my-nav-tabs {% if request.get_host != 'www.oksiji13.ru' %}active{% endif %} h5"
+                       id="description-tab" data-toggle="tab" href="#description"
                        role="tab"
-                       aria-controls="home" {% if request.get_host == 'www.oksiji13.ru' %}aria-selected="false"{% else %}aria-selected="true"{% endif %}><i class="bi bi-info"
+                       aria-controls="home" {% if request.get_host == 'www.oksiji13.ru' %}aria-selected="false"
+                       {% else %}aria-selected="true"{% endif %}><i class="bi bi-info"
                                                                     style="vertical-align: bottom"></i> Информация</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link h5 my-nav-tabs {% if request.get_host == 'www.oksiji13.ru' %}active{% endif %}" id="list-tab" data-toggle="tab" href="#list" role="tab"
-                       aria-controls="profile" {% if request.get_host == 'www.oksiji13.ru' %}aria-selected="true"{% else %}aria-selected="false"{% endif %}><i class="bi bi-list-ol"
-                                                                        style="vertical-align: bottom"></i>
+                    <a class="nav-link h5 my-nav-tabs {% if request.get_host == 'www.oksiji13.ru' %}active{% endif %}"
+                       id="list-tab" data-toggle="tab" href="#list" role="tab"
+                       aria-controls="profile" {% if request.get_host == 'www.oksiji13.ru' %}aria-selected="true"
+                       {% else %}aria-selected="false"{% endif %}><i class="bi bi-list-ol"
+                                                                     style="vertical-align: bottom"></i>
                         Оглавление</a>
                 </li>
                 <li class="nav-item my-nav-tabs">
                     <a class="nav-link h5 my-nav-tabs" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
                        aria-controls="profile"><i class="bi bi-chat"
-                                                                        style="vertical-align: bottom"></i> <span
+                                                  style="vertical-align: bottom"></i> <span
                             style="vertical-align: bottom;">Отзывы</span>
                         <span class="badge rounded-pill"
                               style="background-color: rgba(187,178,181,0.75); vertical-align: bottom;">
@@ -445,7 +463,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="tab-content profile-tab" id="myTabContent">
-                    <div {% if request.get_host == 'www.oksiji13.ru' %}class="tab-pane fade"{% else %}class="tab-pane fade show active"{% endif %} id="description" role="tabpanel"
+                    <div {% if request.get_host == 'www.oksiji13.ru' %}class="tab-pane fade"
+                         {% else %}class="tab-pane fade show active"{% endif %} id="description" role="tabpanel"
                          aria-labelledby="description-tab">
 
                         <div class="card mt-2">
@@ -461,7 +480,9 @@
 
                     </div>
 
-                    <div {% if request.get_host == 'www.oksiji13.ru' %}class="tab-pane fade show active"{% else %}class="tab-pane fade"{% endif %} id="list" role="tabpanel" aria-labelledby="list-tab">
+                    <div {% if request.get_host == 'www.oksiji13.ru' %}class="tab-pane fade show active"
+                         {% else %}class="tab-pane fade"{% endif %} id="list" role="tabpanel"
+                         aria-labelledby="list-tab">
                         <div class="list-group mt-2">
                             <form method="post" action="{% url 'core:buying_many_chapters' novell.id %}">
                                 {% csrf_token %}
@@ -555,9 +576,13 @@
 
                                 {% endfor %}
                                 <div class="mt-2 px-2">
-                                    <span class="btn btn btn-success"
-                                          onclick="eventCheckBox()">Выбрать всё/отменить</span>
-
+                                    {% if request.get_host != 'www.oksiji13.ru' %}
+                                        <span class="btn btn-outline-light border-0"
+                                              onclick="eventCheckBox()" style="background-color: rgba(172,200,227,0.75)">Выбрать всё/отменить</span>
+                                    {% else %}
+                                        <span class="btn btn btn-success"
+                                              onclick="eventCheckBox()">Выбрать всё/отменить</span>
+                                    {% endif %}
                                     <button type="submit" class="btn btn-primary">Купить выбранные</button>
                                 </div>
 

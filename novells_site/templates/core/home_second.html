@@ -25,9 +25,9 @@
 
         .pops-novells {
             /*background: radial-gradient(ellipse closest-side,#ab3b61, #ede2dc);*/
-            background-image: inherit;
+            /*background-image: inherit;
             background: url({% static 'img/backgs/bg-pop-2.jpg'%});
-
+*/
         }
 
         .rec-novell-title a:hover {
@@ -107,7 +107,7 @@
                         <div class="row px-2 justify-content-center">
 
                             <div class="col-lg-4 col-sm-10 col-xs-6"
-                                 style="border-style: dotted; border-width: 3px; border-color: rgb(171,59,97); z-index: 2">
+                                 style="border-style: dotted; border-width: 3px; border-color: rgb(103, 118, 137); z-index: 2">
 
                                 <div class="ratio-3х4 ratio">
 
@@ -120,7 +120,7 @@
 
                             <div class="col-lg-1 m-0 p-0 d-flex d-none d-sm-block d-md-block d-sm-none d-md-none d-lg-block">
                                 <div class="text-vertical text-center display-4 font-weight-bolder pl-2"
-                                     style="color: rgb(171,59,97)">
+                                     style="color: rgb(103, 118, 137)">
                                     Рекомендуем
                                 </div>
                             </div>
@@ -188,7 +188,7 @@
         </div>
 
 
-        <div class="pops-novells carousel row mt-5" style="background-color: rgb(245,210,239);">
+        <div class="pops-novells carousel row mt-5" style="background-color: rgba(200, 218, 236, 0.75);">
             <h1 class="text-center mt-1"><i class="bi bi-card-list text-white"
                                             style="vertical-align: bottom"></i> <span
                     class="text-white">Популярное</span></h1>
@@ -220,7 +220,7 @@
                             </h6>
                             <h6 class="card-subtitle">
 
-                                <a href="{{ nov.get_absolute_url }}" class="link-light"
+                                <a href="{{ nov.get_absolute_url }}" class="link-dark"
                                    style="text-decoration: none;">{{ nov.rus_title|truncatechars:35 }}</a>
                             </h6>
                         </div>

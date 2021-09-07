@@ -3,6 +3,15 @@
 {% load i18n %}
 
 {#% load account socialaccount %#}
+{% if request.get_host != 'www.oksiji13.ru' %}
+
+    <style>
+        body {
+            background-color: rgba(200, 218, 236, 0.75);
+        }
+
+    </style>
+{% endif %}
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
@@ -18,7 +27,8 @@
                     <div class="card-body">
                         {% if socialaccount_providers %}
                             <p>{% blocktrans with site.name as site_name %}Please sign in with one
-                                of your existing third party accounts. Или, <a href="{{ signup_url }}">зарегистрируйтесь</a>
+                                of your existing third party accounts. Или,
+                                <a href="{{ signup_url }}">зарегистрируйтесь</a>
                                 на {{ site_name }} и войдите ниже:{% endblocktrans %}</p>
 
                             <div class="socialaccount_ballot">
@@ -67,9 +77,14 @@
                             <a class="button secondaryAction"
                                href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
                             <div class="d-flex flex-row justify-content-end mt-2">
+                                {% if request.get_host != 'www.oksiji13.ru' %}
+                                    <button class="primaryAction btn btn-outline-light"
+                                            style="background-color: rgba(172,200,227,0.75);">{% trans "Sign In" %}</button>
+                                {% else %}
 
-                                <button class="primaryAction btn btn-success"
-                                        type="submit">{% trans "Sign In" %}</button>
+                                    <button class="primaryAction btn btn-success"
+                                            type="submit">{% trans "Sign In" %}</button>
+                                {% endif %}
                             </div>
                         </form>
                     </div>
