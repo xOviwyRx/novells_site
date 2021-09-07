@@ -160,10 +160,15 @@
             height: 100%;
         }
 
-        body {
-            background-color: rgba(237, 226, 220, 0.75);
-        }
-
+        {% if request.get_host == 'www.oksiji13.ru' %}
+            body {
+                background-color: rgba(200, 218, 236, 0.75);
+            }
+        {% else %}
+            body {
+                background-color: rgba(237, 226, 220, 0.75);
+            }
+        {% endif %}
 
         body .container-xxl {
             max-width: 1200px;
