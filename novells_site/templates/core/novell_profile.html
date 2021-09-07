@@ -576,7 +576,7 @@
 
                                 {% endfor %}
                                 <div class="mt-2 px-2">
-                                    {% if request.get_host != 'www.oksiji13.ru' %}
+                                    {% if request.get_host == 'www.oksiji13.ru' %}
                                         <span class="btn btn-outline-light border-0"
                                               onclick="eventCheckBox()" style="background-color: rgba(172,200,227,0.75)">Выбрать всё/отменить</span>
                                     {% else %}
