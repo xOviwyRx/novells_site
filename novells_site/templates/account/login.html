@@ -3,15 +3,16 @@
 {% load i18n %}
 
 {#% load account socialaccount %#}
-{% if request.get_host == 'www.oksiji13.ru' %}
 
-    <style>
+<style>
+    {% if request.get_host == 'www.oksiji13.ru' %}
+
         body {
             background-color: rgba(200, 218, 236, 0.75);
         }
 
-    </style>
-{% endif %}
+    {% endif %}
+</style>
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 

@@ -23,10 +23,20 @@
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-end w-100">
-                                <button type="submit"
-                                        class="mt-2 btn btn-outline-light" style="background-color: rgba(171,59,97,0.75)">
-                                    Отправить
-                                </button>
+                                {% if request.get_host == 'www.oksiji13.ru' %}
+
+                                    <button type="submit"
+                                            class="mt-2 btn btn-outline-light"
+                                            style="background-color: rgb(172,200,227)">
+                                        Отправить
+                                    </button>
+                                {% else %}
+                                    <button type="submit"
+                                            class="mt-2 btn btn-outline-light"
+                                            style="background-color: rgba(171,59,97,0.75)">
+                                        Отправить
+                                    </button>
+                                {% endif %}
                             </div>
                         </div>
                     </form>
