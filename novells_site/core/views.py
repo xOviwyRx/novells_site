@@ -59,7 +59,8 @@ def donate_money(request):
                 "value": request.POST.get('sum'),
                 "currency": Currency.RUB
             },
-            "vat_code": 2
+            "vat_code": 2,
+            "capture":True
         }),
     ]
 
@@ -69,7 +70,7 @@ def donate_money(request):
     builder = PaymentRequestBuilder()
     builder.set_amount({"value": request.POST.get('sum'), "currency": Currency.RUB}) \
         .set_confirmation({"type": ConfirmationType.REDIRECT, "return_url": "https://privereda1.ru"}) \
-        .set_capture(False) \
+        .set_capture(True) \
         .set_description("Заказ №72") \
         .set_metadata({"user": int(request.user.id)}) \
         .set_receipt(receipt)
@@ -107,7 +108,6 @@ def my_webhook_handler(request):
             p = Profile.objects.get(name_id=payed_user)
             p.balance += payed_money
             p.save(update_fields=['balance'])
-
             some_data = {
                 'paymentId': response_object.id,
                 'paymentStatus': response_object.status,
