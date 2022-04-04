@@ -30,12 +30,18 @@ import json
 from django.http import HttpResponse
 from yookassa import Configuration, Payment
 from yookassa.domain.notification import WebhookNotificationEventType, WebhookNotification
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
 
-Configuration.account_id = '819176'
-Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
+#Configuration.account_id = '819176'
+#Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ' # Old key
+#Configuration.secret_key = 'live_UaQb6za_zudoklGWzklf1GMIief0Yrhr7Q-YGtV-LsU'
+
+# Configuration.account_id = '829811'
+# Configuration.secret_key = 'test__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
+# test_3z2IRsWt9h2FRrKVBy9AaGkeMHt6appEWllT9614G5k
 
 
 @login_required
@@ -46,7 +52,12 @@ def pay_prepare(request):
 @login_required
 def donate_money(request):
     Configuration.account_id = '819176'
-    Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
+    Configuration.secret_key = 'live_Rj4b50yCpOzEirnhaHWgSJ_f-t9naP6WBSlAk8WlAss'
+
+    #Configuration.account_id = '829811'
+    #Configuration.secret_key = 'test_3z2IRsWt9h2FRrKVBy9AaGkeMHt6appEWllT9614G5k'
+
+
     # Configuration.configure('819176', 'test__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ')
     receipt = Receipt()
     receipt.customer = {"phone": "79990000000", "email": "test@email.com"}
@@ -88,10 +99,15 @@ def donate_money(request):
     # return HttpResponse('Временно недоступен')
 
 
-@csrf_protect
+@csrf_exempt
 def my_webhook_handler(request):
     Configuration.account_id = '819176'
-    Configuration.secret_key = 'live__QoWec5bBgd00kgqy4xnSz245AQk2faiTHjPJN7tkiQ'
+    Configuration.secret_key = 'live_Rj4b50yCpOzEirnhaHWgSJ_f-t9naP6WBSlAk8WlAss'
+
+    #Configuration.account_id = '829811'
+    #Configuration.secret_key = 'test_3z2IRsWt9h2FRrKVBy9AaGkeMHt6appEWllT9614G5k'
+
+
     # Извлечение JSON объекта из тела запроса
     print(request)
 
@@ -141,7 +157,9 @@ def contact(request):
 
 
 def index(request):
-    if request.get_host() == 'www.privereda1.ru':
+
+    h = request.get_host()
+    if h == 'www.privereda1.ru' or h == 'privereda1.ru':
         pop_novell = Novell.objects.filter(important=True, translator='Privereda1')
         # pop_novell = Novell.objects.order_by('-views').first()
         test = pop_novell.first()
@@ -203,25 +221,45 @@ class ChapterDetailView(DetailView):
     template_name = 'core/chapter_detail.html'
 
     def get_object(self):
-        nov = get_object_or_404(Novell, slug=self.kwargs['slug'])
-        chapter = get_object_or_404(Chapter, novell=nov, number=self.kwargs['number'])
+        novell = get_object_or_404(Novell, slug=self.kwargs['slug'])
+        chapter = get_object_or_404(Chapter, novell=novell, number=self.kwargs['number'])
         #
+
         if not self.request.user.is_anonymous:
             self.request.user.user_profile.chapter_readed.add(chapter)
+        else:
+            raise PermissionDenied
+            #return redirect('accounts/signup/')
+            #return redirect(novell.get_absolute_url())
+            #return redirect('account_signup')
+
 
         if not chapter.premium:
             return chapter
 
-        if chapter.premium and self.request.user.is_anonymous:
-            # "Вы пытаетесь открыть платную главу. Войдите в аккаунт, где она куплена, или купите её!"
-            raise PermissionDenied
-        elif self.request.user.is_anonymous and chapter.premium and chapter not in self.request.user.user_profile.buyed_chapters.all():
+        elif not self.request.user.is_anonymous and chapter not in self.request.user.user_profile.buyed_chapters.all():
             # "Вы пытаетесь открыть платную главу. Купите её, это не так дорого!"
             raise PermissionDenied
-        elif not self.request.user.is_anonymous and chapter.premium and chapter in self.request.user.user_profile.buyed_chapters.all():
+            #return redirect('accounts/signup/')
+            #return redirect(novell.get_absolute_url())
+
+        elif not self.request.user.is_anonymous and chapter in self.request.user.user_profile.buyed_chapters.all():
             return chapter
         else:
             raise PermissionDenied
+            #return redirect('accounts/signup/')
+            #return redirect(novell.get_absolute_url())
+
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+            if not self.object:
+                raise PermissionDenied
+        except PermissionDenied:
+            return redirect('https://'+request.get_host()+'/accounts/signup/', permanent=True)
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 
 #            raise Http404('Неизвестная ошибка')
@@ -504,7 +542,7 @@ class FilterNovellsView(GenreYear, ListView):
 
     def get_queryset(self):
         q = self.request.GET.get('q')
-        if self.request.get_host() == 'www.privereda1.ru':
+        if self.request.get_host() == 'www.privereda1.ru' or self.request.get_host() == 'privereda1.ru':
             translator = 'Privereda1'
         else:
             translator = 'Oksiji13'
@@ -582,7 +620,7 @@ class JsonFilterNovellsView(ListView):
     context_object_name = 'novells'
 
     def get_queryset(self):
-        if self.request.get_host() == 'www.privereda1.ru':
+        if self.request.get_host() == 'www.privereda1.ru' or self.request.get_host() == 'privereda1.ru':
             translator = 'Privereda1'
         else:
             translator = 'Oksiji13'

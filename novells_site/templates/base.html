@@ -199,7 +199,7 @@
 </head>
 <body>
 {% block navbar %}
-    {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.oksiji13.ru' %}
+    {% if request.get_host == 'oksiji13.ru' or request.get_host == 'www.oksiji13.ru' %}
         {% include 'core/include/navbar_second.html' %}
     {% else %}
         {% include 'core/include/navbar.html' %}

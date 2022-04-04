@@ -4,7 +4,7 @@
 {% load thumbnail %}
 
 {% block title %}
-    Перевод китайских BL-новелл {% if request.get_host == '127.0.0.1:8000' or request.get_host == 'www.privereda1.ru' %}Privereda1{% else %}Oksiji13{% endif %} | Каталог новелл
+    Перевод китайских BL-новелл {% if request.get_host == 'privereda1.ru' or request.get_host == 'www.privereda1.ru' %}Privereda1{% else %}Oksiji13{% endif %} | Каталог новелл
 {% endblock title %}
 {% block styles %}
     <style>
@@ -261,7 +261,7 @@
                                 </div>
 
                                 <div class="card-footer">
-                                    {% if request.get_host == 'www.oksiji13.ru' %}
+                                    {% if request.get_host == 'www.oksiji13.ru' or request.get_host == 'oksiji13.ru' %}
                                     <button type="submit" class="button btn btn-outline-light btn-block"
                                             style="background-color: rgba(172,200,227,0.75);">Найти
                                     </button>

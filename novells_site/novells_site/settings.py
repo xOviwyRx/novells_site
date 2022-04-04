@@ -22,10 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '3uby7wv_r$o0gyvt1wmx+j9rv!xuc@l%0r45!+68%nu5=8$+wd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+#DEBUG = False
+DEBUG = True
 
 if DEBUG:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = ['31.31.203.141', 'privereda1.ru', 'oksiji13.ru', 'www.oksiji13.ru','www.privereda1.ru','127.0.0.1']
 
@@ -92,7 +93,7 @@ WSGI_APPLICATION = 'novells_site.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-if DEBUG:
+if 1==0: #DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -178,7 +179,7 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-    ACCOUNT_EMAIL_VERIFICATION = True
+    ACCOUNT_EMAIL_VERIFICATION = False
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     ACCOUNT_EMAIL_REQUIRED = True
