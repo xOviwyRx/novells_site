@@ -87,7 +87,7 @@
 
                         <div class="carousel-item ratio ratio-21x9 {% if forloop.first %}active{% endif %}">
 
-                            {% thumbnail img.shot "1200x514" crop="center" as im %}
+                            {% thumbnail img.shot "1200x514" crop="center" format="PNG" as im %}
                                 <img src="{{ im.url }}" class="d-block w-100" alt="{{ im.text_primary }}">
                             {% endthumbnail %}
                             <div class="carousel-caption d-none d-md-block">
@@ -131,7 +131,7 @@
 
                                 <div class="ratio-3х4 ratio">
 
-                                    {% thumbnail pop.poster "333x454" crop="center" as im %}
+                                    {% thumbnail pop.poster "333x454" crop="center" format="PNG" as im %}
                                         <img src="{{ im.url }}"
                                              class="img-fluid p-3">
                                     {% endthumbnail %}
@@ -196,7 +196,7 @@
                                 class="{% if forloop.first %}active{% endif %}" aria-current="true"
                                 style="height: auto; width: 9%;">
                             <div class="ratio ratio-3х4">
-                                {% thumbnail pop.poster "95x131" crop="center" as im %}
+                                {% thumbnail pop.poster "95x131" crop="center" format="PNG" as im %}
                                     <img src="{{ im.url }}" class="img-fluid" style="height: 100%;">
                                 {% endthumbnail %}
 
@@ -223,7 +223,7 @@
                         <a href="{{ nov.get_absolute_url }}"
                         >
                             <div class="ratio ratio-3х4">
-                                {% thumbnail nov.poster "200x272" crop="center" as im %}
+                                {% thumbnail nov.poster "200x272" crop="center" format="PNG" as im %}
                                     <img src="{{ im.url }}" class="card-img-top rounded p-2"
                                          alt="{{ im.original_title }}">
                                 {% endthumbnail %}
@@ -324,7 +324,7 @@
 
                                 <div class="col-1 p-0">
                                     <div class="ratio-3х4 ratio">
-                                        {% thumbnail chapter.novell.poster "59x79" crop="center" as im %}
+                                        {% thumbnail chapter.novell.poster "59x79" crop="center" format="PNG" as im %}
                                             <img src="{{ im.url }}" class="rounded">
                                         {% endthumbnail %}
                                     </div>
