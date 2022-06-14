@@ -23,7 +23,7 @@ SECRET_KEY = '3uby7wv_r$o0gyvt1wmx+j9rv!xuc@l%0r45!+68%nu5=8$+wd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = False
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
