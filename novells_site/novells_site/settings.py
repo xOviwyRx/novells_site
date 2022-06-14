@@ -22,13 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '3uby7wv_r$o0gyvt1wmx+j9rv!xuc@l%0r45!+68%nu5=8$+wd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
+# DEBUG = False
 DEBUG = True
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['31.31.203.141', 'privereda1.ru', 'oksiji13.ru', 'www.oksiji13.ru','www.privereda1.ru','127.0.0.1']
+    ALLOWED_HOSTS = ['31.31.203.141', 'privereda1.ru', 'oksiji13.ru', 'www.oksiji13.ru', 'www.privereda1.ru',
+                     '127.0.0.1']
 
 # Application definition
 
@@ -66,7 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    #'core.middleware.MultiSiteMiddleware',
+    # 'core.middleware.MultiSiteMiddleware',
 ]
 
 ROOT_URLCONF = 'novells_site.urls'
@@ -93,7 +94,7 @@ WSGI_APPLICATION = 'novells_site.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 
-if 1==0: #DEBUG:
+if 1 == 0:  # DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -193,7 +194,8 @@ EMAIL_PORT = 587
 # EMAIL_HOST_USER = 'privereda1bl@gmail.com'
 # EMAIL_HOST_PASSWORD = '7rW4QObVsh'
 EMAIL_HOST_USER = 'privereda1blnovell@gmail.com'
-EMAIL_HOST_PASSWORD = '{c{IaqaeZMKKY|x7'
+# EMAIL_HOST_PASSWORD = '{c{IaqaeZMKKY|x7'
+EMAIL_HOST_PASSWORD = 'jwrklewvxrtmayaj'
 
 TINYMCE_DEFAULT_CONFIG = {
     "height": "500px",
