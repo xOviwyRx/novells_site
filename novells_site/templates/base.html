@@ -107,7 +107,6 @@
                 success: function (json) {
 
                     if (json.result) {
-                        ion.sound.play("bell_ring");
                         $('#notify_icon').addClass("text-success");
                         var doc = $.parseHTML(json.notifications_list);
                         $('#notifications-list').html(doc);

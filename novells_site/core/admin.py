@@ -31,7 +31,7 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('author',)
+    list_display = ('author', 'body', 'content_object')
 
 
 @admin.register(LikeDislike)
@@ -44,9 +44,8 @@ class LikeDisLikeAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'balance','name_id')
+    list_display = ('name', 'balance', 'name_id')
     filter_horizontal = ('bookmarks', 'planned', 'readed', 'in_process_reading', 'chapter_readed', 'buyed_chapters')
-
 
 
 @admin.register(RatingStar)
