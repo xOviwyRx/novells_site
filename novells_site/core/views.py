@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment, UserBalanceChange
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidden
 from rest_framework import viewsets, filters, views
@@ -483,6 +483,7 @@ def buy_chapter(request, pk):
         request.user.user_profile.balance -= chapter.cost
         request.user.user_profile.save(update_fields=["balance"])
         request.user.user_profile.buyed_chapters.add(chapter)
+        new_transaction = UserBalanceChange.objects.create(user=request.user, amount=chapter.cost, novell=chapter.novell)
         return redirect(chapter.get_absolute_url())
     else:
         return HttpResponse('Недостаточно средств или просто кривой разраб, сорри((')
