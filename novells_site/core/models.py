@@ -463,3 +463,16 @@ class UserBalanceChange(models.Model):
 
     def __str__(self):
         return 'Транзакция на {} от {}'.format(self.amount, self.user)
+    
+class ViewNovell(models.Model):
+    novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.CASCADE)
+    datetime = models.DateTimeField('Дата', default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Просмотр'
+        verbose_name_plural = 'Просмотры'
+        ordering = ('-datetime',)
+
+    def __str__(self):
+        return 'Просмотр новеллы {}'.format(self.novell)
+

@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment, UserBalanceChange
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment, UserBalanceChange, ViewNovell
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidden
 from rest_framework import viewsets, filters, views
@@ -198,6 +198,7 @@ class NovellDetailView(GenreYear, DetailView):
         nov = context['novell']
         nov.views = nov.views + 1
         nov.save()
+        ViewNovell.objects.create(novell = nov)
         context['star_form'] = RatingForm()
 
         return context
