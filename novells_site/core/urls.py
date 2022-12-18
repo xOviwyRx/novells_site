@@ -67,6 +67,8 @@ urlpatterns = [
     path('donate_money', views.donate_money, name='donate_money'),
 
     # адресс вебхука
-    path('payment-notification', csrf_exempt(views.my_webhook_handler))
+    path('payment-notification', csrf_exempt(views.my_webhook_handler)),
+    
+    path('admin/statistics', views.statistic_view),
 
 ]
