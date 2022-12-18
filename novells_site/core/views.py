@@ -31,6 +31,8 @@ from django.http import HttpResponse
 from yookassa import Configuration, Payment
 from yookassa.domain.notification import WebhookNotificationEventType, WebhookNotification
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+from datetime import date
 
 # Create your views here.
 
@@ -739,3 +741,100 @@ class NovellListViewApi(views.APIView):
             novells = Novell.objects.filter(Q(publish__year__in=year_filter) | Q(genres__in=genre_filter)).distinct()
         serializer = NovellListSerializer(novells, many=True)
         return Response(serializer.data)
+
+def views_for_novell(novell, date_filter, start_date, end_date):
+    if date_filter == 'today':
+        views = ViewNovell.objects.filter(novell = novell, datetime__date__gte=date.today())
+    elif date_filter == 'month':
+        views = ViewNovell.objects.filter(novell = novell,
+                datetime__year__gte = datetime.now().year,
+                datetime__month__gte = datetime.now().month)
+    elif date_filter == 'arbitrary_period':
+        views = ViewNovell.objects.filter(novell = novell,
+                datetime__range = [start_date, end_date])
+    else:
+        views = ViewNovell.objects.filter(novell = novell)
+    return len(views)
+
+def profit_for_novell(novell, date_filter, start_date, end_date):
+    if date_filter == 'today':
+        transactions = UserBalanceChange.objects.filter(novell = novell, datetime__date__gte=date.today())
+    elif date_filter == 'month':
+        transactions = UserBalanceChange.objects.filter(novell = novell,
+                datetime__year__gte = datetime.now().year,
+                datetime__month__gte = datetime.now().month)
+    elif date_filter == 'arbitrary_period':
+        transactions = UserBalanceChange.objects.filter(novell = novell,
+                datetime__range = [start_date, end_date])
+    else:
+        transactions = UserBalanceChange.objects.filter(novell = novell)
+    total_amount = sum(tr.amount for tr in transactions)
+    return total_amount
+
+def get_url_primary(request, q):
+    full_path = request.get_full_path()
+    
+    if request.GET.get(q):
+        sep = full_path[full_path.find(q)-1]
+        if request.GET.get(q) == '1':
+            return full_path.replace(f"{sep}{q}=1", f"{sep}{q}=-1")
+        elif request.GET.get(q) == '-1':
+            return full_path.replace(f"{sep}{q}=-1", f"{sep}{q}=1")
+    else:
+        sep = '&' if len(request.GET) > 0 else '?'
+        q = f"{sep}{q}=-1"
+        return f"{full_path}{q}"
+
+def get_sorted_array(array, value, column):
+        if int(value) > 0:
+            return sorted(array, key=lambda i: i[column])
+        else:
+            return sorted(array, key=lambda i: i[column], reverse=True)
+
+def statistic_view(request, *args, **kwargs):
+
+    translator = request.GET.get('translator')
+    if translator == 'Privereda1' or translator == 'Oksiji13':
+        novells = Novell.objects.filter(translator=translator)
+    else:
+        novells = Novell.objects.all()
+
+    date_filter = request.GET.get('date')
+    res_array = []
+    total = {'views': 0, 'profit': 0}
+
+    for novell in novells:
+        res = {}
+        res["novell"] = novell.rus_title
+        res["views"] = views_for_novell(novell, date_filter, request.GET.get('start_date'), request.GET.get('end_date'))
+        res["profit"] = profit_for_novell(novell, date_filter, request.GET.get('start_date'), request.GET.get('end_date'))
+        res_array.append(res)
+        total["views"] += res["views"]
+        total["profit"] += res["profit"]
+
+    header_name = {'text': 'Название на русском', 'url_primary': get_url_primary(request, 'sn')}
+    header_view = {'text': 'Просмотры', 'url_primary': get_url_primary(request, 'sv')}
+    header_profit = {'text': 'Доход', 'url_primary': get_url_primary(request, 'sp')}
+    result_headers = [header_name, header_view, header_profit]
+
+    if request.GET.get('sn'):
+        res_array = get_sorted_array(res_array, request.GET.get('sn'), 'novell')
+
+    if request.GET.get('sv'):
+        res_array = get_sorted_array(res_array, request.GET.get('sv'), 'views')
+        
+    if request.GET.get('sp'):
+        res_array = get_sorted_array(res_array, request.GET.get('sp'), 'profit')
+
+    return render(request, 'admin/statistics/base.html',
+            {
+                'result': res_array,
+                'total': total,
+                'result_headers': result_headers,
+                'start_date': request.GET.get('start_date'),
+                'end_date': request.GET.get('end_date'),
+                'translator': request.GET.get('translator'),
+                'date': request.GET.get('date')
+                }
+            ) 
+
