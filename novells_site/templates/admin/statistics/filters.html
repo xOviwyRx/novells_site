@@ -1,0 +1,31 @@
+{% load i18n %}
+{% block filters %}
+<div id="changelist-filter">
+    <h2>{% translate 'Filter' %}</h2>
+    <h3 id="changelist-filter-clear">
+      <a href='base.html'>&#10006; {% translate "Clear all filters" %}</a>
+    </h3>
+    <form>
+        <h3>Переводчик</h3>
+        <ul>
+            <select name="translator">
+                <option value="all" {% if translator == 'all'%}selected{% endif %}>Все</option>
+                <option value="Oksiji13"{% if translator == 'Oksiji13'%}selected{% endif %}>Oksiji13</option>
+                <option value="Privereda1"{% if translator == 'Privereda1'%}selected{% endif %}>Privereda1</option>
+            </select>
+        </ul>
+       <h3>Время</h3>
+       <ul>
+           <select name="date" id="date_type">
+               <option value="today"{% if date == 'today'%}selected{% endif %}>Сегодня</option>
+               <option value="month"{% if date == 'month'%}selected{% endif %}>Месяц</option>
+               <option value="all_time"{% if date == 'all_time'%}selected{% endif %}>Все время</option>
+               <option value="arbitrary_period"{% if date == 'arbitrary_period'%}selected{% endif %}>Произвольный период</option>
+           </select>
+       </ul>
+       <input type="date" id="start_date" name="start_date" value="{{ start_date }}"/>
+       <input type="date" id="end_date" name="end_date" value="{{ end_date }}"/>
+       <ul><input type="submit" value="Показать"/></ul>
+    </form>
+</div>
+{% endblock %}
