@@ -170,7 +170,7 @@ class Novell(models.Model):
 
     description = models.TextField('Описание')
     genres = models.ManyToManyField(Genre, related_name='novells', verbose_name='Жанры')
-    views = models.PositiveSmallIntegerField('Просмотры', default=0)
+    views = models.PositiveIntegerField('Просмотры', default=0)
     overall_rating = models.DecimalField(max_digits=3, decimal_places=2, verbose_name='Рейтинг', default='0.00')
     color_reader = ColorField(default='#f2e9e5', verbose_name='Цвет в читалке у этой новеллы')
 
