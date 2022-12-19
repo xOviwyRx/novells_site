@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DetailView, ListView
 from django.contrib.auth.decorators import login_required
 
-from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment
+from .models import Novell, Chapter, LikeDislike, Profile, Genre, Rating, Slider, Post, Review, RatingStar, Comment, UserBalanceChange
 from .forms import CommentForm, EditProfileForm, RatingForm
 from django.http import HttpResponse, JsonResponse, Http404, HttpResponseForbidden
 from rest_framework import viewsets, filters, views
@@ -120,6 +120,7 @@ def my_webhook_handler(request):
         if notification_object.event == WebhookNotificationEventType.PAYMENT_SUCCEEDED:
             payed_user = response_object.metadata['user']
             payed_money = response_object.amount.value
+            UserBalanceChange.objects.create(user=payed_user, amount=payed_money)
             print(payed_user, payed_money)
             p = Profile.objects.get(name_id=payed_user)
             p.balance += payed_money
