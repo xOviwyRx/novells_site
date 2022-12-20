@@ -502,6 +502,7 @@ def buy_many_chapters(request, pk):
     if sum_cost <= request.user.user_profile.balance:
         request.user.user_profile.balance -= sum_cost
         request.user.user_profile.save(update_fields=["balance"])
+        new_transaction = UserBalanceChange.objects.create(user=request.user, amount=sum_cost, novell=n)
         for i in request.POST.getlist('chosen'):
             chapter = get_object_or_404(Chapter, id=i)
             request.user.user_profile.buyed_chapters.add(chapter)
