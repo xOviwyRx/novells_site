@@ -744,31 +744,29 @@ class NovellListViewApi(views.APIView):
         return Response(serializer.data)
 
 def views_for_novell(novell, date_filter, start_date, end_date):
+    views = ViewNovell.objects.filter(novell = novell)
+
     if date_filter == 'today':
-        views = ViewNovell.objects.filter(novell = novell, datetime__date__gte=date.today())
+        views = views.filter(datetime__date__gte=date.today())
     elif date_filter == 'month':
-        views = ViewNovell.objects.filter(novell = novell,
-                datetime__year__gte = datetime.now().year,
-                datetime__month__gte = datetime.now().month)
+        views = views.filter(datetime__year__gte = datetime.now().year,
+                             datetime__month__gte = datetime.now().month)
     elif date_filter == 'arbitrary_period':
-        views = ViewNovell.objects.filter(novell = novell,
-                datetime__range = [start_date, end_date])
-    else:
-        views = ViewNovell.objects.filter(novell = novell)
+        views = views.filter(datetime__range = [start_date, end_date])
+
     return len(views)
 
 def profit_for_novell(novell, date_filter, start_date, end_date):
+    transactions = UserBalanceChange.objects.filter(novell = novell)
+
     if date_filter == 'today':
-        transactions = UserBalanceChange.objects.filter(novell = novell, datetime__date__gte=date.today())
+        transactions = transactions.filter(datetime__date__gte=date.today())
     elif date_filter == 'month':
-        transactions = UserBalanceChange.objects.filter(novell = novell,
-                datetime__year__gte = datetime.now().year,
-                datetime__month__gte = datetime.now().month)
+        transactions = transactions.filter(datetime__year__gte = datetime.now().year,
+                                           datetime__month__gte = datetime.now().month)
     elif date_filter == 'arbitrary_period':
-        transactions = UserBalanceChange.objects.filter(novell = novell,
-                datetime__range = [start_date, end_date])
-    else:
-        transactions = UserBalanceChange.objects.filter(novell = novell)
+        transactions = transactions.filter(datetime__range = [start_date, end_date])
+
     total_amount = sum(tr.amount for tr in transactions)
     return total_amount
 
@@ -793,7 +791,6 @@ def get_sorted_array(array, value, column):
             return sorted(array, key=lambda i: i[column], reverse=True)
 
 def statistic_view(request, *args, **kwargs):
-
     translator = request.GET.get('translator')
     if translator == 'Privereda1' or translator == 'Oksiji13':
         novells = Novell.objects.filter(translator=translator)
