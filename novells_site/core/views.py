@@ -491,8 +491,7 @@ def buy_chapter(request, pk):
         request.user.user_profile.balance -= chapter.cost
         request.user.user_profile.save(update_fields=["balance"])
         request.user.user_profile.buyed_chapters.add(chapter)
-        if request.user.is_staff == False:
-            new_transaction = UserBalanceChange.objects.create(user=request.user, amount=chapter.cost, novell=chapter.novell)
+        create_transaction(request.user, chapter.cost, chapter.novell)
         return redirect(chapter.get_absolute_url())
     else:
         return HttpResponse('Недостаточно средств или просто кривой разраб, сорри((')
@@ -508,8 +507,7 @@ def buy_many_chapters(request, pk):
     if sum_cost <= request.user.user_profile.balance:
         request.user.user_profile.balance -= sum_cost
         request.user.user_profile.save(update_fields=["balance"])
-        if request.user.is_staff == False:
-            new_transaction = UserBalanceChange.objects.create(user=request.user, amount=sum_cost, novell=n)
+        create_transaction(request.user, sum_cost, n)
         for i in request.POST.getlist('chosen'):
             chapter = get_object_or_404(Chapter, id=i)
             request.user.user_profile.buyed_chapters.add(chapter)
@@ -517,6 +515,9 @@ def buy_many_chapters(request, pk):
     else:
         return HttpResponse('Недостаточно средств или сбой системы')
 
+def create_transaction(user, amount, novell):
+    if user.is_staff == False:
+        UserBalanceChange.objects.create(user=user, amount=amount, novell=novell)
 
 class ProfileDetail(DetailView):
     model = Profile
