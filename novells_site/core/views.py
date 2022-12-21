@@ -200,7 +200,8 @@ class NovellDetailView(GenreYear, DetailView):
         nov = context['novell']
         nov.views = nov.views + 1
         nov.save()
-        ViewNovell.objects.create(novell = nov)
+        if self.request.user.is_staff == False:
+            ViewNovell.objects.create(novell = nov)
         context['star_form'] = RatingForm()
 
         return context
@@ -486,7 +487,8 @@ def buy_chapter(request, pk):
         request.user.user_profile.balance -= chapter.cost
         request.user.user_profile.save(update_fields=["balance"])
         request.user.user_profile.buyed_chapters.add(chapter)
-        new_transaction = UserBalanceChange.objects.create(user=request.user, amount=chapter.cost, novell=chapter.novell)
+        if request.user.is_staff == False:
+            new_transaction = UserBalanceChange.objects.create(user=request.user, amount=chapter.cost, novell=chapter.novell)
         return redirect(chapter.get_absolute_url())
     else:
         return HttpResponse('Недостаточно средств или просто кривой разраб, сорри((')
@@ -502,7 +504,8 @@ def buy_many_chapters(request, pk):
     if sum_cost <= request.user.user_profile.balance:
         request.user.user_profile.balance -= sum_cost
         request.user.user_profile.save(update_fields=["balance"])
-        new_transaction = UserBalanceChange.objects.create(user=request.user, amount=sum_cost, novell=n)
+        if request.user.is_staff == False:
+            new_transaction = UserBalanceChange.objects.create(user=request.user, amount=sum_cost, novell=n)
         for i in request.POST.getlist('chosen'):
             chapter = get_object_or_404(Chapter, id=i)
             request.user.user_profile.buyed_chapters.add(chapter)
