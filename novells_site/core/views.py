@@ -263,6 +263,10 @@ class ChapterDetailView(DetailView):
         except PermissionDenied:
             return redirect('https://'+request.get_host()+'/accounts/signup/', permanent=True)
         context = self.get_context_data(object=self.object)
+
+        if request.user.is_staff == False:
+            ViewNovell.objects.create(novell = context['chapter'].novell)
+
         return self.render_to_response(context)
 
 
