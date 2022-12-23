@@ -454,7 +454,8 @@ class UserBalanceChange(models.Model):
     # reason = models.IntegerField(choices=REASON_CHOICES, default=NO_REASON)
     amount = models.DecimalField('Сумма платежа', default=0, max_digits=18, decimal_places=6)
     datetime = models.DateTimeField('Дата', default=timezone.now)
-
+    novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.SET_NULL, null=True)
+    
     class Meta:
         verbose_name = 'Транзакция'
         verbose_name_plural = 'Транзакции'
@@ -462,3 +463,16 @@ class UserBalanceChange(models.Model):
 
     def __str__(self):
         return 'Транзакция на {} от {}'.format(self.amount, self.user)
+    
+class ViewNovell(models.Model):
+    novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.CASCADE)
+    datetime = models.DateTimeField('Дата', default=timezone.now)
+
+    class Meta:
+        verbose_name = 'Просмотр'
+        verbose_name_plural = 'Просмотры'
+        ordering = ('-datetime',)
+
+    def __str__(self):
+        return 'Просмотр новеллы {}'.format(self.novell)
+

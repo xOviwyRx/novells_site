@@ -1,0 +1,27 @@
+{% load i18n static %}
+<div class="results">
+    <table id="result-list">
+        <thead>
+            <tr>
+            {% for header in result_headers %}
+                <th scope="col">
+                    <div class="text">
+                        <a href="{{ header.url_primary }}">{{ header.text|capfirst }}</a>
+                    </div>
+                </th>{% endfor %}
+            </tr>
+        </thead>
+        {% for raw in result %}
+        <tr>
+            <td>{{ raw.novell }}</td>
+            <td>{{ raw.views }}</td>
+            <td>{{ raw.profit }}</td>
+        <tr>
+        {% endfor %}
+        <tr style="font-weight: bold">
+            <td>Итого:</td>
+            <td>{{ total.views }}</td>
+            <td>{{ total.profit }}</td>
+        </tr>
+    </table>
+</div>

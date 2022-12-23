@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+{% block title %}Статистика{% endblock %}
+{% block extrastyle %}
+    {{ block.super }}
+        <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
+    {{ endblock }}
+    <script src={% static 'admin/statistics/filter.js' %}>
+    </script>
+{% endblock %}
+{% block coltype %}flex{% endblock %}
+{% block content %}
+    <div id="content-main">
+        <h1>Статистика</h1>
+        <div class="module filtered" id="changelist">
+            <div class="changelist-form-container">
+                {% include 'admin/statistics/results.html' %}
+            </div>
+            {% include 'admin/statistics/filters.html' %}
+        </div>
+    </div>
+{% endblock %}
