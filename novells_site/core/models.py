@@ -454,7 +454,7 @@ class UserBalanceChange(models.Model):
     # reason = models.IntegerField(choices=REASON_CHOICES, default=NO_REASON)
     amount = models.DecimalField('Сумма платежа', default=0, max_digits=18, decimal_places=6)
     datetime = models.DateTimeField('Дата', default=timezone.now)
-    novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.SET_NULL, null=True)
+    novell = models.ForeignKey(Novell, verbose_name='Новелла', on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
         verbose_name = 'Транзакция'
