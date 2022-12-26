@@ -134,6 +134,17 @@
             }
         }
     </script>
+	<script>
+	function checkedAny() {
+	    if($('form[name=buying_many_chapters] input[name=chosen]:checked').length > 0) {
+            $('form[name=buying_many_chapters]').submit();
+	    }
+	    else
+	    {
+            alert("Не выбрано ни одной главы");
+	    }
+	}
+	</script>
 {% endblock %}
 
 {% block content %}
@@ -503,7 +514,7 @@
                          {% else %}class="tab-pane fade"{% endif %} id="list" role="tabpanel"
                          aria-labelledby="list-tab">
                         <div class="list-group mt-2">
-                            <form method="post" action="{% url 'core:buying_many_chapters' novell.id %}">
+                            <form method="post" action="{% url 'core:buying_many_chapters' novell.id %}" name="buying_many_chapters">
                                 {% csrf_token %}
                                 {% for n in novell.chapters.all %}
 
@@ -603,7 +614,7 @@
                                         <span class="btn btn btn-success"
                                               onclick="eventCheckBox()">Выбрать всё/отменить</span>
                                     {% endif %}
-                                    <button type="submit" class="btn btn-primary">Купить выбранные</button>
+                                    <button onclick="checkedAny()" class="btn btn-primary" type="button">Купить выбранные</button>
                                 </div>
 
                             </form>
